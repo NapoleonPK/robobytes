@@ -22,25 +22,31 @@ SEED = 0
 
 
 def load_lerobot(repo):
-    """Float rows (state, environment_state, action) in (episode, frame) order, plus episode ids, lengths, info."""
+    """Float rows (state, environment_state, action) in (episode, frame) order, plus episode ids, lengths, info.
+    Rows are written into one preallocated float32 array to keep the peak memory near the size of the data."""
     d = HUB / repo
     info = json.load(open(d / "meta/info.json"))
     keys = [k for k in ("observation.state", "observation.environment_state", "action") if k in info["features"]]
-    parts, eps, frames = [], [], []
-    for f in sorted(glob.glob(str(d / "data/**/*.parquet"), recursive=True)):
+    dims = {k: int(info["features"][k]["shape"][0]) for k in keys}
+    files = sorted(glob.glob(str(d / "data/**/*.parquet"), recursive=True))
+    n = sum(pq.ParquetFile(f).metadata.num_rows for f in files)
+    x = np.empty((n, sum(dims.values())), np.float32)
+    ep, fr = np.empty(n, np.int64), np.empty(n, np.int64)
+    i = 0
+    for f in files:
         t = pq.read_table(f, columns=keys + ["episode_index", "frame_index"])
-        cols = []
+        j, c0 = i + len(t), 0
         for k in keys:
             c = t.column(k).combine_chunks()
-            cols.append(np.asarray(c.flatten(), dtype=np.float32).reshape(len(t), -1))
-        parts.append(np.concatenate(cols, 1))
-        eps.append(t.column("episode_index").to_numpy())
-        frames.append(t.column("frame_index").to_numpy())
-    x, ep, fr = np.concatenate(parts), np.concatenate(eps), np.concatenate(frames)
+            x[i:j, c0:c0 + dims[k]] = np.asarray(c.flatten(), dtype=np.float32).reshape(len(t), -1)
+            c0 += dims[k]
+        ep[i:j], fr[i:j] = t.column("episode_index").to_numpy(), t.column("frame_index").to_numpy()
+        i = j
+        del t
     order = np.lexsort((fr, ep))
-    x, ep = x[order], ep[order]
+    if not np.array_equal(order, np.arange(n)):
+        x, ep = x[order], ep[order]
     ids, lengths = np.unique(ep, return_counts=True)
-    dims = {k: int(info["features"][k]["shape"][0]) for k in keys}
     return x, ids, lengths, dict(fps=info["fps"], dims=dims)
 
 
@@ -55,13 +61,9 @@ def load_fetch(repo):
                                                        source_file="sim/test.npz")
 
 
-def reorder(x, lengths, perm):
-    """Rows of episodes in the order perm (episode positions)."""
-    starts = np.concatenate([[0], np.cumsum(lengths)[:-1]])
-    return np.concatenate([x[starts[e]:starts[e] + lengths[e]] for e in perm]), lengths[perm]
-
-
 def build(name, x, ids, lengths, meta, held_out):
+    """Shuffle episodes with seed 0, split, take percentiles from the statistics split (one channel at a time) and write
+    the quantised rows in shuffled-episode order, a chunk of episodes at a time."""
     rng = np.random.default_rng(SEED)
     n = len(lengths)
     perm = rng.permutation(n)
@@ -72,11 +74,22 @@ def build(name, x, ids, lengths, meta, held_out):
         n_val = n_test = max(1, round(0.05 * n))
         split = np.array(["train"] * (n - n_val - n_test) + ["val"] * n_val + ["test"] * n_test)
         stat_eps = perm[:n - n_val - n_test]
-    xs, ls = reorder(x, lengths, stat_eps)
-    lo, hi = percentiles(xs)
-    del xs
-    xp, lp = reorder(x, lengths, perm)
-    rows = quantise(xp, lo, hi)
+    starts = np.concatenate([[0], np.cumsum(lengths)[:-1]])
+    stat_rows = np.zeros(len(x), bool)
+    for e in stat_eps:
+        stat_rows[starts[e]:starts[e] + lengths[e]] = True
+    lo, hi = np.empty(x.shape[1]), np.empty(x.shape[1])
+    for c in range(x.shape[1]):
+        col = x[stat_rows, c]
+        lo[c], hi[c] = np.percentile(col, 1), np.percentile(col, 99)
+    del stat_rows
+    rows = np.empty(x.shape, np.uint8)
+    r = 0
+    for k in range(0, n, 2000):
+        idx = np.concatenate([np.arange(starts[e], starts[e] + lengths[e]) for e in perm[k:k + 2000]])
+        rows[r:r + len(idx)] = quantise(x[idx], lo, hi)
+        r += len(idx)
+    lp = lengths[perm]
     meta = dict(meta, name=name, W=int(rows.shape[1]), stats_from="pool" if held_out else "train",
                 lo=lo.tolist(), hi=hi.tolist(), constant_channels=int(np.sum(hi - lo <= 1e-8)))
     write(name, rows, lp, ids[perm], split, meta)
@@ -117,7 +130,9 @@ def main():
         assert all(m["dims"] == metas[0]["dims"] for m in metas), name
         meta = dict(metas[0], robot=items[0][2], repos=[r for r, *_ in items],
                     revision={r: v for r, v, *_ in items})
-        summary[name] = build(name, np.concatenate(xs), np.concatenate(ids), np.concatenate(lens), meta, items[0][3])
+        x = xs[0] if len(xs) == 1 else np.concatenate(xs)
+        del xs
+        summary[name] = build(name, x, np.concatenate(ids), np.concatenate(lens), meta, items[0][3])
         print(name, json.dumps({k: v for k, v in summary[name].items() if k not in ("dims", "revision")}), flush=True)
         json.dump(summary, open(summ_path, "w"), indent=1)
     print("wrote", summ_path, file=sys.stderr)

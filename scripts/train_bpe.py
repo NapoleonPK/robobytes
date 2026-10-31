@@ -44,15 +44,22 @@ def main():
     sym_tr = pos_tr = 0
     for n in names + sorted(p.name for p in STREAMS.iterdir() if p.name.startswith("heldout_")):
         s = Stream(n)
-        ids = bpe.encode_rows(tok, s.rows)
         offs, toks, mask = [0], [], []
-        r0 = 0
-        for e in range(len(s.length)):  # episodes in stored order
-            t, m = bpe.episode_tokens(ids[r0:r0 + s.length[e]])
-            r0 += s.length[e]
-            toks.append(t)
-            mask.append(m)
-            offs.append(offs[-1] + len(t))
+        E = len(s.length)
+        e0 = 0
+        while e0 < E:  # tokenise a block of episodes at a time (~500k rows) to bound memory
+            e1 = e0 + 1
+            while e1 < E and s.start[e1] + s.length[e1] - s.start[e0] < 500_000:
+                e1 += 1
+            ids = bpe.encode_rows(tok, s.rows[s.start[e0]:s.start[e1 - 1] + s.length[e1 - 1]])
+            r0 = 0
+            for e in range(e0, e1):  # episodes in stored order
+                t, m = bpe.episode_tokens(ids[r0:r0 + s.length[e]])
+                r0 += s.length[e]
+                toks.append(t)
+                mask.append(m)
+                offs.append(offs[-1] + len(t))
+            e0 = e1
         d = bpe.PATH.parent / n
         d.mkdir(parents=True, exist_ok=True)
         np.save(d / "tokens.npy", np.concatenate(toks))
@@ -64,7 +71,7 @@ def main():
             sym = s.n_symbols(eps)
             pos = int(sum(offs[e + 1] - offs[e] for e in eps))
             res[split] = dict(symbols=sym, positions=pos, compression=sym / pos,
-                              data_bytes_per_data_token=s.n_data_bytes(eps) / int(sum(mask[e].sum() for e in eps)))
+                              data_bytes_per_data_token=s.n_data_bytes(eps) / int(sum(int(mask[e].sum()) for e in eps)))
             if split == "train":
                 sym_tr += sym
                 pos_tr += pos

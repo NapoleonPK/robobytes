@@ -60,12 +60,18 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--device", default="mps")
     ap.add_argument("--steps", type=int, default=200)
+    ap.add_argument("--R", type=float, default=4.0)
+    ap.add_argument("--N", type=int, default=4)
+    ap.add_argument("--tag", default="")
     ap.add_argument("--methods", nargs="+", default=["byte", "bpe", "hnet", "fixed", "entropy", "hnet_refractory"])
     a = ap.parse_args()
+    globals().update(R_ASSUMED=a.R, N_ASSUMED=a.N)
     dev = torch.device(a.device)
     sync = torch.mps.synchronize if a.device == "mps" else (lambda: None)
-    res = {"device": a.device, "swap_mb_start": swap_mb(), "runs": {}}
-    out = Path(f"runs/pilot_throughput_{a.device}.json")
+    res = {"device": a.device, "R": a.R, "N": a.N, "swap_mb_start": swap_mb(), "runs": {}}
+    out = Path(f"runs/pilot_throughput_{a.device}{a.tag}.json")
+    if out.exists():  # merge with earlier timings of other methods
+        res["runs"] = json.load(open(out))["runs"]
     for method in a.methods:
         for size in SIZES:
             mb = MB
@@ -81,6 +87,19 @@ def main():
                         f().backward()
                         opt.step()
                     sync()
+                    if a.device == "mps":
+                        torch.mps.empty_cache()
+                    t0, peak, sw = time.time(), 0, 0.0
+                    for i in range(a.steps):  # an H-Net router can emit more chunks as it trains, so OOM can come late
+                        opt.zero_grad(set_to_none=True)
+                        f().backward()
+                        opt.step()
+                        if i % 100 == 99:
+                            sync()
+                            if a.device == "mps":
+                                peak = max(peak, torch.mps.current_allocated_memory())
+                            sw = max(sw, swap_mb())
+                    sync()
                     break
                 except RuntimeError as e:
                     if "out of memory" not in str(e) or mb == 1:
@@ -90,19 +109,6 @@ def main():
                         torch.mps.empty_cache()
                     print(f"{method} {size}: OOM at micro-batch {mb}, halving", flush=True)
                     mb //= 2
-            if a.device == "mps":
-                torch.mps.empty_cache()
-            t0, peak, sw = time.time(), 0, 0.0
-            for i in range(a.steps):
-                opt.zero_grad(set_to_none=True)
-                f().backward()
-                opt.step()
-                if i % 100 == 99:
-                    sync()
-                    if a.device == "mps":
-                        peak = max(peak, torch.mps.current_allocated_memory())
-                    sw = max(sw, swap_mb())
-            sync()
             dt = (time.time() - t0) / a.steps
             fpb = flops_per_byte(model.cpu(), CTX, comp)
             r = dict(params=params(model), micro_batch=mb, s_per_step=dt, bytes_per_s=mb * CTX / dt,
