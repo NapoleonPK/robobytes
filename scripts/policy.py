@@ -2,8 +2,8 @@
 hidden state at the last observation byte of each step and predicts the action (MSE on the 50 pool episodes; only the head
 trains). Rollout: keep the last 1,024 bytes of history; each step append the observation's bytes, read the action, execute
 it, append the executed action's bytes and SEP. H-Net, BPE, Byte and an MLP behaviour-cloning lower bound, 3 seeds x 100
-rollouts on fixed environment seeds. Success = the environment's own flag at the rollout's last step. Writes
-runs/policy/<task>/<method>_s<seed>.json. A finished run is skipped. Run only after few_shot.py. Needs gym-pusht for PushT.
+rollouts on fixed environment seeds. Success = the environment's own flag at the rollout's last step. On PushT each
+rollout's peak coverage is also stored, an exploratory measure outside H4. Writes runs/policy/<task>/<method>_s<seed>.json. A finished run is skipped. Run only after few_shot.py. Needs gym-pusht for PushT.
 usage: PYTHONPATH=. PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.7 PYTORCH_MPS_LOW_WATERMARK_RATIO=0.5 caffeinate -i \
        python scripts/policy.py [--tasks pusht fetch]"""
 import argparse
@@ -148,6 +148,7 @@ def rollout(env, flat, enc, head, n_obs, lo, hi, env_seed, dev):
     o, _ = env.reset(seed=env_seed)
     low, high = env.action_space.low, env.action_space.high
     h = History(enc) if enc is not None else None
+    peak = 0.0
     while True:
         q = quantise(flat(o)[None], lo[:n_obs], hi[:n_obs])[0]
         if enc is None:
@@ -158,10 +159,11 @@ def rollout(env, flat, enc, head, n_obs, lo, hi, env_seed, dev):
         a01 = head(x).clamp(0, 1)[0].cpu().numpy()
         a = np.clip(lo[n_obs:] + a01 * (hi[n_obs:] - lo[n_obs:]), low, high).astype(env.action_space.dtype)
         o, _, term, trunc, info = env.step(a)
+        peak = max(peak, float(info.get("coverage", 0.0)))  # PushT only; a success ends the rollout, so its coverage counts
         if enc is not None:
             h.add_act(quantise(a[None].astype(np.float64), lo[n_obs:], hi[n_obs:])[0])
         if term or trunc:
-            return bool(info["is_success"])
+            return bool(info["is_success"]), peak
 
 
 def encoder(method, stream, seed, dev):
@@ -185,9 +187,12 @@ def run(task, method, seed, dev):
     Xv, Yv = features(enc, stream, s.episodes("val"))
     head, mse = train_head(X, Y, Xv, Yv, seed, dev)
     env, flat = make_env(task)
-    ok = [rollout(env, flat, enc, head, n_obs, lo, hi, e, dev) for e in ENV_SEEDS]
+    ok, peak = zip(*[rollout(env, flat, enc, head, n_obs, lo, hi, e, dev) for e in ENV_SEEDS])
     path.parent.mkdir(parents=True, exist_ok=True)
-    json.dump(dict(task=task, method=method, seed=seed, env_seeds=ENV_SEEDS, success=ok, val_mse=mse), open(path, "w"))
+    row = dict(task=task, method=method, seed=seed, env_seeds=ENV_SEEDS, success=list(ok), val_mse=mse)
+    if task == "pusht":
+        row["peak_coverage"] = list(peak)
+    json.dump(row, open(path, "w"))
     print(f"{task} {method} s{seed}: success {np.mean(ok):.2f}, val MSE {mse:.5f}", flush=True)
 
 

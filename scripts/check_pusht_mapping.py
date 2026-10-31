@@ -154,7 +154,8 @@ def main():
     t0 = time.time()
     head = lambda x: torch.full((1, A), 0.5)
     succ = [policy.rollout(env, flat, None, head, K, lo, hi, 300000 + i, "cpu") for i in range(3)]
-    res["rollout_smoke"] = dict(rollouts=3, seconds=time.time() - t0, returned=succ, successes_expected_none=not any(succ))
+    res["rollout_smoke"] = dict(rollouts=3, seconds=time.time() - t0, returned=[x[0] for x in succ], peak_coverage=[x[1] for x in succ],
+                                 successes_expected_none=not any(x[0] for x in succ))
     json.dump(res, open("runs/pusht_mapping_check.json", "w"), indent=1)
     print(json.dumps(res, indent=1))
 

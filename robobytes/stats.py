@@ -8,6 +8,7 @@ import numpy as np
 
 RESAMPLES, SEED = 10_000, 0
 G_FLOOR, G_FACTOR, COMPRESSION_FLOOR = 0.02, 1.5, 0.8
+COVERAGE_LINE = 0.90  # exploratory PushT measure, fixed by Téo before any rollout; demonstrations peak at 0.935
 
 
 def pooled_bpb(groups):
@@ -81,6 +82,19 @@ def policy_bootstrap(a, b, resamples=RESAMPLES, seed=SEED):
         ix = np.ix_(rng.integers(0, S, S), rng.integers(0, E, E))
         d[i] = a[ix].mean() - b[ix].mean()
     return dict(diff=float(a.mean() - b.mean()), diff_ci=ci(d))
+
+
+def coverage_summary(peak, line=COVERAGE_LINE, resamples=RESAMPLES, seed=SEED):
+    """Exploratory, outside H4. peak: peak coverage (seeds x rollouts) of one method. Mean peak coverage and share of rollouts
+    at or above line, each with a percentile CI resampling seeds and rollouts as in policy_bootstrap."""
+    peak = np.asarray(peak, np.float64)
+    S, E = peak.shape
+    rng = np.random.default_rng(seed)
+    m, f = np.empty(resamples), np.empty(resamples)
+    for i in range(resamples):
+        x = peak[np.ix_(rng.integers(0, S, S), rng.integers(0, E, E))]
+        m[i], f[i] = x.mean(), (x >= line).mean()
+    return dict(mean=float(peak.mean()), mean_ci=ci(m), share=float((peak >= line).mean()), share_ci=ci(f), line=line)
 
 
 def uninformative(rates, low=0.05, high=0.95):

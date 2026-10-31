@@ -156,6 +156,17 @@ def h4():
     return dict(status="done", tasks=res, passed=any(v["clears"] for v in res.values()))
 
 
+def pusht_coverage():
+    """Exploratory, outside H4: per method, mean peak coverage and the share of rollouts at or above the fixed line."""
+    d = json.load(open("runs/pusht_mapping_check.json"))["demonstration_success"]
+    res = dict(demonstrations=d, line=stats.COVERAGE_LINE)
+    ps = {m: [POLICY / "pusht" / f"{m}_s{s}.json" for s in (0, 1, 2)] for m in POLICY_METHODS}
+    if not all(p.exists() for v in ps.values() for p in v):
+        return dict(res, status="pending")
+    return dict(res, status="done", methods={m: stats.coverage_summary([json.load(open(p))["peak_coverage"] for p in v])
+                                             for m, v in ps.items()})
+
+
 def frontiers(get, flops, robots):
     targets = ["held_in", *robots]
     out = {}
@@ -204,6 +215,19 @@ def tables(r):
         for t, row in ts.items():
             L.append(f"| {arm} | {t} | " + " | ".join(f"{row[str(i)]['bpb']:.4f}" if str(i) in row else "-"
                                                       for i in range(len(r["flops"]))) + " |")
+    x, d = r["pusht_coverage"], r["pusht_coverage"]["demonstrations"]
+    L += ["", "## PushT peak coverage (exploratory, outside H4)", "",
+          f"No PushT demonstration reaches the environment's {d['threshold']:.2f} success flag: "
+          f"{d['dataset_success_frames']} success frames in {d['dataset_episodes']} episodes, and the "
+          f"{d['pool_episodes']} few-shot pool episodes peak at {d['final_coverage_max']:.3f} coverage.", ""]
+    if x["status"] == "done":
+        L += [f"| Method | Mean peak coverage | 95% CI | Share of rollouts ≥ {x['line']:.2f} | 95% CI |",
+              "| --- | --- | --- | --- | --- |"]
+        for m, v in x["methods"].items():
+            L.append(f"| {m} | {v['mean']:.4f} | [{v['mean_ci'][0]:.4f}, {v['mean_ci'][1]:.4f}] | {v['share']:.4f} | "
+                     f"[{v['share_ci'][0]:.4f}, {v['share_ci'][1]:.4f}] |")
+    else:
+        L.append("Rollouts pending.")
     return "\n".join(L) + "\n"
 
 
@@ -219,7 +243,7 @@ def main():
     get = Scores(training_names()).get
     robots = list(HELD_OUT)
     front = frontiers(get, flops, robots)
-    res = dict(flops=flops, primary=primary(get, R, robots), H3=h3(robots), H4=h4(), frontiers=front,
+    res = dict(flops=flops, primary=primary(get, R, robots), H3=h3(robots), H4=h4(), pusht_coverage=pusht_coverage(), frontiers=front,
                multipliers=multipliers(front, flops, ["held_in", *robots]), secondary=secondary(get, robots))
     OUT.mkdir(parents=True, exist_ok=True)
     json.dump(res, open(OUT / "results.json", "w"), indent=1)

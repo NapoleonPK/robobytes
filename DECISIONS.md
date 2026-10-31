@@ -273,3 +273,14 @@ Written during the ladder, before any model saw a held-out robot. No hypothesis,
   is false on every frame of all 206 episodes, and replaying each pool episode's last action peaks at 0.935 coverage. A policy
   cloned from these 50 episodes is therefore unlikely to reach it, and §9's rule (every method below 5%) would make H4
   uninformative on PushT. The pre-registration is unchanged: success stays the environment's own flag.
+
+## Dated addition: PushT peak coverage, exploratory, outside H4 (2026-10-31, before any rollout)
+- **Téo's decision,** following the finding above. `scripts/policy.py` stores each PushT rollout's peak coverage, and
+  `scripts/analysis.py` reports per method, labelled exploratory: mean peak coverage with a 95% bootstrap CI over rollouts and
+  seeds, and the share of rollouts reaching coverage ≥ 0.90 (with the same CI). Methods are H-Net, BPE, Byte and the MLP lower bound.
+- **The 0.90 line is fixed now,** before any rollout (`stats.COVERAGE_LINE`). Demonstrations peak at 0.935.
+- **H4 is unchanged:** success remains the environment's own flag, and this measure enters no pass/fail. The frozen
+  `PREREGISTRATION.md` is not edited; this entry is the dated record.
+- **The report must state that no PushT demonstration reaches the environment's 0.95 success flag.** The generated tables print
+  this from `runs/pusht_mapping_check.json`.
+- Peak is taken over the rollout's steps. A success ends a PushT rollout, so that step's coverage is included.

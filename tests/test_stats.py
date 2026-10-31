@@ -86,6 +86,37 @@ def test_policy_bootstrap():
     assert c["diff"] == 1 and stats.excludes_zero(c["diff_ci"])
 
 
+def test_coverage_summary():
+    c = stats.coverage_summary(np.tile([0.89, 0.90, 0.91, 0.70], (3, 25)), resamples=200)
+    assert c["line"] == 0.90 and c["share"] == 0.5 and abs(c["mean"] - 0.85) < 1e-9
+    assert c["mean_ci"][0] < c["mean"] < c["mean_ci"][1] and c["share_ci"][0] < 0.5 < c["share_ci"][1]
+    flat = stats.coverage_summary(np.full((3, 100), 0.93), resamples=50)
+    assert flat["share"] == 1 and flat["mean_ci"] == pytest.approx([0.93, 0.93])
+    assert stats.coverage_summary(np.full((3, 10), 0.8), resamples=50) == stats.coverage_summary(np.full((3, 10), 0.8), resamples=50)
+
+
+def test_pusht_coverage_stays_outside_h4(tmp_path, monkeypatch):
+    a = load("analysis")
+    monkeypatch.setattr(a, "POLICY", tmp_path)
+    assert a.pusht_coverage()["status"] == "pending"
+    rng = np.random.default_rng(0)
+    rows = {}
+    for task, rates in (("pusht", dict(hnet=.8, bpe=.2, byte=.5, mlp=.1)), ("fetch", dict(hnet=.6, bpe=.3, byte=.2, mlp=.1))):
+        (tmp_path / task).mkdir()
+        for m, r in rates.items():
+            for s in (0, 1, 2):
+                rows[task, m, s] = dict(env_seeds=list(range(100)), success=(rng.random(100) < r).tolist())
+    write = lambda: [(tmp_path / t / f"{m}_s{s}.json").write_text(json.dumps(v)) for (t, m, s), v in rows.items()]
+    write()
+    before = a.h4()
+    for (t, m, s), v in rows.items():
+        if t == "pusht":
+            v["peak_coverage"] = rng.uniform(.5, 1, 100).tolist()
+    write()
+    x = a.pusht_coverage()
+    assert x["status"] == "done" and set(x["methods"]) == set(a.POLICY_METHODS) and a.h4() == before
+
+
 def test_uninformative():
     assert stats.uninformative([0.01, 0.0, 0.04, 0.02]) and stats.uninformative([0.96, 1.0, 0.99, 0.97])
     assert not stats.uninformative([0.0, 1.0, 0.0, 1.0]) and not stats.uninformative([0.01, 0.05])
@@ -231,7 +262,7 @@ def test_report_runs_end_to_end():
     get = get_from(v)
     flops = [1e14, 3e14, 1e15, 3e15]
     front = a.frontiers(get, flops, robots)
-    res = dict(flops=flops, primary=a.primary(get, 1.549, robots), H3=dict(status="pending"), H4=dict(status="pending"),
+    res = dict(flops=flops, primary=a.primary(get, 1.549, robots), H3=dict(status="pending"), H4=dict(status="pending"), pusht_coverage=a.pusht_coverage(),
                frontiers=front, multipliers=a.multipliers(front, flops, ["held_in", *robots]),
                secondary=a.secondary(get, robots))
     json.dumps(res)
@@ -239,3 +270,14 @@ def test_report_runs_end_to_end():
     assert set(res["secondary"]["no_ema"]) == {"fixed", "hnet"} and len(res["secondary"]["n4_router"]) == 4
     md = a.tables(res)
     assert "| H2b |" in md and "| hnet_refractory_N4 | r3 | - | - |" in md
+
+
+def test_report_notes_that_no_demonstration_reaches_the_flag():
+    a = load("analysis")
+    d = dict(threshold=.95, dataset_success_frames=0, dataset_episodes=206, pool_episodes=50, final_coverage_max=.935)
+    p = dict(H1=dict(passed=True, budgets={}), H2=dict(passed=False, g_id=dict(g=0, g_ci=[0, 0]), line=0, robots={}),
+             H2b=dict(passed=False, g_id=dict(g=0, g_ci=[0, 0]), line=0, robots={}),
+             compression=dict(realised=2, floor=1, ok=True))
+    t = a.tables(dict(primary=p, H3=dict(status="pending"), H4=dict(status="pending"), flops=[1.0], frontiers={},
+                      pusht_coverage=dict(status="pending", line=.9, demonstrations=d)))
+    assert "No PushT demonstration reaches the environment's 0.95 success flag" in t and "exploratory, outside H4" in t

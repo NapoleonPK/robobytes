@@ -63,15 +63,15 @@
  },
  "reward_success": {
   "frames": 1391,
-  "reward_abs_diff_mean": 2.170853442261185e-08,
-  "reward_abs_diff_p99": 1.0646094239508096e-07,
+  "reward_abs_diff_mean": 2.1708534421928435e-08,
+  "reward_abs_diff_p99": 1.0646094209532074e-07,
   "success_agreement": 1.0,
   "pool_episodes_recorded_success": 0
  },
  "demonstration_success": {
   "threshold": 0.95,
   "final_coverage_median": 0.8829692981773095,
-  "final_coverage_max": 0.9354653333752911,
+  "final_coverage_max": 0.9354653333752914,
   "pool_success_after_last_action": 0,
   "pool_episodes": 50,
   "dataset_episodes": 206,
@@ -84,11 +84,16 @@
  },
  "rollout_smoke": {
   "rollouts": 3,
-  "seconds": 0.10833191871643066,
+  "seconds": 0.10697388648986816,
   "returned": [
    false,
    false,
    false
+  ],
+  "peak_coverage": [
+   0.11770702512956903,
+   0.2842718491672778,
+   0.0
   ],
   "successes_expected_none": true
  }
