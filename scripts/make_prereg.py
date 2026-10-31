@@ -1,6 +1,7 @@
 """Generate PREREGISTRATION.md and the episode lists it fixes (prereg/splits.json) from the pilot's result files.
 Every number in the document comes from these files: runs/streams_summary.json, runs/bpe_summary.json,
-runs/bpe_vocab_check.json, runs/ladder.json, runs/lr_search.json, robobytes/sources.py.
+runs/bpe_vocab_check.json, runs/ladder.json, runs/lr_search.json, runs/wrapper_diag.json, runs/wrapper_share.json,
+robobytes/sources.py. The prediction probabilities in §2.1 are judgement, written here by hand.
 usage: PYTHONPATH=. python scripts/make_prereg.py"""
 import hashlib
 import json
@@ -91,6 +92,28 @@ def main():
     a("**Exploratory (labelled as such):** compute multipliers from the iso-FLOP frontiers; the secondary N = 4 "
       "comparison (§6.1); whether chunk counts for a new robot shrink as an episode goes on (in-context merging); whether "
       "boundaries align with gripper events; 16-bit serialisation; how Byte and Entropy transfer.\n")
+    bv = {m: lr[f"{m}_{best[m]:g}"]["val_bpb"] for m in best}
+    g_b, g_f = (bv["bpe"] - bv["hnet"]) / bv["bpe"], (bv["fixed"] - bv["hnet"]) / bv["fixed"]
+    a("### 2.1 Predictions stated in advance\n")
+    a("Judgement from the held-in pilot only (search budget, size S, §6); no model has seen a held-out robot. "
+      "Probabilities are subjective, and the report will score them.\n")
+    a(f"- **Held-in order:** Byte best ({bv['byte']:.2f}), then Fixed ({bv['fixed']:.2f}) and Byte + conv "
+      f"({bv['byteconv']:.2f}), then Entropy ({bv['entropy']:.2f}), H-Net ({bv['hnet']:.2f}), BPE ({bv['bpe']:.2f}). Gaps "
+      "should narrow with budget.")
+    a(f"- **H1: likely passes (85%).** Pilot g = {g_b:.2f} for H-Net over BPE. The risk is that BPE improves faster with "
+      "budget.")
+    a(f"- **H2: likely fails (35%).** A pilot g_ID of {g_b:.2f} would require g_OOD ≥ {1.5 * abs(g_b):.2f} on 2 of 3 robots. "
+      "BPE barely compresses held-out robots, so it nears a byte model with a shorter context; the effect on it is unclear.")
+    a(f"- **H2b: expected to fail (5%) unless the H-Net vs Fixed gap reverses out of distribution.** Pilot g_ID = "
+      f"{g_f:.2f}. The rule uses |g_ID|, so H-Net being worse in distribution raises the bar: at that value "
+      f"g_OOD ≥ {1.5 * abs(g_f):.2f} is required, meaning H-Net below {1 - 1.5 * abs(g_f):.2f} × Fixed's bpb.")
+    a("- **H3: likely passes (65%)** if H-Net leads BPE at zero shot, because BPE's vocabulary is frozen and it cannot "
+      "form new tokens for a new robot.")
+    a("- **H4: likely fails or is uninformative (20%).** Underpowered by design.")
+    a(f"- **Compression floor: passes (95%).** Pilot H-Net compression "
+      f"{lr[f'hnet_{best['hnet']:g}']['train']['compression']:.2f} against a floor of {0.8 * R:.2f}.")
+    a("- **N = 4:** H-Net and Fixed both worse than at N = 2, and H-Net further behind Fixed; refractory r = 1 changes "
+      "little.\n")
     a("## 3. Data\n")
     family = lambda t: ("Franka" if ("Franka" in t or "Panda" in t) else "SO-100/101" if t.startswith("SO-")
                         else "xArm" if t.startswith("xArm") else t)
@@ -147,7 +170,7 @@ def main():
     a("| --- | --- | --- |")
     a("| BPE | as above; context round(1,024 / R_BPE) tokens | Primary baseline |")
     a(f"| H-Net | RoboChunk's router (LayerNorm, identity init), ratio loss α = 0.3 targeting N = {N}; causal-conv encoder "
-      "and decoder, 4 blocks each, width 256; EMA dechunk; next-byte softmax over 258 | Primary method |")
+      "and decoder, 2 blocks each, width 128; EMA dechunk; next-byte softmax over 258 | Primary method |")
     a("| H-Net refractory | as H-Net, no new boundary within r positions of the last kept one, **r = floor(0.3 × N)** "
       f"(r = 3 at RoboChunk's N = 10). At N = {N}, r = {int(0.3 * N)}: identical to H-Net, so the arm is not in the main "
       "ladder; it runs only in the N = 4 comparison (r = 1) | Exploratory |")
@@ -168,13 +191,34 @@ def main():
       f"{au['byte_rope_gpt2init']['val_bpb']:.2f}), because the data's main structure is a relative offset. **Every "
       "method therefore uses rotary positions** (over bytes, tokens or chunks). The first search is archived and fixes "
       "nothing.\n")
+    wd = json.load(open("runs/wrapper_diag.json"))
+    ws = json.load(open("runs/wrapper_share.json"))
+    v = lambda k: wd[k]["val_bpb"]
+    a(f"**Wrapper diagnostic.** With the brief's wrapper (width 256, 4 blocks) Byte + conv scored "
+      f"{v('byteconv_256x4'):.2f} against Byte's {v('byte'):.2f} at equal FLOPs ({wd['byteconv_256x4']['steps']} against "
+      f"{wd['byte']['steps']} steps). Given Byte's step count it reached {v('byteconv_256x4_same_bytes'):.2f}, and with zero "
+      f"conv blocks {v('byteconv_256x0'):.2f}: the loss is mostly the FLOP charge, not a defect. Causality and "
+      "residual and norm placement were checked. Outer-network share of FLOPs (Cartesia's ratio: 45%):\n")
+    a("| Method | 256×4, S | 256×4, M | 128×2, S | 128×2, M |")
+    a("| --- | --- | --- | --- | --- |")
+    for k in ws["128x2"]:
+        a(f"| {k} | {ws['256x4'][k]['S']:.0%} | {ws['256x4'][k]['M']:.0%} | {ws['128x2'][k]['S']:.0%} | "
+          f"{ws['128x2'][k]['M']:.0%} |")
+    a("")
+    a("**H-Net, Fixed, Entropy and Byte + conv therefore use width 128, 2 blocks** (departure from the brief, on Téo's "
+      "instruction). The 256×4 search is archived and fixes nothing.\n")
+    a(f"**H-Net diagnostics.** At the search budget, size S, Fixed reaches {lr['fixed_0.0015']['val_bpb']:.2f}. H-Net "
+      f"without the EMA dechunk reached {v('hnet_no_ema_1.5e-3'):.2f}; with rotary positions on byte offset / N instead of "
+      f"chunk index {v('hnet_rope_bytes_1.5e-3'):.2f} (Entropy {v('entropy_rope_bytes_1.5e-3'):.2f}); with both "
+      f"{v('hnet_rope_bytes_no_ema_1.5e-3'):.2f}, all at 1.5e-3. Byte-offset positions leave regular boundaries unchanged. "
+      "Pending Téo's decision; neither is in this draft's design.\n")
     a("## 6. Compute ladder and training\n")
     a(f"Budgets **{', '.join(fmt_e(b) for b in ld['budgets'])} FLOPs** (×3.16), sizes S and M at every budget, 6 "
       f"methods: {len(ld['runs'])} ladder runs, ≈ {ld['ladder_hours']:.0f} h at the measured throughput; longest run "
       f"{max(r['hours'] for r in ld['runs'] if r['method'] != 'entropy'):.2f} h, except Entropy (up to "
       f"{ld['max_run_hours']:.2f} h, because its small byte model's forward pass is wall-clock time not charged to its "
-      "budget). FLOPs = 6 × parameters used per position + 6 × layers × context × width, per "
-      f"network, per symbol. At most {ld['max_passes']:.2f} passes over the {ld['train_symbols']:,} training symbols, so "
+      "budget; Téo accepted this overrun). FLOPs = 6 × parameters used per position + 6 × layers × context × width, per "
+      f"network, per symbol, charged at nominal N (realised compression is reported for every run). At most {ld['max_passes']:.2f} passes over the {ld['train_symbols']:,} training symbols, so "
       "no budget is dropped. At each budget the size with the lower held-in validation bpb is the method's frontier run; "
       "only frontier runs enter the tests.\n")
     a("Optimiser: AdamW (0.9, 0.95), weight decay 0.1, 2% linear warm-up, cosine decay to 10%, gradient clip 1.0, "
@@ -259,7 +303,8 @@ def main():
       "event is logged.\n")
     a("## 11. Files fixed by this document\n")
     for f in ["robobytes/sources.py", "runs/streams_summary.json", "runs/bpe_summary.json", "runs/ladder.json",
-              "runs/baseline_audit.json", "runs/delta_reference.json", str(LISTS)]:
+              "runs/baseline_audit.json", "runs/delta_reference.json", "runs/wrapper_diag.json", "runs/wrapper_share.json",
+              str(LISTS)]:
         a(f"- `{f}`: SHA-256 `{sha(f)}`")
     if Path("runs/lr_search.json").exists():
         a(f"- `runs/lr_search.json`: SHA-256 `{sha('runs/lr_search.json')}`")

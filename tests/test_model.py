@@ -43,3 +43,14 @@ def test_chunk_bucketing_does_not_change_outputs():
         m.k_bucket = 64
         b = m(ids)["logits"]
     assert torch.allclose(a, b, atol=1e-5)
+
+
+def test_rope_on_byte_offset_equals_chunk_index_for_regular_boundaries():
+    torch.manual_seed(0)
+    a = ByteHNet(32, 2, 2, d_outer=16, pos="rope", k_bucket=0).eval()
+    c = ByteHNet(32, 2, 2, d_outer=16, pos="rope", k_bucket=0, rope_bytes=2.0).eval()
+    c.load_state_dict(a.state_dict())
+    ids = torch.randint(0, 256, (2, 40))
+    b = torch.zeros_like(ids, dtype=torch.bool)
+    b[:, ::2] = True
+    assert torch.allclose(a(ids, b)["logits"], c(ids, b)["logits"], atol=1e-5)

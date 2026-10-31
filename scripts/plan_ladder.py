@@ -9,7 +9,7 @@ import json
 
 import numpy as np
 
-from robobytes.data import CTX, training_names
+from robobytes.data import CTX, sqrt_weights, training_names
 from robobytes.flops import flops_per_byte
 from robobytes.serialize import Stream
 from robobytes.train import SIZES, bpe_info, build
@@ -17,10 +17,15 @@ from robobytes.train import SIZES, bpe_info, build
 TOP_HOURS = 2.0
 SPACING = 10 ** 0.5
 SIZE_PAIR = ("S", "M")
-# real training / pilot throughput, measured on the learning-rate runs and the memory check: the pilot has no router loop
-# on real data and no entropy-model forward pass; the other methods match it within 1%
-REAL = {"hnet": 0.91, "hnet_refractory": 0.91, "entropy": 0.64}
+# real training / pilot throughput, measured on the final learning-rate runs (size S) and the memory check (H-Net M); the
+# pilot has no router loop on real data and no entropy-model forward pass. Entropy's factor is S's at both sizes (cautious:
+# its extra pass weighs less at M)
+REAL = {"byte": 0.99, "bpe": 0.99, "fixed": 0.97, "byteconv": 0.98, "entropy": 0.46, "hnet_S": 0.87, "hnet_M": 0.94}
 METHODS = ["byte", "bpe", "hnet", "fixed", "entropy", "byteconv"]
+
+
+def real_factor(m, size):
+    return REAL[f"hnet_{size}"] if m.startswith("hnet") else REAL[m]
 
 
 def main():
@@ -40,10 +45,18 @@ def main():
             t = real[f"{timed[m]}_{size}"]
             # the pilot computed achieved FLOP/s with its own compression; this is the same model, so it carries over
             cfg[f"{m}_{size}"] = dict(flops_per_symbol=flops_per_byte(model, CTX, comp),
-                                      flops_per_s=t["achieved_flops"] * REAL.get(m, 1.0),
+                                      flops_per_s=t["achieved_flops"] * real_factor(m, size),
                                       micro_batch=t["micro_batch"])
+    n4 = {}
+    for m in ("hnet", "fixed", "hnet_refractory"):
+        for size in SIZE_PAIR:
+            model = build(m, size, 4, R, refractory=1)
+            src = "hnet" if m == "hnet_refractory" else m
+            n4[f"{m}_{size}"] = dict(flops_per_symbol=flops_per_byte(model, CTX, 4.0),
+                                     flops_per_s=n4_t[f"{src}_{size}"]["achieved_flops"] * real_factor(m, size))
     # Entropy's extra forward pass is uncharged wall-clock, so it does not set the budget; its runs may exceed 2 h
-    slowest = min(cfg[f"{m}_{s}"]["flops_per_s"] for m in METHODS if m != "entropy" for s in SIZE_PAIR)
+    slowest = min([cfg[f"{m}_{s}"]["flops_per_s"] for m in METHODS if m != "entropy" for s in SIZE_PAIR]
+                  + [c["flops_per_s"] for c in n4.values()])
     top = float(f"{TOP_HOURS * 3600 * slowest:.1e}")
     while top / slowest / 3600 > TOP_HOURS:
         top = float(f"{top * 0.95:.1e}")
@@ -56,13 +69,6 @@ def main():
                 by = b / c["flops_per_symbol"]
                 plan.append(dict(budget=b, method=m, size=s, hours=b / c["flops_per_s"] / 3600, symbols_seen=by,
                                  passes=by / train_symbols))
-    n4 = {}
-    for m in ("hnet", "fixed", "hnet_refractory"):
-        for size in SIZE_PAIR:
-            model = build(m, size, 4, R, refractory=1)
-            src = "hnet" if m == "hnet_refractory" else m
-            n4[f"{m}_{size}"] = dict(flops_per_symbol=flops_per_byte(model, CTX, 4.0),
-                                     flops_per_s=n4_t[f"{src}_{size}"]["achieved_flops"] * REAL.get(m, 1.0))
     secondary = []
     for b in budgets:
         for m in ("hnet", "fixed"):
@@ -96,13 +102,18 @@ def main():
              basis="estimate: forward passes over validation and test windows"),
     ]
     out_total = sum(r["hours"] for r in run_list)
+    w = sqrt_weights(streams)
+    seen = max(r["symbols_seen"] for r in plan)
+    per_passes = {s.name: float(seen * wi / s.n_symbols(s.episodes("train"))) for s, wi in zip(streams, w)}
     out = dict(R_BPE=R, N=N, real_factors=REAL, secondary=secondary, run_list=run_list, total_hours=out_total, train_symbols=train_symbols, budgets=budgets, size_pair=SIZE_PAIR, configs=cfg, runs=plan,
                ladder_hours=hours(plan), max_run_hours=max(r["hours"] for r in plan),
-               max_passes=max(r["passes"] for r in plan), top_budget_hours=hours(top_rows))
+               max_passes=max(r["passes"] for r in plan), top_budget_hours=hours(top_rows),
+               per_dataset_passes_at_max=per_passes, max_secondary_hours=max(r["hours"] for r in secondary))
     json.dump(out, open("runs/ladder.json", "w"), indent=1)
     print("budgets", budgets, "train symbols", train_symbols)
     for r in top_rows:
         print(f"  top {r['method']:7s} {r['size']}  {r['hours']:.2f} h  passes {r['passes']:.2f}")
+    print(f"secondary longest {out['max_secondary_hours']:.2f} h")
     print(f"ladder {out['ladder_hours']:.1f} h, longest run {out['max_run_hours']:.2f} h, max passes {out['max_passes']:.2f}")
     for r in run_list:
         print(f"  {r['hours']:5.1f} h  {r['runs']!s:>8}  {r['block']}")

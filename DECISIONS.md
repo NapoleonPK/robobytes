@@ -158,3 +158,47 @@ Every choice the brief (`docs/BRIEF.md`) left open, with a one-line reason. Date
   dropped to 8 at step 17. Starting at 8 avoids the failed step, and accumulation keeps the effective batch at 16.
 - **Timings:** `runs/pilot_throughput_mps_rope.json` (N = 2), `runs/pilot_throughput_mps_rope_n4.json` (N = 4). Total
   estimate 65.1 h against the 72 h cap.
+
+## Hold before the freeze (Téo, 2026-10-31 ~13:40)
+- Téo: do not freeze at 14:15; hold the ladder for a wrapper diagnostic; he will OK the freeze after the next check-in 2.
+  This replaces the earlier delegation of the freeze decision.
+- **Wrapper diagnostic** (`scripts/wrapper_diag.py`, `runs/wrapper_diag.json`; size S, rate 1.5e-3): Byte 2.67; Byte + conv
+  256×4 3.85 (307 steps); same with Byte's step count 2.86; small conv init 3.76; zero conv blocks 2.71; 128×2 2.87 (505
+  steps). So about 1.0 of the 1.17-bit gap is the FLOP charge, not information loss; there is no bug in the `ByteHNet`
+  path (zero-block control), and causality and block norm/residual placement are clean. The remaining ~0.2 bits is within
+  this budget's sensitivity: Byte itself moved 0.25 bits between 2.43e14 and 2.75e14.
+- **Outer FLOP share at the brief's 256×4:** S: 43% (N = 1), 64% (N = 2), 79% (N = 4); M: 16%, 30%, 47%.
+- **Wrapper changed to width 128, 2 blocks each side, for H-Net, Fixed, Entropy and Byte + conv** (Téo's instruction:
+  a single design with outer share ≤ 45%, Cartesia's ratio; departs from the brief's 256×4). Share at S: 10% / 20% / 35%.
+  The hierarchical search is re-run at 2.75e14 with this wrapper, the same budget as Byte's and BPE's. The 256×4 results
+  are archived (`runs/lr_search_wrapper256.json`, `runs/archive_wrapper256/`).
+- **Entropy overrun accepted by Téo:** its top-budget runs may exceed the 2 h limit (2.39 h estimated with 256×4;
+  re-estimated after the rerun). Its small byte model's forward pass is uncharged wall-clock.
+
+## Final pilot, ladder and open decisions (2026-10-31, supersedes the budgets and hours in "Final pilot and ladder")
+- **Pilot, wrapper 128×2, 2.75e14 FLOPs, size S:** Byte 2.418, Fixed 2.719, Byte + conv 2.738, Entropy 3.624, H-Net 4.181,
+  BPE 5.004; rates in `runs/lr_search.json`, all interior (H-Net's edge run 1.35e-2 lost). Numbers here are copied from
+  that file for the log; the pre-registration reads them from it.
+- **Outer FLOP share with 128×2** (`scripts/wrapper_share.py`): N = 1: 10% S, 3% M; N = 2: 20%, 6%; N = 4: 35%, 11%.
+  All under 45%.
+- **Ladder 1.58e14, 5e14, 1.58e15, 5e15; estimate 55.4 h** (`scripts/plan_ladder.py`). Real / pilot throughput: Byte .99,
+  BPE .99, Fixed .97, Byte + conv .98, H-Net .87 S and .94 M, Entropy .46. H-Net at N = 4, size S now sets the top budget
+  (2.00 h). Entropy's top run is 2.37 h, overrun accepted by Téo.
+- **The search stayed at 2.75e14**, between the first and second budgets. Rates are not re-searched.
+- **Every ladder run starts at micro-batch 8** (`runs/memory_test.json`: H-Net M dropped to 8 at step 6, swap growth 0,
+  driver 6.2 GB). The S rates above were measured at micro-batch 16, so S estimates may run slightly low.
+- **`check_flops.py` rerun at N = 2 with the new wrapper:** analytic within 11-32% of the counter, as before for Byte
+  (1.32); the counter omits and adds different terms per network (note in `runs/flops_check.json`).
+
+## H-Net vs Fixed diagnostics, no design change yet (2026-10-31)
+Same search budget, size S, same validation episodes (`runs/wrapper_diag.json`). Fixed 2.72 at every comparison.
+- **EMA.** H-Net without the EMA dechunk: 3.65 at 1.5e-3 (4.24 with it), 4.06 at 4.5e-3 (4.18 with it).
+- **Positions.** RoPE counts chunks. Under irregular boundaries the data's W + 1 byte offset is not a constant number of
+  chunks, the same failure the Byte audit found for absolute positions. RoPE on byte offset / N (`--rope-bytes`) is
+  identical to the current code for regular boundaries (unit test), so Fixed and Byte + conv do not change, costs no FLOPs
+  and leaves the router alone. Best of three rates: H-Net 3.45, Entropy 3.42, both at 1.5e-3.
+- **Both.** H-Net with byte-offset RoPE and no EMA: 2.99 at 1.5e-3 (3.93 at 5e-4, 3.75 at 4.5e-3), compression 1.85. It
+  stays behind Fixed on all 23 datasets, and ahead of Entropy by 0.43 bits.
+- **Charge.** FLOPs use nominal N. With byte-offset RoPE realised compression falls to about 1.8, so H-Net uses more main
+  positions than it is charged for.
+- These flags are diagnostic only. Whether to adopt either is Téo's decision before the freeze.

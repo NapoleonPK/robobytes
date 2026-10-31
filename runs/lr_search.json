@@ -669,442 +669,442 @@
   "method": "hnet",
   "lr": 0.0005,
   "run": "runs/lr/hnet_0.0005",
-  "val_bpb": 5.317912548279476,
+  "val_bpb": 5.023587067217893,
   "per_dataset": {
    "berkeley_autolab_ur5": {
-    "bpb": 5.434251063105648,
-    "compression": 2.2251729680620587
+    "bpb": 5.154656788172634,
+    "compression": 2.407197399259091
    },
    "berkeley_fanuc_manipulation": {
-    "bpb": 2.980146210763591,
-    "compression": 2.0752507676560903
+    "bpb": 2.8090822341867567,
+    "compression": 1.8785857238158772
    },
    "cmu_stretch": {
-    "bpb": 2.1664993193828397,
-    "compression": 1.3709821791846366
+    "bpb": 1.9533410719830895,
+    "compression": 1.431922488526262
    },
    "dlr_sara_pour": {
-    "bpb": 6.274710659213833,
-    "compression": 2.3111555777888944
+    "bpb": 5.298051235670254,
+    "compression": 1.875
    },
    "fmb": {
-    "bpb": 5.029866377693185,
-    "compression": 1.9652480148842155
+    "bpb": 4.65979695655906,
+    "compression": 2.2192541457192165
    },
    "jaco_play": {
-    "bpb": 4.054162243938328,
-    "compression": 2.157094173385421
+    "bpb": 3.7972536214819868,
+    "compression": 1.9503983165489254
    },
    "koch_pick_place_1_lego": {
-    "bpb": 6.071601910198477,
-    "compression": 2.3894121146029543
+    "bpb": 5.690479188032263,
+    "compression": 1.8429423459244534
    },
    "koch_pick_place_5_lego": {
-    "bpb": 6.400623772118065,
-    "compression": 2.250467872738615
+    "bpb": 6.122073955936833,
+    "compression": 1.889402932960894
    },
    "robocasa_target_human_unified": {
-    "bpb": 3.864804534098335,
-    "compression": 1.9760915264417256
+    "bpb": 3.34432703544837,
+    "compression": 1.968596795985331
    },
    "roboturk": {
-    "bpb": 2.8882549646246525,
-    "compression": 2.1941900026171157
+    "bpb": 2.903673751360284,
+    "compression": 2.12239731662553
    },
    "stanford_kuka_multimodal_dataset": {
-    "bpb": 5.70922998046875,
-    "compression": 2.1346235947061336
+    "bpb": 5.510995727539062,
+    "compression": 1.9483049746720353
    },
    "svla_so100_pickplace": {
-    "bpb": 5.7780419540405275,
-    "compression": 2.027378270663663
+    "bpb": 5.380375154283311,
+    "compression": 1.9180327868852458
    },
    "svla_so100_sorting": {
-    "bpb": 6.362460989636646,
-    "compression": 2.31438127090301
+    "bpb": 6.142812911409098,
+    "compression": 2.2311507936507935
    },
    "svla_so100_stacking": {
-    "bpb": 6.687128834178967,
-    "compression": 2.418314113124657
+    "bpb": 6.4444116195922705,
+    "compression": 2.187926965594336
    },
    "svla_so101_pickplace": {
-    "bpb": 5.894162582257472,
-    "compression": 2.1187200956937797
+    "bpb": 5.532503063890183,
+    "compression": 1.7819416498993963
    },
    "toto": {
-    "bpb": 6.272480806229241,
-    "compression": 2.0342246925467196
+    "bpb": 5.66214592317022,
+    "compression": 2.1271337696215276
    },
    "utaustin_mutex": {
-    "bpb": 6.366917659273638,
-    "compression": 2.276167833965174
+    "bpb": 6.070588750244802,
+    "compression": 2.18242306626005
    },
    "utokyo_pr2_opening_fridge": {
-    "bpb": 6.302216001689304,
-    "compression": 2.280391243595715
+    "bpb": 6.09838159764774,
+    "compression": 2.3663605606573226
    },
    "utokyo_pr2_tabletop_manipulation": {
-    "bpb": 3.4089131284959033,
-    "compression": 2.1475908436049305
+    "bpb": 3.1114083963605332,
+    "compression": 2.031803725579282
    },
    "utokyo_xarm_pick_and_place": {
-    "bpb": 5.9340871797385795,
-    "compression": 2.2150220913107512
+    "bpb": 5.734478827402102,
+    "compression": 2.2582582582582584
    },
    "vlabench_unified": {
-    "bpb": 3.73726085854118,
-    "compression": 1.9050823222659126
+    "bpb": 3.3510584516353843,
+    "compression": 1.7320155231413332
    },
    "xarm_lift_medium": {
-    "bpb": 7.626739532470703,
-    "compression": 2.4311183144246353
+    "bpb": 7.58549478149414,
+    "compression": 2.1686746987951806
    },
    "xarm_push_medium": {
-    "bpb": 7.067428048270089,
-    "compression": 3.398470688190314
+    "bpb": 7.185111502511161,
+    "compression": 3.1421838177533385
    }
   },
   "train": {
-   "step": 516,
-   "loss": 3.7899084091186523,
-   "lr": 5.000433660472902e-05,
-   "seconds": 248.71316385269165,
-   "mps_gb": 0.108939008,
-   "mps_driver_gb": 5.737627648,
-   "swap_mb": 1796.06,
+   "step": 1169,
+   "loss": 2.8734352588653564,
+   "lr": 5.000084543993966e-05,
+   "seconds": 301.54174304008484,
+   "mps_gb": 0.060073728,
+   "mps_driver_gb": 4.64068608,
+   "swap_mb": 1762.56,
    "micro": 16,
-   "compression": 2.0117415027588694
+   "compression": 1.998373719303952
   }
  },
  "hnet_0.0015": {
   "method": "hnet",
   "lr": 0.0015,
   "run": "runs/lr/hnet_0.0015",
-  "val_bpb": 4.541066312038831,
+  "val_bpb": 4.235670009030724,
   "per_dataset": {
    "berkeley_autolab_ur5": {
-    "bpb": 4.819657657693579,
-    "compression": 1.861661696778343
+    "bpb": 4.36042244864868,
+    "compression": 1.6883185746858265
    },
    "berkeley_fanuc_manipulation": {
-    "bpb": 2.6422145300842694,
-    "compression": 1.6637563185190047
+    "bpb": 2.437620832783606,
+    "compression": 2.2294159042927517
    },
    "cmu_stretch": {
-    "bpb": 1.8783354806814845,
-    "compression": 1.7162065804217175
+    "bpb": 1.7529374302058038,
+    "compression": 1.8528538436159683
    },
    "dlr_sara_pour": {
-    "bpb": 5.061224194506665,
-    "compression": 1.96972926881262
+    "bpb": 4.513892882020324,
+    "compression": 1.5513767629281396
    },
    "fmb": {
-    "bpb": 4.396133364999964,
-    "compression": 1.9759486905398183
+    "bpb": 4.006540830442102,
+    "compression": 1.644572953736655
    },
    "jaco_play": {
-    "bpb": 3.628720797700643,
-    "compression": 1.741744966442953
+    "bpb": 3.2637318543333405,
+    "compression": 1.731403028887851
    },
    "koch_pick_place_1_lego": {
-    "bpb": 4.738333655106683,
-    "compression": 1.9363702096890818
+    "bpb": 4.4651287727671445,
+    "compression": 1.5389821850456549
    },
    "koch_pick_place_5_lego": {
-    "bpb": 4.956518961741282,
-    "compression": 1.6849602989257357
+    "bpb": 4.758177541326116,
+    "compression": 1.5148015956330043
    },
    "robocasa_target_human_unified": {
-    "bpb": 3.355982420563751,
-    "compression": 2.0979954540312047
+    "bpb": 2.9584802256009537,
+    "compression": 2.13762424483765
    },
    "roboturk": {
-    "bpb": 2.8703778339706303,
-    "compression": 1.6723682242058544
+    "bpb": 2.830532222607057,
+    "compression": 1.9989271025809143
    },
    "stanford_kuka_multimodal_dataset": {
-    "bpb": 5.2848822893415175,
-    "compression": 1.8046198267564966
+    "bpb": 4.849738978794643,
+    "compression": 1.5203729981755525
    },
    "svla_so100_pickplace": {
-    "bpb": 4.530498657932988,
-    "compression": 1.7813641900121802
+    "bpb": 4.209847202301026,
+    "compression": 1.4885496183206106
    },
    "svla_so100_sorting": {
-    "bpb": 4.938923144233327,
-    "compression": 1.6287266143633072
+    "bpb": 4.704981450477164,
+    "compression": 1.4975030518255465
    },
    "svla_so100_stacking": {
-    "bpb": 5.2052471428339775,
-    "compression": 1.7235812133072408
+    "bpb": 4.896255189114391,
+    "compression": 1.5450399087799316
    },
    "svla_so101_pickplace": {
-    "bpb": 4.955741658341994,
-    "compression": 1.855197695731867
+    "bpb": 4.488541620003703,
+    "compression": 1.4850136239782017
    },
    "toto": {
-    "bpb": 5.2086069528357575,
-    "compression": 2.3025289178411312
+    "bpb": 4.522317939622608,
+    "compression": 1.5925170883799016
    },
    "utaustin_mutex": {
-    "bpb": 5.474913640583685,
-    "compression": 1.9068227694792088
+    "bpb": 4.878566013004219,
+    "compression": 1.4923222748815166
    },
    "utokyo_pr2_opening_fridge": {
-    "bpb": 5.567734642278135,
-    "compression": 1.7516994633273704
+    "bpb": 5.10745848279633,
+    "compression": 1.4956468611577822
    },
    "utokyo_pr2_tabletop_manipulation": {
-    "bpb": 2.8584093100317096,
-    "compression": 1.5759426759074358
+    "bpb": 2.7103998835151746,
+    "compression": 2.3148994909843843
    },
    "utokyo_xarm_pick_and_place": {
-    "bpb": 5.277628272306835,
-    "compression": 1.9711664482306683
+    "bpb": 4.872498335060499,
+    "compression": 1.6532014289640011
    },
    "vlabench_unified": {
-    "bpb": 2.799706660607229,
-    "compression": 2.055400530865038
+    "bpb": 2.6781792620836615,
+    "compression": 1.848941858329422
    },
    "xarm_lift_medium": {
-    "bpb": 7.50136264038086,
-    "compression": 2.3340248962655603
+    "bpb": 7.409919006347656,
+    "compression": 2.0288548241659154
    },
    "xarm_push_medium": {
-    "bpb": 6.493371268136161,
-    "compression": 2.0671834625322996
+    "bpb": 6.744241803850446,
+    "compression": 2.1356113187399894
    }
   },
   "train": {
-   "step": 516,
-   "loss": 3.2831907272338867,
-   "lr": 0.00015001300981418706,
-   "seconds": 245.23336791992188,
-   "mps_gb": 0.108939008,
-   "mps_driver_gb": 5.687836672,
-   "swap_mb": 1788.06,
+   "step": 1169,
+   "loss": 2.501312494277954,
+   "lr": 0.00015000253631981898,
+   "seconds": 310.3263909816742,
+   "mps_gb": 0.060073728,
+   "mps_driver_gb": 4.653400064,
+   "swap_mb": 1762.56,
    "micro": 16,
-   "compression": 1.9793714794847401
+   "compression": 1.8852660227333369
   }
  },
  "hnet_0.0045": {
   "method": "hnet",
   "lr": 0.0045,
   "run": "runs/lr/hnet_0.0045",
-  "val_bpb": 4.134020872440688,
+  "val_bpb": 4.181424877128487,
   "per_dataset": {
    "berkeley_autolab_ur5": {
-    "bpb": 4.064049166834335,
-    "compression": 1.8092965109671553
+    "bpb": 4.37071819618519,
+    "compression": 1.7751017449963762
    },
    "berkeley_fanuc_manipulation": {
-    "bpb": 2.116688685063963,
-    "compression": 2.0783992127275708
+    "bpb": 2.274513432473847,
+    "compression": 1.9356169091533968
    },
    "cmu_stretch": {
-    "bpb": 1.9216456293460669,
-    "compression": 1.809861424427973
+    "bpb": 1.6840774854464882,
+    "compression": 1.7936761418077292
    },
    "dlr_sara_pour": {
-    "bpb": 5.016329507894449,
-    "compression": 1.63135593220339
+    "bpb": 4.5025012107440086,
+    "compression": 1.5172413793103448
    },
    "fmb": {
-    "bpb": 3.9127679243733526,
-    "compression": 1.78227726053813
+    "bpb": 3.961232126291165,
+    "compression": 1.8281052013474672
    },
    "jaco_play": {
-    "bpb": 3.054830437788393,
-    "compression": 1.6993190151911997
+    "bpb": 3.229289116410625,
+    "compression": 1.72645023948909
    },
    "koch_pick_place_1_lego": {
-    "bpb": 4.394802386363776,
-    "compression": 1.704285108188375
+    "bpb": 4.270241326884545,
+    "compression": 1.852432557067097
    },
    "koch_pick_place_5_lego": {
-    "bpb": 4.498375534653306,
-    "compression": 1.5843214756258235
+    "bpb": 4.598447840158885,
+    "compression": 1.8368126272912424
    },
    "robocasa_target_human_unified": {
-    "bpb": 3.6918276716965637,
-    "compression": 2.2797208267907934
+    "bpb": 3.148810853567222,
+    "compression": 2.1564825778078482
    },
    "roboturk": {
-    "bpb": 2.832566977639235,
-    "compression": 1.6352642871074703
+    "bpb": 2.8331973624290097,
+    "compression": 2.0805260872262545
    },
    "stanford_kuka_multimodal_dataset": {
-    "bpb": 5.233534022739955,
-    "compression": 1.7088174982911826
+    "bpb": 4.790551095145089,
+    "compression": 1.5977844056242012
    },
    "svla_so100_pickplace": {
-    "bpb": 4.069918160261931,
-    "compression": 1.7546490701859627
+    "bpb": 4.032465432131732,
+    "compression": 1.7042971595047343
    },
    "svla_so100_sorting": {
-    "bpb": 4.459240290470895,
-    "compression": 1.7983607649763445
+    "bpb": 4.51516936417949,
+    "compression": 1.7758768177929856
    },
    "svla_so100_stacking": {
-    "bpb": 4.5831286215694185,
-    "compression": 1.6606957669463562
+    "bpb": 4.680060268650783,
+    "compression": 1.8630354309888948
    },
    "svla_so101_pickplace": {
-    "bpb": 4.445108115053323,
-    "compression": 1.7792566549472626
+    "bpb": 4.456297799206655,
+    "compression": 1.7242638111462643
    },
    "toto": {
-    "bpb": 4.381941779569449,
-    "compression": 1.9184414726762424
+    "bpb": 4.5482052965104,
+    "compression": 2.0218805054701265
    },
    "utaustin_mutex": {
-    "bpb": 4.5675997956048215,
-    "compression": 1.83586846674095
+    "bpb": 4.981557173988827,
+    "compression": 1.7034864150036066
    },
    "utokyo_pr2_opening_fridge": {
-    "bpb": 4.70507655590448,
-    "compression": 1.884526558891455
+    "bpb": 5.216078481902744,
+    "compression": 1.7002951901371766
    },
    "utokyo_pr2_tabletop_manipulation": {
-    "bpb": 2.4174492317553047,
-    "compression": 2.549116473494205
+    "bpb": 2.613866414703448,
+    "compression": 2.1614306428226198
    },
    "utokyo_xarm_pick_and_place": {
-    "bpb": 4.653294288689363,
-    "compression": 2.1852524518706864
+    "bpb": 5.046587469222698,
+    "compression": 2.3638506876227896
    },
    "vlabench_unified": {
-    "bpb": 2.5343656815102107,
-    "compression": 1.972395175686855
+    "bpb": 2.515792729026773,
+    "compression": 1.853518821603928
    },
    "xarm_lift_medium": {
-    "bpb": 7.317561706542969,
-    "compression": 2.152080344332855
+    "bpb": 7.28330062866211,
+    "compression": 2.5
    },
    "xarm_push_medium": {
-    "bpb": 6.210377894810268,
-    "compression": 1.9627085377821394
+    "bpb": 6.6198110700334825,
+    "compression": 3.499562554680665
    }
   },
   "train": {
-   "step": 516,
-   "loss": 3.041289806365967,
-   "lr": 0.00045003902944256113,
-   "seconds": 246.67111492156982,
-   "mps_gb": 0.108939008,
-   "mps_driver_gb": 5.687836672,
-   "swap_mb": 1788.06,
+   "step": 1169,
+   "loss": 2.5184526443481445,
+   "lr": 0.00045000760895945685,
+   "seconds": 314.346164226532,
+   "mps_gb": 0.060073728,
+   "mps_driver_gb": 4.565385216,
+   "swap_mb": 1746.56,
    "micro": 16,
-   "compression": 2.029103969286024
+   "compression": 2.0134826337621536
   }
  },
  "fixed_0.0005": {
   "method": "fixed",
   "lr": 0.0005,
   "run": "runs/lr/fixed_0.0005",
-  "val_bpb": 4.205949572950708,
+  "val_bpb": 3.1630151053081157,
   "per_dataset": {
    "berkeley_autolab_ur5": {
-    "bpb": 4.159004126569534,
+    "bpb": 3.293800931384216,
     "compression": 2.0
    },
    "berkeley_fanuc_manipulation": {
-    "bpb": 2.120850910241355,
+    "bpb": 1.2800180645502777,
     "compression": 2.0
    },
    "cmu_stretch": {
-    "bpb": 1.6178247736462243,
+    "bpb": 1.122744619448831,
     "compression": 2.000474946568511
    },
    "dlr_sara_pour": {
-    "bpb": 5.17010379960209,
+    "bpb": 3.5222345703409546,
     "compression": 2.0
    },
    "fmb": {
-    "bpb": 4.022695011327742,
+    "bpb": 3.1554551155957764,
     "compression": 2.0
    },
    "jaco_play": {
-    "bpb": 3.0675549182194133,
+    "bpb": 2.0942839373593656,
     "compression": 2.0
    },
    "koch_pick_place_1_lego": {
-    "bpb": 4.591960953620217,
+    "bpb": 2.9422359706600205,
     "compression": 2.0001659751037346
    },
    "koch_pick_place_5_lego": {
-    "bpb": 4.814126603524606,
+    "bpb": 3.3496866402802645,
     "compression": 2.000092404361486
    },
    "robocasa_target_human_unified": {
-    "bpb": 2.532671554694638,
+    "bpb": 1.6018554881530442,
     "compression": 2.0000392191467875
    },
    "roboturk": {
-    "bpb": 2.9087390647286373,
+    "bpb": 2.8598778361885904,
     "compression": 2.0
    },
    "stanford_kuka_multimodal_dataset": {
-    "bpb": 4.802022147042411,
+    "bpb": 4.171403041294643,
     "compression": 2.0
    },
    "svla_so100_pickplace": {
-    "bpb": 4.283882703074703,
+    "bpb": 2.6644700607547054,
     "compression": 2.000341938792956
    },
    "svla_so100_sorting": {
-    "bpb": 4.697060605234723,
+    "bpb": 3.0265668625240534,
     "compression": 2.0001482250055584
    },
    "svla_so100_stacking": {
-    "bpb": 4.712429257776464,
+    "bpb": 2.7852636320857838,
     "compression": 2.0001135460429205
    },
    "svla_so101_pickplace": {
-    "bpb": 4.390988598978119,
+    "bpb": 2.9697328165036825,
     "compression": 2.000282326369283
    },
    "toto": {
-    "bpb": 4.470921456998473,
+    "bpb": 2.3977025257795623,
     "compression": 2.0
    },
    "utaustin_mutex": {
-    "bpb": 4.759494563938085,
+    "bpb": 3.4246913035782445,
     "compression": 2.0
    },
    "utokyo_pr2_opening_fridge": {
-    "bpb": 5.0759295960137525,
+    "bpb": 4.336026379953023,
     "compression": 2.0
    },
    "utokyo_pr2_tabletop_manipulation": {
-    "bpb": 2.515838092886603,
+    "bpb": 2.0136681117112962,
     "compression": 2.0
    },
    "utokyo_xarm_pick_and_place": {
-    "bpb": 4.84092794513026,
+    "bpb": 3.967133826397835,
     "compression": 2.0
    },
    "vlabench_unified": {
-    "bpb": 2.7295724624265674,
+    "bpb": 1.885196384215197,
     "compression": 2.000176616036736
    },
    "xarm_lift_medium": {
-    "bpb": 7.5847334289550785,
+    "bpb": 7.425254486083984,
     "compression": 1.991150442477876
    },
    "xarm_push_medium": {
-    "bpb": 6.867507603236607,
+    "bpb": 6.460044817243303,
     "compression": 2.0
    }
   },
   "train": {
-   "step": 516,
-   "loss": 2.5443291664123535,
-   "lr": 5.000433660472902e-05,
-   "seconds": 198.879380941391,
-   "mps_gb": 0.10736,
-   "mps_driver_gb": 3.443949568,
-   "swap_mb": 1772.06,
+   "step": 1169,
+   "loss": 1.4716131687164307,
+   "lr": 5.000084543993966e-05,
+   "seconds": 222.22863483428955,
+   "mps_gb": 0.05967744,
+   "mps_driver_gb": 2.353430528,
+   "swap_mb": 1746.56,
    "micro": 16,
    "compression": 2.0
   }
@@ -1113,109 +1113,109 @@
   "method": "fixed",
   "lr": 0.0015,
   "run": "runs/lr/fixed_0.0015",
-  "val_bpb": 3.5721318574654424,
+  "val_bpb": 2.7190822966061403,
   "per_dataset": {
    "berkeley_autolab_ur5": {
-    "bpb": 3.547437800754055,
+    "bpb": 2.8250979656430344,
     "compression": 2.0
    },
    "berkeley_fanuc_manipulation": {
-    "bpb": 1.6385491778954915,
+    "bpb": 1.0016678762957705,
     "compression": 2.0
    },
    "cmu_stretch": {
-    "bpb": 1.3969393184212364,
+    "bpb": 0.9440599021391891,
     "compression": 2.000474946568511
    },
    "dlr_sara_pour": {
-    "bpb": 4.349651893313393,
+    "bpb": 2.9186576452010717,
     "compression": 2.0
    },
    "fmb": {
-    "bpb": 3.437520432414188,
+    "bpb": 2.7859869609843426,
     "compression": 2.0
    },
    "jaco_play": {
-    "bpb": 2.460796256012452,
+    "bpb": 1.758143427104456,
     "compression": 2.0
    },
    "koch_pick_place_1_lego": {
-    "bpb": 3.677515757593994,
+    "bpb": 2.2993325801343207,
     "compression": 2.0001659751037346
    },
    "koch_pick_place_5_lego": {
-    "bpb": 3.93606703312428,
+    "bpb": 2.7353525760295514,
     "compression": 2.000092404361486
    },
    "robocasa_target_human_unified": {
-    "bpb": 2.0837346476155933,
+    "bpb": 1.274965681466435,
     "compression": 2.0000392191467875
    },
    "roboturk": {
-    "bpb": 2.837982130414657,
+    "bpb": 2.8187063270549433,
     "compression": 2.0
    },
    "stanford_kuka_multimodal_dataset": {
-    "bpb": 4.252274239676339,
+    "bpb": 3.8137887137276785,
     "compression": 2.0
    },
    "svla_so100_pickplace": {
-    "bpb": 3.409803650467484,
+    "bpb": 2.1084538800628096,
     "compression": 2.000341938792956
    },
    "svla_so100_sorting": {
-    "bpb": 3.7894989018571934,
+    "bpb": 2.4085857471595915,
     "compression": 2.0001482250055584
    },
    "svla_so100_stacking": {
-    "bpb": 3.8659811360076493,
+    "bpb": 2.1953249660365257,
     "compression": 2.0001135460429205
    },
    "svla_so101_pickplace": {
-    "bpb": 3.748464495690955,
+    "bpb": 2.516769116077948,
     "compression": 2.000282326369283
    },
    "toto": {
-    "bpb": 3.396397919690411,
+    "bpb": 1.6334303897588471,
     "compression": 2.0
    },
    "utaustin_mutex": {
-    "bpb": 3.814635455353509,
+    "bpb": 2.888292873282635,
     "compression": 2.0
    },
    "utokyo_pr2_opening_fridge": {
-    "bpb": 4.420488404916003,
+    "bpb": 3.7276971555223652,
     "compression": 2.0
    },
    "utokyo_pr2_tabletop_manipulation": {
-    "bpb": 2.056355647475884,
+    "bpb": 1.6951721761601508,
     "compression": 2.0
    },
    "utokyo_xarm_pick_and_place": {
-    "bpb": 4.280541447037501,
+    "bpb": 3.7495514538271206,
     "compression": 2.0
    },
    "vlabench_unified": {
-    "bpb": 2.180248403323633,
+    "bpb": 1.4234158156385033,
     "compression": 2.000176616036736
    },
    "xarm_lift_medium": {
-    "bpb": 7.3164880676269535,
+    "bpb": 7.028809936523437,
     "compression": 1.991150442477876
    },
    "xarm_push_medium": {
-    "bpb": 6.261660505022322,
+    "bpb": 5.987629656110491,
     "compression": 2.0
    }
   },
   "train": {
-   "step": 516,
-   "loss": 2.054112672805786,
-   "lr": 0.00015001300981418706,
-   "seconds": 198.06928205490112,
-   "mps_gb": 0.10736,
-   "mps_driver_gb": 3.43556096,
-   "swap_mb": 1772.06,
+   "step": 1169,
+   "loss": 1.2102787494659424,
+   "lr": 0.00015000253631981898,
+   "seconds": 222.42927408218384,
+   "mps_gb": 0.05967744,
+   "mps_driver_gb": 2.353430528,
+   "swap_mb": 1746.56,
    "micro": 16,
    "compression": 2.0
   }
@@ -1224,109 +1224,109 @@
   "method": "fixed",
   "lr": 0.0045,
   "run": "runs/lr/fixed_0.0045",
-  "val_bpb": 4.170172859952684,
+  "val_bpb": 2.99479358710479,
   "per_dataset": {
    "berkeley_autolab_ur5": {
-    "bpb": 4.29917909401745,
+    "bpb": 3.016688131207797,
     "compression": 2.0
    },
    "berkeley_fanuc_manipulation": {
-    "bpb": 2.1262259273015287,
+    "bpb": 1.1446779091350157,
     "compression": 2.0
    },
    "cmu_stretch": {
-    "bpb": 1.9354472628562498,
+    "bpb": 1.100149939052577,
     "compression": 2.000474946568511
    },
    "dlr_sara_pour": {
-    "bpb": 5.228512139309259,
+    "bpb": 3.75717639700794,
     "compression": 2.0
    },
    "fmb": {
-    "bpb": 4.037486041599308,
+    "bpb": 2.8880036052510905,
     "compression": 2.0
    },
    "jaco_play": {
-    "bpb": 3.1350488364035045,
+    "bpb": 1.8866626805353695,
     "compression": 2.0
    },
    "koch_pick_place_1_lego": {
-    "bpb": 4.2798270966585745,
+    "bpb": 2.7460142010109583,
     "compression": 2.0001659751037346
    },
    "koch_pick_place_5_lego": {
-    "bpb": 4.495710078326312,
+    "bpb": 3.1626353804174965,
     "compression": 2.000092404361486
    },
    "robocasa_target_human_unified": {
-    "bpb": 2.564055928624593,
+    "bpb": 1.4310664218593232,
     "compression": 2.0000392191467875
    },
    "roboturk": {
-    "bpb": 2.8402480667784014,
+    "bpb": 2.824172210814692,
     "compression": 2.0
    },
    "stanford_kuka_multimodal_dataset": {
-    "bpb": 5.064869855608259,
+    "bpb": 3.9916364571707588,
     "compression": 2.0
    },
    "svla_so100_pickplace": {
-    "bpb": 4.107101673550076,
+    "bpb": 2.5287944239157216,
     "compression": 2.000341938792956
    },
    "svla_so100_sorting": {
-    "bpb": 4.460549685919829,
+    "bpb": 2.861234949120514,
     "compression": 2.0001482250055584
    },
    "svla_so100_stacking": {
-    "bpb": 4.6844738799560846,
+    "bpb": 2.7129200220987806,
     "compression": 2.0001135460429205
    },
    "svla_so101_pickplace": {
-    "bpb": 4.527165479980842,
+    "bpb": 2.887007121281522,
     "compression": 2.000282326369283
    },
    "toto": {
-    "bpb": 4.424633224408516,
+    "bpb": 1.8481760065075452,
     "compression": 2.0
    },
    "utaustin_mutex": {
-    "bpb": 4.771176957954882,
+    "bpb": 3.078947593920994,
     "compression": 2.0
    },
    "utokyo_pr2_opening_fridge": {
-    "bpb": 5.071217562274476,
+    "bpb": 3.909924429434317,
     "compression": 2.0
    },
    "utokyo_pr2_tabletop_manipulation": {
-    "bpb": 2.505364071856055,
+    "bpb": 1.8105372866208025,
     "compression": 2.0
    },
    "utokyo_xarm_pick_and_place": {
-    "bpb": 4.917735428505756,
+    "bpb": 4.237909327838437,
     "compression": 2.0
    },
    "vlabench_unified": {
-    "bpb": 2.5341503199249815,
+    "bpb": 1.6288449021703022,
     "compression": 2.000176616036736
    },
    "xarm_lift_medium": {
-    "bpb": 7.54751870727539,
+    "bpb": 7.198750457763672,
     "compression": 1.991150442477876
    },
    "xarm_push_medium": {
-    "bpb": 6.356278459821429,
+    "bpb": 6.228322649274554,
     "compression": 2.0
    }
   },
   "train": {
-   "step": 516,
-   "loss": 2.565325975418091,
-   "lr": 0.00045003902944256113,
-   "seconds": 201.61728596687317,
-   "mps_gb": 0.10736,
-   "mps_driver_gb": 3.443949568,
-   "swap_mb": 1756.06,
+   "step": 1169,
+   "loss": 1.3433027267456055,
+   "lr": 0.00045000760895945685,
+   "seconds": 222.58225512504578,
+   "mps_gb": 0.05967744,
+   "mps_driver_gb": 2.353430528,
+   "swap_mb": 1738.56,
    "micro": 16,
    "compression": 2.0
   }
@@ -1335,442 +1335,442 @@
   "method": "entropy",
   "lr": 0.0005,
   "run": "runs/lr/entropy_0.0005",
-  "val_bpb": 5.143152121527734,
+  "val_bpb": 4.43656555926091,
   "per_dataset": {
    "berkeley_autolab_ur5": {
-    "bpb": 5.259228670768802,
+    "bpb": 4.24517393818253,
     "compression": 1.4718934911242603
    },
    "berkeley_fanuc_manipulation": {
-    "bpb": 2.932610525266089,
+    "bpb": 2.536190805852614,
     "compression": 3.337591361032462
    },
    "cmu_stretch": {
-    "bpb": 2.1081815967046458,
+    "bpb": 2.0289305449811237,
     "compression": 5.657488247145736
    },
    "dlr_sara_pour": {
-    "bpb": 5.756214033362471,
+    "bpb": 4.543457322909838,
     "compression": 1.2333155365723438
    },
    "fmb": {
-    "bpb": 4.857757204190097,
+    "bpb": 3.996173173503551,
     "compression": 1.3819914957244988
    },
    "jaco_play": {
-    "bpb": 3.8883381245805557,
+    "bpb": 3.2353693744551237,
     "compression": 2.0001541425818883
    },
    "koch_pick_place_1_lego": {
-    "bpb": 5.871828418719344,
+    "bpb": 5.211621310204236,
     "compression": 1.4934010781337133
    },
    "koch_pick_place_5_lego": {
-    "bpb": 6.141399532276112,
+    "bpb": 5.362563369796799,
     "compression": 1.3467521154803386
    },
    "robocasa_target_human_unified": {
-    "bpb": 3.972225638755694,
+    "bpb": 3.541579273045172,
     "compression": 3.1033690600254067
    },
    "roboturk": {
-    "bpb": 2.9069920698801677,
+    "bpb": 2.9071900808174194,
     "compression": 2.503433860853986
    },
    "stanford_kuka_multimodal_dataset": {
-    "bpb": 5.471162859235491,
+    "bpb": 4.750982892717634,
     "compression": 1.4108352144469527
    },
    "svla_so100_pickplace": {
-    "bpb": 5.619591421197962,
+    "bpb": 4.744517355318423,
     "compression": 1.5944399018806215
    },
    "svla_so100_sorting": {
-    "bpb": 6.135562935929001,
+    "bpb": 5.225842458128393,
     "compression": 1.356794530189533
    },
    "svla_so100_stacking": {
-    "bpb": 6.501485819423624,
+    "bpb": 5.590667266658018,
     "compression": 1.3904017680953509
    },
    "svla_so101_pickplace": {
-    "bpb": 5.7688665407513255,
+    "bpb": 5.167250505499884,
     "compression": 1.6484411354118194
    },
    "toto": {
-    "bpb": 5.9799432552510545,
+    "bpb": 4.807657031586166,
     "compression": 1.438875646224809
    },
    "utaustin_mutex": {
-    "bpb": 6.117868684781886,
+    "bpb": 5.1011987986531615,
     "compression": 1.3410054512416718
    },
    "utokyo_pr2_opening_fridge": {
-    "bpb": 5.986887839988426,
+    "bpb": 5.006673057406556,
     "compression": 1.2868970955447496
    },
    "utokyo_pr2_tabletop_manipulation": {
-    "bpb": 3.2155685191267267,
+    "bpb": 2.581847800594323,
     "compression": 2.53754492150558
    },
    "utokyo_xarm_pick_and_place": {
-    "bpb": 5.736683692661583,
+    "bpb": 4.571465624816029,
     "compression": 1.3312679796415137
    },
    "vlabench_unified": {
-    "bpb": 3.57801557069921,
+    "bpb": 3.020790129059762,
     "compression": 2.2891505381777755
    },
    "xarm_lift_medium": {
-    "bpb": 7.571114929199219,
+    "bpb": 7.440906555175781,
     "compression": 1.077070368597415
    },
    "xarm_push_medium": {
-    "bpb": 6.914970912388393,
+    "bpb": 6.422959193638393,
     "compression": 1.118881118881119
    }
   },
   "train": {
-   "step": 516,
-   "loss": 3.3865625858306885,
-   "lr": 5.000433660472902e-05,
-   "seconds": 307.9942350387573,
-   "mps_gb": 0.120527872,
-   "mps_driver_gb": 6.806962176,
-   "swap_mb": 2018.56,
+   "step": 1169,
+   "loss": 2.4572439193725586,
+   "lr": 5.000084543993966e-05,
+   "seconds": 468.6101927757263,
+   "mps_gb": 0.072845312,
+   "mps_driver_gb": 6.723076096,
+   "swap_mb": 1730.56,
    "micro": 16,
-   "compression": 1.9940970637456261
+   "compression": 2.060245772426324
   }
  },
  "entropy_0.0015": {
   "method": "entropy",
   "lr": 0.0015,
   "run": "runs/lr/entropy_0.0015",
-  "val_bpb": 4.273452221538958,
+  "val_bpb": 3.6242993310249845,
   "per_dataset": {
    "berkeley_autolab_ur5": {
-    "bpb": 4.353052999218504,
+    "bpb": 3.5561439886045214,
     "compression": 1.4718934911242603
    },
    "berkeley_fanuc_manipulation": {
-    "bpb": 2.414295611156759,
+    "bpb": 1.9453972470479381,
     "compression": 3.337591361032462
    },
    "cmu_stretch": {
-    "bpb": 1.9268497800761824,
+    "bpb": 1.7039225543956362,
     "compression": 5.657488247145736
    },
    "dlr_sara_pour": {
-    "bpb": 4.521722853155959,
+    "bpb": 3.814857991536458,
     "compression": 1.2333155365723438
    },
    "fmb": {
-    "bpb": 4.0787878330056335,
+    "bpb": 3.3646427561772243,
     "compression": 1.3819914957244988
    },
    "jaco_play": {
-    "bpb": 3.1939832807322173,
+    "bpb": 2.5137935702711576,
     "compression": 2.0001541425818883
    },
    "koch_pick_place_1_lego": {
-    "bpb": 4.590660329775517,
+    "bpb": 3.8922483278924034,
     "compression": 1.4934010781337133
    },
    "koch_pick_place_5_lego": {
-    "bpb": 4.787000451073633,
+    "bpb": 4.011852660766235,
     "compression": 1.3467521154803386
    },
    "robocasa_target_human_unified": {
-    "bpb": 3.4001339303763944,
+    "bpb": 2.7967570751918758,
     "compression": 3.1033690600254067
    },
    "roboturk": {
-    "bpb": 2.837937208107713,
+    "bpb": 2.8395940473668144,
     "compression": 2.503433860853986
    },
    "stanford_kuka_multimodal_dataset": {
-    "bpb": 4.75465234375,
+    "bpb": 4.080368303571428,
     "compression": 1.4108352144469527
    },
    "svla_so100_pickplace": {
-    "bpb": 4.298023168069345,
+    "bpb": 3.548348115991663,
     "compression": 1.5944399018806215
    },
    "svla_so100_sorting": {
-    "bpb": 4.726806809677095,
+    "bpb": 3.8654752007339273,
     "compression": 1.356794530189533
    },
    "svla_so100_stacking": {
-    "bpb": 4.977951462711649,
+    "bpb": 4.160229668611383,
     "compression": 1.3904017680953509
    },
    "svla_so101_pickplace": {
-    "bpb": 4.763683110275036,
+    "bpb": 4.158191636578388,
     "compression": 1.6484411354118194
    },
    "toto": {
-    "bpb": 4.825983538559231,
+    "bpb": 3.4672641626774956,
     "compression": 1.438875646224809
    },
    "utaustin_mutex": {
-    "bpb": 5.009858515233169,
+    "bpb": 3.88569487951061,
     "compression": 1.3410054512416718
    },
    "utokyo_pr2_opening_fridge": {
-    "bpb": 5.033614154890472,
+    "bpb": 4.233414234834559,
     "compression": 1.2868970955447496
    },
    "utokyo_pr2_tabletop_manipulation": {
-    "bpb": 2.6824458050031215,
+    "bpb": 2.105829735158618,
     "compression": 2.53754492150558
    },
    "utokyo_xarm_pick_and_place": {
-    "bpb": 4.732996860801751,
+    "bpb": 4.072345759344439,
     "compression": 1.3312679796415137
    },
    "vlabench_unified": {
-    "bpb": 2.7071452843657955,
+    "bpb": 2.2503696439845897,
     "compression": 2.2891505381777755
    },
    "xarm_lift_medium": {
-    "bpb": 7.290243255615234,
+    "bpb": 7.056345428466797,
     "compression": 1.077070368597415
    },
    "xarm_push_medium": {
-    "bpb": 6.381572509765625,
+    "bpb": 6.035797624860491,
     "compression": 1.118881118881119
    }
   },
   "train": {
-   "step": 516,
-   "loss": 2.798752546310425,
-   "lr": 0.00015001300981418706,
-   "seconds": 307.5781948566437,
-   "mps_gb": 0.120527872,
-   "mps_driver_gb": 7.046037504,
-   "swap_mb": 2010.56,
+   "step": 1169,
+   "loss": 1.9495902061462402,
+   "lr": 0.00015000253631981898,
+   "seconds": 467.52704787254333,
+   "mps_gb": 0.072845312,
+   "mps_driver_gb": 5.65772288,
+   "swap_mb": 1730.56,
    "micro": 16,
-   "compression": 1.9940970637456261
+   "compression": 2.060245772426324
   }
  },
  "entropy_0.0045": {
   "method": "entropy",
   "lr": 0.0045,
   "run": "runs/lr/entropy_0.0045",
-  "val_bpb": 4.138577413922027,
+  "val_bpb": 3.9022706840628727,
   "per_dataset": {
    "berkeley_autolab_ur5": {
-    "bpb": 4.082481148622343,
+    "bpb": 3.8651300166400033,
     "compression": 1.4718934911242603
    },
    "berkeley_fanuc_manipulation": {
-    "bpb": 2.157787292653864,
+    "bpb": 2.2249165302976617,
     "compression": 3.337591361032462
    },
    "cmu_stretch": {
-    "bpb": 1.9441434535569915,
+    "bpb": 1.8880115658920444,
     "compression": 5.657488247145736
    },
    "dlr_sara_pour": {
-    "bpb": 5.1280050922384905,
+    "bpb": 4.002643113925463,
     "compression": 1.2333155365723438
    },
    "fmb": {
-    "bpb": 3.9450914233146395,
+    "bpb": 3.579128876674832,
     "compression": 1.3819914957244988
    },
    "jaco_play": {
-    "bpb": 3.035302773572465,
+    "bpb": 2.938451366369684,
     "compression": 2.0001541425818883
    },
    "koch_pick_place_1_lego": {
-    "bpb": 4.4057367147193975,
+    "bpb": 4.20523111136943,
     "compression": 1.4934010781337133
    },
    "koch_pick_place_5_lego": {
-    "bpb": 4.470651502867002,
+    "bpb": 4.3265676527051955,
     "compression": 1.3467521154803386
    },
    "robocasa_target_human_unified": {
-    "bpb": 3.7802287738117615,
+    "bpb": 3.1262717448189177,
     "compression": 3.1033690600254067
    },
    "roboturk": {
-    "bpb": 2.846880416287721,
+    "bpb": 2.854542346643734,
     "compression": 2.503433860853986
    },
    "stanford_kuka_multimodal_dataset": {
-    "bpb": 5.327189208984375,
+    "bpb": 4.321803553989955,
     "compression": 1.4108352144469527
    },
    "svla_so100_pickplace": {
-    "bpb": 3.9561299059126114,
+    "bpb": 3.84943249490526,
     "compression": 1.5944399018806215
    },
    "svla_so100_sorting": {
-    "bpb": 4.383011682567951,
+    "bpb": 4.256057116950102,
     "compression": 1.356794530189533
    },
    "svla_so100_stacking": {
-    "bpb": 4.571799618203702,
+    "bpb": 4.493357122780212,
     "compression": 1.3904017680953509
    },
    "svla_so101_pickplace": {
-    "bpb": 4.452942019354677,
+    "bpb": 4.301518609983112,
     "compression": 1.6484411354118194
    },
    "toto": {
-    "bpb": 4.418474961684069,
+    "bpb": 4.131848586362049,
     "compression": 1.438875646224809
    },
    "utaustin_mutex": {
-    "bpb": 4.576596405203893,
+    "bpb": 4.344281646811219,
     "compression": 1.3410054512416718
    },
    "utokyo_pr2_opening_fridge": {
-    "bpb": 4.678139321320976,
+    "bpb": 4.461850101911424,
     "compression": 1.2868970955447496
    },
    "utokyo_pr2_tabletop_manipulation": {
-    "bpb": 2.3493361095291228,
+    "bpb": 2.3596620259809105,
     "compression": 2.53754492150558
    },
    "utokyo_xarm_pick_and_place": {
-    "bpb": 4.591143867817331,
+    "bpb": 4.395345593175144,
     "compression": 1.3312679796415137
    },
    "vlabench_unified": {
-    "bpb": 2.501964403980728,
+    "bpb": 2.4806614632186963,
     "compression": 2.2891505381777755
    },
    "xarm_lift_medium": {
-    "bpb": 7.362400604248047,
+    "bpb": 7.159001373291016,
     "compression": 1.077070368597415
    },
    "xarm_push_medium": {
-    "bpb": 6.221843819754464,
+    "bpb": 6.18651171875,
     "compression": 1.118881118881119
    }
   },
   "train": {
-   "step": 516,
-   "loss": 2.734034776687622,
-   "lr": 0.00045003902944256113,
-   "seconds": 306.7277181148529,
-   "mps_gb": 0.120527872,
-   "mps_driver_gb": 7.046037504,
-   "swap_mb": 2002.56,
+   "step": 1169,
+   "loss": 2.1909573078155518,
+   "lr": 0.00045000760895945685,
+   "seconds": 467.3706889152527,
+   "mps_gb": 0.072845312,
+   "mps_driver_gb": 5.672402944,
+   "swap_mb": 1730.56,
    "micro": 16,
-   "compression": 1.9940970637456261
+   "compression": 2.060245772426324
   }
  },
  "byteconv_0.0005": {
   "method": "byteconv",
   "lr": 0.0005,
   "run": "runs/lr/byteconv_0.0005",
-  "val_bpb": 4.745077433124571,
+  "val_bpb": 3.402699162315171,
   "per_dataset": {
    "berkeley_autolab_ur5": {
-    "bpb": 4.4530992995474605,
+    "bpb": 3.378123671437428,
     "compression": 1.0
    },
    "berkeley_fanuc_manipulation": {
-    "bpb": 2.323712756095912,
+    "bpb": 1.3537342234091325,
     "compression": 1.0
    },
    "cmu_stretch": {
-    "bpb": 2.0582469690192506,
+    "bpb": 1.2448775368319143,
     "compression": 1.0
    },
    "dlr_sara_pour": {
-    "bpb": 6.482462024466419,
+    "bpb": 4.0121460992417415,
     "compression": 1.0
    },
    "fmb": {
-    "bpb": 4.281081951562003,
+    "bpb": 3.3204804503447996,
     "compression": 1.0
    },
    "jaco_play": {
-    "bpb": 3.318847684158595,
+    "bpb": 2.2150631015211575,
     "compression": 1.0
    },
    "koch_pick_place_1_lego": {
-    "bpb": 5.604948184422476,
+    "bpb": 3.4389458676543607,
     "compression": 1.0
    },
    "koch_pick_place_5_lego": {
-    "bpb": 5.8427825614616085,
+    "bpb": 3.723564811989113,
     "compression": 1.0
    },
    "robocasa_target_human_unified": {
-    "bpb": 2.8954266275104565,
+    "bpb": 1.7797223676594225,
     "compression": 1.0
    },
    "roboturk": {
-    "bpb": 3.0124461368143405,
+    "bpb": 2.918286900119927,
     "compression": 1.0
    },
    "stanford_kuka_multimodal_dataset": {
-    "bpb": 5.109076729910714,
+    "bpb": 4.260669189453125,
     "compression": 1.0
    },
    "svla_so100_pickplace": {
-    "bpb": 5.250018164316813,
+    "bpb": 3.088910078825774,
     "compression": 1.0
    },
    "svla_so100_sorting": {
-    "bpb": 5.763461804497142,
+    "bpb": 3.476809633337081,
     "compression": 1.0
    },
    "svla_so100_stacking": {
-    "bpb": 5.965822534690191,
+    "bpb": 3.282169570078269,
     "compression": 1.0
    },
    "svla_so101_pickplace": {
-    "bpb": 5.346527640899752,
+    "bpb": 3.2734321979207732,
     "compression": 1.0
    },
    "toto": {
-    "bpb": 4.989896308780742,
+    "bpb": 2.6613469036844224,
     "compression": 1.0
    },
    "utaustin_mutex": {
-    "bpb": 5.1269466892921285,
+    "bpb": 3.541602554711833,
     "compression": 1.0
    },
    "utokyo_pr2_opening_fridge": {
-    "bpb": 5.280873217613869,
+    "bpb": 4.38134173889825,
     "compression": 1.0
    },
    "utokyo_pr2_tabletop_manipulation": {
-    "bpb": 2.753384463106086,
+    "bpb": 2.0940185152591044,
     "compression": 1.0
    },
    "utokyo_xarm_pick_and_place": {
-    "bpb": 5.044166186177138,
+    "bpb": 3.990453505008779,
     "compression": 1.0
    },
    "vlabench_unified": {
-    "bpb": 3.153215455151777,
+    "bpb": 2.097472797482219,
     "compression": 1.0
    },
    "xarm_lift_medium": {
-    "bpb": 7.820996368408204,
+    "bpb": 7.936226715087891,
     "compression": 1.0
    },
    "xarm_push_medium": {
-    "bpb": 7.2593412039620535,
+    "bpb": 6.792682303292411,
     "compression": 1.0
    }
   },
   "train": {
-   "step": 347,
-   "loss": 2.531604290008545,
-   "lr": 5.000954861621132e-05,
-   "seconds": 206.24589109420776,
-   "mps_gb": 0.10736,
-   "mps_driver_gb": 5.566185472,
-   "swap_mb": 2002.56,
+   "step": 572,
+   "loss": 1.6547759771347046,
+   "lr": 5.000352797428032e-05,
+   "seconds": 228.30359172821045,
+   "mps_gb": 0.05967744,
+   "mps_driver_gb": 4.54311936,
+   "swap_mb": 1730.56,
    "micro": 16,
    "compression": 1.0
   }
@@ -1779,109 +1779,109 @@
   "method": "byteconv",
   "lr": 0.0015,
   "run": "runs/lr/byteconv_0.0015",
-  "val_bpb": 3.573892224488858,
+  "val_bpb": 2.738042856519297,
   "per_dataset": {
    "berkeley_autolab_ur5": {
-    "bpb": 3.5222234065888114,
+    "bpb": 2.8219357509389393,
     "compression": 1.0
    },
    "berkeley_fanuc_manipulation": {
-    "bpb": 1.5541467226715602,
+    "bpb": 0.9956140496112682,
     "compression": 1.0
    },
    "cmu_stretch": {
-    "bpb": 1.5809852406715519,
+    "bpb": 0.9531652857456667,
     "compression": 1.0
    },
    "dlr_sara_pour": {
-    "bpb": 5.423397841375746,
+    "bpb": 3.057282297983592,
     "compression": 1.0
    },
    "fmb": {
-    "bpb": 3.359443280501465,
+    "bpb": 2.825698347833737,
     "compression": 1.0
    },
    "jaco_play": {
-    "bpb": 2.3574820757206214,
+    "bpb": 1.7904878016611798,
     "compression": 1.0
    },
    "koch_pick_place_1_lego": {
-    "bpb": 3.6401141638894683,
+    "bpb": 2.325165424789297,
     "compression": 1.0
    },
    "koch_pick_place_5_lego": {
-    "bpb": 3.8404704564565177,
+    "bpb": 2.695636304315027,
     "compression": 1.0
    },
    "robocasa_target_human_unified": {
-    "bpb": 2.032007342385957,
+    "bpb": 1.3168348652767687,
     "compression": 1.0
    },
    "roboturk": {
-    "bpb": 2.864005332684699,
+    "bpb": 2.843869200189605,
     "compression": 1.0
    },
    "stanford_kuka_multimodal_dataset": {
-    "bpb": 4.175443498883928,
+    "bpb": 3.828383536202567,
     "compression": 1.0
    },
    "svla_so100_pickplace": {
-    "bpb": 3.3510211534853336,
+    "bpb": 2.0593103544358855,
     "compression": 1.0
    },
    "svla_so100_sorting": {
-    "bpb": 3.672547958413224,
+    "bpb": 2.3585314680233016,
     "compression": 1.0
    },
    "svla_so100_stacking": {
-    "bpb": 3.664991521893979,
+    "bpb": 2.1145173808305464,
     "compression": 1.0
    },
    "svla_so101_pickplace": {
-    "bpb": 3.561780745246724,
+    "bpb": 2.3848732962885397,
     "compression": 1.0
    },
    "toto": {
-    "bpb": 3.1717973087768203,
+    "bpb": 1.5894808961711802,
     "compression": 1.0
    },
    "utaustin_mutex": {
-    "bpb": 3.621269746187113,
+    "bpb": 2.9079375648670833,
     "compression": 1.0
    },
    "utokyo_pr2_opening_fridge": {
-    "bpb": 4.293296159066926,
+    "bpb": 3.8769956501480802,
     "compression": 1.0
    },
    "utokyo_pr2_tabletop_manipulation": {
-    "bpb": 2.0378994496815057,
+    "bpb": 1.722608514344851,
     "compression": 1.0
    },
    "utokyo_xarm_pick_and_place": {
-    "bpb": 4.125371569099156,
+    "bpb": 3.613497949153819,
     "compression": 1.0
    },
    "vlabench_unified": {
-    "bpb": 2.1549213172133057,
+    "bpb": 1.522454626332394,
     "compression": 1.0
    },
    "xarm_lift_medium": {
-    "bpb": 7.530928833007812,
+    "bpb": 7.228609466552735,
     "compression": 1.0
    },
    "xarm_push_medium": {
-    "bpb": 6.6639760393415175,
+    "bpb": 6.142095668247768,
     "compression": 1.0
    }
   },
   "train": {
-   "step": 347,
-   "loss": 1.8783096075057983,
-   "lr": 0.00015002864584863395,
-   "seconds": 205.8185737133026,
-   "mps_gb": 0.10736,
-   "mps_driver_gb": 5.566185472,
-   "swap_mb": 2002.56,
+   "step": 572,
+   "loss": 1.317429542541504,
+   "lr": 0.00015001058392284094,
+   "seconds": 228.10728478431702,
+   "mps_gb": 0.05967744,
+   "mps_driver_gb": 4.54311936,
+   "swap_mb": 1730.56,
    "micro": 16,
    "compression": 1.0
   }
@@ -1890,109 +1890,109 @@
   "method": "byteconv",
   "lr": 0.0045,
   "run": "runs/lr/byteconv_0.0045",
-  "val_bpb": 4.589914023838576,
+  "val_bpb": 3.0263100593857217,
   "per_dataset": {
    "berkeley_autolab_ur5": {
-    "bpb": 4.422529309654555,
+    "bpb": 3.124736594450933,
     "compression": 1.0
    },
    "berkeley_fanuc_manipulation": {
-    "bpb": 2.218881509520791,
+    "bpb": 1.1982086490300368,
     "compression": 1.0
    },
    "cmu_stretch": {
-    "bpb": 2.20436595433292,
+    "bpb": 1.1987652868591057,
     "compression": 1.0
    },
    "dlr_sara_pour": {
-    "bpb": 6.1202361704864146,
+    "bpb": 3.4983606867579033,
     "compression": 1.0
    },
    "fmb": {
-    "bpb": 4.212213481187326,
+    "bpb": 3.0268982993289204,
     "compression": 1.0
    },
    "jaco_play": {
-    "bpb": 3.2023961297288825,
+    "bpb": 1.976243936559863,
     "compression": 1.0
    },
    "koch_pick_place_1_lego": {
-    "bpb": 5.089158070168877,
+    "bpb": 2.7103696296387376,
     "compression": 1.0
    },
    "koch_pick_place_5_lego": {
-    "bpb": 5.3414365153651575,
+    "bpb": 3.0985841982118836,
     "compression": 1.0
    },
    "robocasa_target_human_unified": {
-    "bpb": 2.496539006089064,
+    "bpb": 1.4840481323927897,
     "compression": 1.0
    },
    "roboturk": {
-    "bpb": 2.902244111660479,
+    "bpb": 2.855367121684339,
     "compression": 1.0
    },
    "stanford_kuka_multimodal_dataset": {
-    "bpb": 5.4198593924386165,
+    "bpb": 3.991771013532366,
     "compression": 1.0
    },
    "svla_so100_pickplace": {
-    "bpb": 4.990890607833863,
+    "bpb": 2.44649816248152,
     "compression": 1.0
    },
    "svla_so100_sorting": {
-    "bpb": 5.370617358747322,
+    "bpb": 2.7280933953434054,
     "compression": 1.0
    },
    "svla_so100_stacking": {
-    "bpb": 5.565788293442017,
+    "bpb": 2.6163970102683205,
     "compression": 1.0
    },
    "svla_so101_pickplace": {
-    "bpb": 5.508174039974854,
+    "bpb": 2.8890742893977266,
     "compression": 1.0
    },
    "toto": {
-    "bpb": 4.463052979828774,
+    "bpb": 2.0778592154874382,
     "compression": 1.0
    },
    "utaustin_mutex": {
-    "bpb": 4.886035753552794,
+    "bpb": 3.1820730253573966,
     "compression": 1.0
    },
    "utokyo_pr2_opening_fridge": {
-    "bpb": 5.2456391378165845,
+    "bpb": 4.234652184712861,
     "compression": 1.0
    },
    "utokyo_pr2_tabletop_manipulation": {
-    "bpb": 2.687510831283542,
+    "bpb": 1.9331877485323417,
     "compression": 1.0
    },
    "utokyo_xarm_pick_and_place": {
-    "bpb": 5.096330637289277,
+    "bpb": 3.8960163468164755,
     "compression": 1.0
    },
    "vlabench_unified": {
-    "bpb": 3.040046157403836,
+    "bpb": 1.8773847694541332,
     "compression": 1.0
    },
    "xarm_lift_medium": {
-    "bpb": 8.293053558349609,
+    "bpb": 7.356488098144531,
     "compression": 1.0
    },
    "xarm_push_medium": {
-    "bpb": 6.791023542131696,
+    "bpb": 6.204053571428571,
     "compression": 1.0
    }
   },
   "train": {
-   "step": 347,
-   "loss": 2.4145615100860596,
-   "lr": 0.00045008593754590183,
-   "seconds": 205.84552192687988,
-   "mps_gb": 0.10736,
-   "mps_driver_gb": 5.566185472,
-   "swap_mb": 1986.56,
+   "step": 572,
+   "loss": 1.45427668094635,
+   "lr": 0.0004500317517685228,
+   "seconds": 229.23225808143616,
+   "mps_gb": 0.05967744,
+   "mps_driver_gb": 4.54311936,
+   "swap_mb": 1730.56,
    "micro": 16,
    "compression": 1.0
   }
@@ -2002,229 +2002,118 @@
   "bpe": 0.0015,
   "hnet": 0.0045,
   "fixed": 0.0015,
-  "entropy": 0.0045,
+  "entropy": 0.0015,
   "byteconv": 0.0015
  },
  "hnet_0.0135": {
   "method": "hnet",
   "lr": 0.013499999999999998,
   "run": "runs/lr/hnet_0.0135",
-  "val_bpb": 5.470439314553581,
+  "val_bpb": 4.496121642649548,
   "per_dataset": {
    "berkeley_autolab_ur5": {
-    "bpb": 5.856802464010728,
-    "compression": 1.7274305555555556
+    "bpb": 5.376447931286478,
+    "compression": 1.8614440222157265
    },
    "berkeley_fanuc_manipulation": {
-    "bpb": 3.267493901589904,
-    "compression": 2.0332129963898917
+    "bpb": 3.0319009230193066,
+    "compression": 1.8285714285714285
    },
    "cmu_stretch": {
-    "bpb": 2.286082074336934,
-    "compression": 2.1658310836868493
+    "bpb": 1.9638300728538114,
+    "compression": 2.067492943919499
    },
    "dlr_sara_pour": {
-    "bpb": 5.905863920625273,
-    "compression": 1.8632788868723533
+    "bpb": 5.023733456484921,
+    "compression": 2.204724409448819
    },
    "fmb": {
-    "bpb": 5.2274359973662925,
-    "compression": 1.6744607371341222
+    "bpb": 4.726278372570173,
+    "compression": 1.8662880580533208
    },
    "jaco_play": {
-    "bpb": 4.3914903887691095,
-    "compression": 1.6046497248500586
+    "bpb": 4.107928466796875,
+    "compression": 1.8484330484330485
    },
    "koch_pick_place_1_lego": {
-    "bpb": 6.025921615496337,
-    "compression": 1.9003390365055586
+    "bpb": 4.035160090759563,
+    "compression": 1.784936680737614
    },
    "koch_pick_place_5_lego": {
-    "bpb": 6.411582085702035,
-    "compression": 1.8990173714686787
+    "bpb": 4.29915060858588,
+    "compression": 1.8100852985449072
    },
    "robocasa_target_human_unified": {
-    "bpb": 4.213856108442165,
-    "compression": 2.2151564018612935
+    "bpb": 3.8863638671674687,
+    "compression": 2.202111581310994
    },
    "roboturk": {
-    "bpb": 2.9021874182703535,
-    "compression": 2.056540136137855
+    "bpb": 2.8459685227343146,
+    "compression": 1.9172193002515436
    },
    "stanford_kuka_multimodal_dataset": {
-    "bpb": 5.830636387416295,
-    "compression": 2.116850127011008
+    "bpb": 5.532092337472098,
+    "compression": 1.8301610541727673
    },
    "svla_so100_pickplace": {
-    "bpb": 5.7580039059674295,
-    "compression": 1.9877675840978593
+    "bpb": 3.818302710144608,
+    "compression": 1.6676168757126568
    },
    "svla_so100_sorting": {
-    "bpb": 6.358837509890282,
-    "compression": 1.70961611554542
+    "bpb": 4.222309869608209,
+    "compression": 1.816395207968771
    },
    "svla_so100_stacking": {
-    "bpb": 6.75872335774139,
-    "compression": 1.7288252036509961
+    "bpb": 4.332391530092059,
+    "compression": 1.6585067319461444
    },
    "svla_so101_pickplace": {
-    "bpb": 6.206102458708877,
-    "compression": 1.9779452819653824
+    "bpb": 4.09728216468741,
+    "compression": 1.792763157894737
    },
    "toto": {
-    "bpb": 6.545116479712797,
-    "compression": 1.8070485780378283
+    "bpb": 5.468145657143782,
+    "compression": 1.9292310885130228
    },
    "utaustin_mutex": {
-    "bpb": 6.7917469110807644,
-    "compression": 1.781980984959002
+    "bpb": 6.17359878921394,
+    "compression": 1.7956204379562044
    },
    "utokyo_pr2_opening_fridge": {
-    "bpb": 6.619979452827137,
-    "compression": 1.9761856710393542
+    "bpb": 5.911561687527659,
+    "compression": 1.8510396975425332
    },
    "utokyo_pr2_tabletop_manipulation": {
-    "bpb": 3.5881675603446133,
-    "compression": 2.035811836115326
+    "bpb": 2.9194624601882393,
+    "compression": 2.9143043336591723
    },
    "utokyo_xarm_pick_and_place": {
-    "bpb": 6.258633393091513,
-    "compression": 2.02832097100472
+    "bpb": 5.547108418890771,
+    "compression": 1.8380690498014054
    },
    "vlabench_unified": {
-    "bpb": 4.143800676105828,
-    "compression": 2.063123377510589
+    "bpb": 2.5368113422123124,
+    "compression": 1.8178534882321074
    },
    "xarm_lift_medium": {
-    "bpb": 7.656322784423828,
-    "compression": 1.5115888478333894
+    "bpb": 7.265162872314453,
+    "compression": 2.1983390327308254
    },
    "xarm_push_medium": {
-    "bpb": 6.8153173828125,
-    "compression": 1.3205678441729944
+    "bpb": 6.289805629185268,
+    "compression": 2.002002002002002
    }
   },
   "train": {
-   "step": 516,
-   "loss": 3.976579189300537,
-   "lr": 0.0013501170883276833,
-   "seconds": 242.33586716651917,
-   "mps_gb": 0.108939008,
-   "mps_driver_gb": 6.798655488,
-   "swap_mb": 1938.56,
+   "step": 1169,
+   "loss": 2.8691818714141846,
+   "lr": 0.0013500228268783704,
+   "seconds": 310.42741203308105,
+   "mps_gb": 0.060073728,
+   "mps_driver_gb": 4.642783232,
+   "swap_mb": 1730.56,
    "micro": 16,
-   "compression": 1.982739972619939
-  }
- },
- "entropy_0.0135": {
-  "method": "entropy",
-  "lr": 0.013499999999999998,
-  "run": "runs/lr/entropy_0.0135",
-  "val_bpb": 5.187940216167136,
-  "per_dataset": {
-   "berkeley_autolab_ur5": {
-    "bpb": 5.607686343296888,
-    "compression": 1.4718934911242603
-   },
-   "berkeley_fanuc_manipulation": {
-    "bpb": 3.1373061533327458,
-    "compression": 3.337591361032462
-   },
-   "cmu_stretch": {
-    "bpb": 2.2136253174334484,
-    "compression": 5.657488247145736
-   },
-   "dlr_sara_pour": {
-    "bpb": 5.743155689728566,
-    "compression": 1.2333155365723438
-   },
-   "fmb": {
-    "bpb": 5.031442438286748,
-    "compression": 1.3819914957244988
-   },
-   "jaco_play": {
-    "bpb": 4.219974583987586,
-    "compression": 2.0001541425818883
-   },
-   "koch_pick_place_1_lego": {
-    "bpb": 5.410418661666919,
-    "compression": 1.4934010781337133
-   },
-   "koch_pick_place_5_lego": {
-    "bpb": 5.668939034287278,
-    "compression": 1.3467521154803386
-   },
-   "robocasa_target_human_unified": {
-    "bpb": 4.189020524947299,
-    "compression": 3.1033690600254067
-   },
-   "roboturk": {
-    "bpb": 2.856379169240859,
-    "compression": 2.503433860853986
-   },
-   "stanford_kuka_multimodal_dataset": {
-    "bpb": 5.752629760742187,
-    "compression": 1.4108352144469527
-   },
-   "svla_so100_pickplace": {
-    "bpb": 5.263757420999032,
-    "compression": 1.5944399018806215
-   },
-   "svla_so100_sorting": {
-    "bpb": 5.724045495613309,
-    "compression": 1.356794530189533
-   },
-   "svla_so100_stacking": {
-    "bpb": 6.044961408964675,
-    "compression": 1.3904017680953509
-   },
-   "svla_so101_pickplace": {
-    "bpb": 5.7757223333422925,
-    "compression": 1.6484411354118194
-   },
-   "toto": {
-    "bpb": 6.235563241386304,
-    "compression": 1.438875646224809
-   },
-   "utaustin_mutex": {
-    "bpb": 6.579452992490673,
-    "compression": 1.3410054512416718
-   },
-   "utokyo_pr2_opening_fridge": {
-    "bpb": 6.317518698831529,
-    "compression": 1.2868970955447496
-   },
-   "utokyo_pr2_tabletop_manipulation": {
-    "bpb": 3.433834989908272,
-    "compression": 2.53754492150558
-   },
-   "utokyo_xarm_pick_and_place": {
-    "bpb": 6.070079627611959,
-    "compression": 1.3312679796415137
-   },
-   "vlabench_unified": {
-    "bpb": 3.6272658839807717,
-    "compression": 2.2891505381777755
-   },
-   "xarm_lift_medium": {
-    "bpb": 7.680232757568359,
-    "compression": 1.077070368597415
-   },
-   "xarm_push_medium": {
-    "bpb": 6.739612444196428,
-    "compression": 1.118881118881119
-   }
-  },
-  "train": {
-   "step": 516,
-   "loss": 3.5129501819610596,
-   "lr": 0.0013501170883276833,
-   "seconds": 306.61415910720825,
-   "mps_gb": 0.120527872,
-   "mps_driver_gb": 6.806962176,
-   "swap_mb": 1906.56,
-   "micro": 16,
-   "compression": 1.9940970637456261
+   "compression": 2.0210381790748064
   }
  }
 }

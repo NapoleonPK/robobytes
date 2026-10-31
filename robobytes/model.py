@@ -19,11 +19,15 @@ N_BYTES, BOS, SEP = 256, 256, 257
 VOCAB = 258
 
 
-def rope(x, base=10000.0):
-    """Rotary position embedding on (B, h, L, dh), rotating pairs (even, odd) of each head dimension."""
+def rope(x, base=10000.0, pos=None):
+    """Rotary position embedding on (B, h, L, dh), rotating pairs (even, odd) of each head dimension. pos: optional
+    (B, L) real positions; default = index along L."""
     L, dh = x.shape[-2], x.shape[-1]
     inv = base ** (-torch.arange(0, dh, 2, device=x.device, dtype=torch.float32) / dh)
-    ang = torch.arange(L, device=x.device, dtype=torch.float32)[:, None] * inv[None]
+    if pos is None:
+        ang = torch.arange(L, device=x.device, dtype=torch.float32)[:, None] * inv[None]
+    else:
+        ang = pos.to(torch.float32)[:, None, :, None] * inv
     cos, sin = ang.cos().to(x.dtype), ang.sin().to(x.dtype)
     x1, x2 = x[..., 0::2], x[..., 1::2]
     return torch.stack([x1 * cos - x2 * sin, x1 * sin + x2 * cos], -1).flatten(-2)
@@ -40,11 +44,11 @@ class Block(nn.Module):
         self.qkv, self.proj = nn.Linear(d, 3 * d), nn.Linear(d, d)
         self.fc1, self.fc2 = nn.Linear(d, 4 * d), nn.Linear(4 * d, d)
 
-    def forward(self, x):
+    def forward(self, x, pos=None):
         B, L, D = x.shape
         q, k, v = self.qkv(self.n1(x)).view(B, L, 3, self.h, D // self.h).permute(2, 0, 3, 1, 4)
         if self.use_rope:
-            q, k = rope(q), rope(k)
+            q, k = rope(q, pos=pos), rope(k, pos=pos)
         a = F.scaled_dot_product_attention(q, k, v, is_causal=True)
         x = x + self.proj(a.transpose(1, 2).reshape(B, L, D))
         return x + self.fc2(F.gelu(self.fc1(self.n2(x))))
@@ -60,11 +64,11 @@ class Main(nn.Module):
         self.blocks = nn.ModuleList([Block(d, heads, use_rope=pos == "rope") for _ in range(layers)])
         self.norm = nn.LayerNorm(d)
 
-    def forward(self, h):
+    def forward(self, h, positions=None):
         if self.pos is not None:
             h = h + self.pos(torch.arange(h.shape[1], device=h.device))
         for b in self.blocks:
-            h = b(h)
+            h = b(h, positions)
         return self.norm(h)
 
 
@@ -99,11 +103,11 @@ class TokenLM(nn.Module):
 class ConvBlock(nn.Module):
     """Causal depthwise conv (kernel 4) + gated MLP: a cheap stand-in for a Mamba layer (Mamba kernels do not run on MPS)."""
 
-    def __init__(self, d, k=4):
+    def __init__(self, d, k=4, conv_init=1.0):
         super().__init__()
         self.k = k
         self.n1, self.n2 = nn.LayerNorm(d), nn.LayerNorm(d)
-        self.conv_w = nn.Parameter(torch.randn(k, d) / math.sqrt(k))
+        self.conv_w = nn.Parameter(conv_init * torch.randn(k, d) / math.sqrt(k))
         self.conv_b = nn.Parameter(torch.zeros(d))
         self.w1, self.w3 = nn.Linear(d, 2 * d), nn.Linear(d, 2 * d)
         self.w2 = nn.Linear(2 * d, d)
@@ -153,13 +157,16 @@ def ema(z, P):
 
 
 class ByteHNet(nn.Module):
-    def __init__(self, d_main, layers, heads, d_outer=256, outer_blocks=4, refractory=0, max_chunks=1024, k_bucket=64,
-                 pos="learned", init="default"):
+    def __init__(self, d_main, layers, heads, d_outer=128, outer_blocks=2, refractory=0, max_chunks=1024, k_bucket=64,
+                 pos="learned", init="default", conv_init=1.0, use_ema=True, rope_bytes=0.0):
         super().__init__()
+        self.use_ema = use_ema  # diagnostic only: False skips the EMA dechunk for the learned router
+        self.rope_bytes = rope_bytes  # diagnostic only: > 0 gives each chunk the RoPE position (byte offset / this)
         self.refractory = refractory
         self.k_bucket = k_bucket  # chunk count rounded up to a multiple of this: few distinct shapes, no MPS fragmentation
         self.emb = nn.Embedding(VOCAB, d_outer)
-        self.encoder = nn.Sequential(*[ConvBlock(d_outer) for _ in range(outer_blocks)], nn.LayerNorm(d_outer))
+        self.encoder = nn.Sequential(*[ConvBlock(d_outer, conv_init=conv_init) for _ in range(outer_blocks)],
+                                     nn.LayerNorm(d_outer))
         self.router_norm = nn.LayerNorm(d_outer)
         self.wq, self.wk = nn.Linear(d_outer, d_outer, bias=False), nn.Linear(d_outer, d_outer, bias=False)
         with torch.no_grad():  # identity init (RoboChunk)
@@ -173,7 +180,8 @@ class ByteHNet(nn.Module):
         with torch.no_grad():  # H-Net initialises the residual projection close to 0
             self.residual.weight.mul_(1e-3)
             self.residual.bias.zero_()
-        self.decoder = nn.Sequential(*[ConvBlock(d_outer) for _ in range(outer_blocks)], nn.LayerNorm(d_outer))
+        self.decoder = nn.Sequential(*[ConvBlock(d_outer, conv_init=conv_init) for _ in range(outer_blocks)],
+                                     nn.LayerNorm(d_outer))
         self.head = nn.Linear(d_outer, VOCAB)
 
     def route(self, xh):
@@ -205,8 +213,12 @@ class ByteHNet(nn.Module):
         chunks[bi, idx[bi, ti]] = xh[bi, ti]
         P = xh.new_zeros(ids.shape[0], K)
         P[bi, idx[bi, ti]] = p[bi, ti]
-        zh = self.down_proj(self.main(self.up_proj(chunks)))
-        zbar = zh if boundaries is not None else ema(zh, P)
+        positions = None
+        if self.rope_bytes:
+            positions = xh.new_zeros(ids.shape[0], K)  # padding sits after the real chunks, so nothing attends to it
+            positions[bi, idx[bi, ti]] = ti.to(xh.dtype) / self.rope_bytes
+        zh = self.down_proj(self.main(self.up_proj(chunks), positions))
+        zbar = zh if boundaries is not None or not self.use_ema else ema(zh, P)
         up = torch.gather(zbar, 1, idx.unsqueeze(-1).expand(-1, -1, zbar.shape[-1]))
         c = torch.where(b, p, 1 - p)
         up = up * ste(c).unsqueeze(-1)

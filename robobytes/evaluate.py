@@ -87,7 +87,9 @@ def load_run(run, dev):
     c = torch.load(Path(run) / "final.pt", map_location="cpu", weights_only=False)
     a, meta = c["args"], c["meta"]
     m = build(a["method"], a["size"], meta["N"], meta["R_BPE"], meta.get("refractory"), a.get("pos", "learned"),
-              a.get("init", "default")).to(dev)
+              a.get("init", "default"), a.get("outer_width", 256), a.get("outer_blocks", 4),
+              a.get("conv_init", 1.0), not a.get("no_ema", False),
+              a.get("rope_bytes", False)).to(dev)
     m.load_state_dict(c["model"])
     ent = EntropyBoundaries(a["entropy_ckpt"], a["entropy_threshold"], dev) if a["method"] == "entropy" else None
     return a["method"], m, meta["N"], meta["R_BPE"], ent

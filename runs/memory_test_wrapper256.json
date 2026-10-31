@@ -1,0 +1,19 @@
+{
+ "config": "H-Net, size M, top budget, N = round(R_BPE), micro-batch 16 at start",
+ "minutes": 10.108617067337036,
+ "swap_start_mb": 1906.56,
+ "swap_peak_mb": 1906.56,
+ "swap_growth_mb": 0.0,
+ "peak_mps_gb": 0.290938624,
+ "peak_mps_driver_gb": 6.83638784,
+ "steps": 600,
+ "micro_end": 8,
+ "events": [
+  {
+   "step": 17,
+   "event": "oom",
+   "micro": 8
+  }
+ ],
+ "decision": "micro-batch 8 + accumulation"
+}

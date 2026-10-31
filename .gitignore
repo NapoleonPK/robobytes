@@ -30,3 +30,7 @@ docs/BRIEF.md
 !runs/delta_reference.json
 !runs/lr_search_learned_pos.json
 !runs/memory_test_learned_pos.json
+!runs/wrapper_diag.json
+!runs/wrapper_share.json
+!runs/lr_search_wrapper256.json
+!runs/memory_test_wrapper256.json
