@@ -256,3 +256,20 @@ Written during the ladder, before any model saw a held-out robot. No hypothesis,
   log-log interpolation on the frontier; empty when the ladder does not reach that bpb.
 - **Not implemented yet:** the other exploratory items (in-context merging, gripper-event alignment, 16-bit serialisation)
   and figures. `gym-pusht` and `pymunk` are not installed in the venv, so `scripts/policy.py --tasks pusht` cannot run yet.
+
+## Clarifications approved, public push and PushT check (2026-10-31)
+- **Téo approved the three choices logged above as written:** Fetch rollouts (150 steps, table goals), BPE in H4
+  (observation and action bytes encoded separately), H3 over all six main methods. Commit `6ff6352` was pushed to the public
+  repo on his instruction at 18:53:23 CET, before any test-set or held-out result exists.
+- **PushT runs in a separate venv** outside the repo (`../robobytes-pusht-venv`, Python 3.12, no change to `.venv`), with
+  `gym-pusht` 0.1.8 and `pymunk` 6.11.1 and the main venv's torch, numpy, gymnasium, tokenizers and pyarrow versions. Its
+  mujoco differs from `.venv`, so Fetch rollouts stay in `.venv`. `cv2` and `pygame` each ship SDL: macOS prints duplicate-class
+  warnings; nothing crashed.
+- **The PushT mapping is verified** (`scripts/check_pusht_mapping.py`, `runs/pusht_mapping_check.json`; no model, pool episodes
+  only, plus the success-flag column of the whole dataset). Open-loop replay of the recorded actions over 20 episodes matches
+  the recordings to about 1e-5 px; swapped action axes and a one-step action delay miss by far more, so the check can fail.
+  Environment reward and success match the recording on 1,391 frames, and live observations quantise to the stream's exact bytes.
+- **Problem for H4 on PushT: no demonstration reaches the environment's success flag.** The flag needs coverage above 0.95. It
+  is false on every frame of all 206 episodes, and replaying each pool episode's last action peaks at 0.935 coverage. A policy
+  cloned from these 50 episodes is therefore unlikely to reach it, and §9's rule (every method below 5%) would make H4
+  uninformative on PushT. The pre-registration is unchanged: success stays the environment's own flag.

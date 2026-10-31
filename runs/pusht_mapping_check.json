@@ -1,0 +1,95 @@
+{
+ "packages": {
+  "gym-pusht": "0.1.8",
+  "pymunk": "6.11.1",
+  "gymnasium": "1.4.0",
+  "numpy": "2.5.4",
+  "torch": "2.15.0"
+ },
+ "episodes_used": "pool only",
+ "n_pool": 50,
+ "reset": {
+  "keys": [
+   "agent_pos",
+   "environment_state"
+  ],
+  "agent_pos": [
+   2
+  ],
+  "environment_state": [
+   16
+  ],
+  "flat": 18,
+  "action_low": [
+   0.0,
+   0.0
+  ],
+  "action_high": [
+   512.0,
+   512.0
+  ],
+  "control_hz": 10,
+  "is_success_key": true,
+  "max_episode_steps": 300
+ },
+ "geometry": {
+  "frames": 150,
+  "keypoint_max_px": 2.3529750942954234e-05,
+  "keypoint_median_px": 1.3804842384582203e-05,
+  "agent_max_px": 0.0
+ },
+ "replay_open_loop": {
+  "as_mapped": {
+   "episodes": 20,
+   "agent_mean_px": 9.180088875265598e-06,
+   "agent_first_step_px": 8.186806703511145e-06,
+   "keypoint_mean_px": 1.6187142574242525e-05,
+   "keypoint_median_final_px": 1.4171321900958299e-05
+  },
+  "action_xy_swapped": {
+   "episodes": 20,
+   "agent_mean_px": 169.1281165927133,
+   "agent_first_step_px": 51.954276823466955,
+   "keypoint_mean_px": 98.4044035261837,
+   "keypoint_median_final_px": 131.62923999576697
+  },
+  "action_one_step_late": {
+   "episodes": 20,
+   "agent_mean_px": 9.39173396250261,
+   "agent_first_step_px": 8.186806703511145e-06,
+   "keypoint_mean_px": 1.7561280527863001,
+   "keypoint_median_final_px": 2.1694817345917525
+  }
+ },
+ "reward_success": {
+  "frames": 1391,
+  "reward_abs_diff_mean": 2.170853442261185e-08,
+  "reward_abs_diff_p99": 1.0646094239508096e-07,
+  "success_agreement": 1.0,
+  "pool_episodes_recorded_success": 0
+ },
+ "demonstration_success": {
+  "threshold": 0.95,
+  "final_coverage_median": 0.8829692981773095,
+  "final_coverage_max": 0.9354653333752911,
+  "pool_success_after_last_action": 0,
+  "pool_episodes": 50,
+  "dataset_episodes": 206,
+  "dataset_success_frames": 0
+ },
+ "bytes": {
+  "episodes": 20,
+  "recorded_vs_stream_max": 0,
+  "live_vs_stream_max": 0
+ },
+ "rollout_smoke": {
+  "rollouts": 3,
+  "seconds": 0.10833191871643066,
+  "returned": [
+   false,
+   false,
+   false
+  ],
+  "successes_expected_none": true
+ }
+}
