@@ -10,24 +10,25 @@ Cartesia reported that H-Net's advantage over BPE grows out of distribution (1.2
 
 ## 2. Hypotheses and pass criteria
 
-All four tests compare plain H-Net (primary) with BPE (baseline). Other methods are reported without pass/fail.
+H1–H4 compare plain H-Net (primary) with BPE (baseline). **H2b** (co-primary with H2) compares H-Net with Fixed patches, which share every component except the learned router, so it isolates the router's contribution. Other methods are reported without pass/fail.
 
 - **bpb:** cross-entropy of the next byte in bits, data bytes only (BOS and SEP predictions excluded), for every method.
 - **Relative gap:** g = (bpb_BPE − bpb_HNet) / bpb_BPE; g > 0 means H-Net is better.
 - **g_ID:** on the held-in test episodes (pooled, see §7). **g_OOD(r):** zero-shot on held-out robot r's test episodes.
-- **Top budget:** 8.7e15 FLOPs. H-Net and BPE run 3 seeds there (0, 1, 2); per-episode bpb is averaged over seeds before any statistic.
+- **Top budget:** 7.7e15 FLOPs. H-Net and BPE run 3 seeds there (0, 1, 2); per-episode bpb is averaged over seeds before any statistic.
 - **CI:** 95% paired percentile bootstrap, 10,000 resamples of episodes, RNG seed 0.
 
 | ID | Question | Pass criterion |
 | --- | --- | --- |
-| H1 | In distribution, is H-Net at least as compute-efficient as BPE? | At each of the two largest budgets (2.75e15 and 8.7e15), held-in test bpb of H-Net < BPE, and the CI of the difference excludes 0. |
+| H1 | In distribution, is H-Net at least as compute-efficient as BPE? | At each of the two largest budgets (2.43e15 and 7.7e15), held-in test bpb of H-Net < BPE, and the CI of the difference excludes 0. |
 | H2 (main) | Does the advantage grow on unseen robots? | At the top budget, for at least 2 of the 3 held-out robots: g_OOD(r) > 0 with CI excluding 0, **and** g_OOD(r) ≥ max(1.5 × \|g_ID\|, 0.02). |
+| H2b (co-primary) | Does the **learned router's** advantage grow on unseen robots? | Same rule with g = (bpb_Fixed − bpb_HNet) / bpb_Fixed (both at N = round(R_BPE)): at the top budget, for at least 2 of the 3 held-out robots, g_OOD(r) > 0 with CI excluding 0 **and** g_OOD(r) ≥ max(1.5 × \|g_ID\|, 0.02). |
 | H3 | Does H-Net adapt to a new robot better with few episodes? | After fine-tuning on the 50-episode pool of each held-out robot (§8), test bpb of H-Net < BPE for at least 2 of 3 robots, CI excluding 0. |
 | H4 (underpowered) | Does better pretraining show up as better robot behaviour? | Policy success on PushT and Fetch (§9): H-Net − BPE > 0 with CI (over rollouts and seeds) excluding 0 on at least 1 of 2 tasks. |
 
 **Compression floor.** If H-Net's realised compression at the top budget (held-in test) is below 0.8 × R_BPE = 1.239, the comparison is not matched and H1 and H2 count as failed.
 
-**Exploratory (labelled as such):** compute multipliers from the iso-FLOP frontiers; the refractory router as a second H-Net arm; whether chunk counts for a new robot shrink as an episode goes on (in-context merging); whether boundaries align with gripper events; 16-bit serialisation; how Byte and Entropy transfer.
+**Exploratory (labelled as such):** compute multipliers from the iso-FLOP frontiers; the secondary N = 4 comparison (§6.1); whether chunk counts for a new robot shrink as an episode goes on (in-context merging); whether boundaries align with gripper events; 16-bit serialisation; how Byte and Entropy transfer.
 
 ## 3. Data
 
@@ -89,22 +90,62 @@ ALOHA pools its two simulated tasks into one robot. Fetch uses RoboChunk's held-
 | --- | --- | --- |
 | BPE | as above; context round(1,024 / R_BPE) tokens | Primary baseline |
 | H-Net | RoboChunk's router (LayerNorm, identity init), ratio loss α = 0.3 targeting N = 2; causal-conv encoder and decoder, 4 blocks each, width 256; EMA dechunk; next-byte softmax over 258 | Primary method |
-| H-Net refractory | as H-Net, no boundary within 3 positions of the last kept one | Exploratory |
+| H-Net refractory | as H-Net, no new boundary within r positions of the last kept one, **r = floor(0.3 × N)** (r = 3 at RoboChunk's N = 10). At N = 2, r = 0: identical to H-Net, so the arm is not in the main ladder; it runs only in the N = 4 comparison (r = 1) | Exploratory |
 | Fixed | H-Net architecture, a boundary every 2 positions | Baseline |
 | Entropy | H-Net architecture, boundary where a small byte model's next-symbol entropy exceeds a threshold set to give compression 2 on training-robot validation windows; the small model is the Byte run at the second budget | Baseline |
 | Byte | plain Transformer, one position per byte | Reference |
+| Byte + conv | H-Net's conv encoder and decoder with the main Transformer over every byte (a boundary at every position): H-Net without chunking | Reference: separates the conv wrapper from chunking |
 
-Main Transformer sizes: **S** = width 256, 4 layers; **M** = width 384, 8 layers (pre-norm, learned positions, context 1,024 bytes). Only the main network changes with size.
+Main Transformer sizes: **S** = width 256, 4 layers; **M** = width 384, 8 layers (pre-norm, rotary positions, context 1,024 bytes). Only the main network changes with size.
+
+**Baseline audit.** A no-learning reference, predicting each byte from the same channel at the previous timestep, gives 3.10 bpb on validation; it is told the channel layout. The first pilot used learned absolute positions, where Byte reached only 6.28. Rotary positions reached 2.43 (GPT-2 init alone 6.01; both 3.48), because the data's main structure is a relative offset. **Every method therefore uses rotary positions** (over bytes, tokens or chunks). The first search is archived and fixes nothing.
 
 ## 6. Compute ladder and training
 
-Budgets **2.75e14, 8.7e14, 2.75e15, 8.7e15 FLOPs** (×3.16), sizes S and M at every budget, 5 methods: 40 ladder runs, ≈ 22 h at the measured throughput; longest run 1.90 h. FLOPs = 6 × parameters used per position + 6 × layers × context × width, per network, per symbol. At most 1.00 passes over the 458,630,486 training symbols, so no budget is dropped. At each budget the size with the lower held-in validation bpb is the method's frontier run; only frontier runs enter the tests.
+Budgets **2.43e14, 7.7e14, 2.43e15, 7.7e15 FLOPs** (×3.16), sizes S and M at every budget, 6 methods: 48 ladder runs, ≈ 28 h at the measured throughput; longest run 1.91 h, except Entropy (up to 2.39 h, because its small byte model's forward pass is wall-clock time not charged to its budget). FLOPs = 6 × parameters used per position + 6 × layers × context × width, per network, per symbol. At most 0.89 passes over the 458,630,486 training symbols, so no budget is dropped. At each budget the size with the lower held-in validation bpb is the method's frontier run; only frontier runs enter the tests.
 
 Optimiser: AdamW (0.9, 0.95), weight decay 0.1, 2% linear warm-up, cosine decay to 10%, gradient clip 1.0, effective batch 16 windows, fp32. Training loss: next-symbol cross-entropy on every target (+ 0.3 × ratio loss for H-Net).
 
-**Learning rates:** pending (search running: 5e-4, 1.5e-3, 4.5e-3 per method at the smallest budget).
+**Learning rates** (pilot search at 2.75e14 FLOPs, size S, 3 values per method, held-in validation only; a method whose best rate was at an end of the grid got one more rate ×3 beyond it, once): byte 0.0015, bpe 0.0015, hnet 0.0045, fixed 0.0015, entropy 0.0045, byteconv 0.0015. Fixed for every later run.
 
-Extra runs: H-Net and BPE at the top budget with seeds 1 and 2 (frontier size); H-Net refractory at the top two budgets (H-Net's frontier size).
+**Known before the freeze.** Held-in validation at the search budget, size S, each method's best rate (first 20 validation episodes per dataset). These pilot numbers motivated H2b and the N = 4 arm; held-out robots have not been evaluated by any model:
+
+| Method | Rate | Validation bpb |
+| --- | --- | --- |
+| byte | 0.0015 | 2.418 |
+| bpe | 0.0015 | 5.004 |
+| hnet | 0.0045 | 4.134 |
+| fixed | 0.0015 | 3.572 |
+| entropy | 0.0045 | 4.139 |
+| byteconv | 0.0015 | 3.574 |
+
+The search ran at 2.75e14 FLOPs, set before the ladder was lowered to account for real training speed; the smallest budget is 2.43e14. Rates are not re-searched.
+
+Extra runs: H-Net and BPE at the top budget with seeds 1 and 2 (frontier size).
+
+### 6.1 Secondary comparison at N = 4 (pre-registered, no pass/fail)
+
+N = round(R_BPE) = 2 barely exercises chunking, so H-Net and Fixed are also trained with **N = 4** across the full ladder (4 budgets × sizes S and M), plus H-Net refractory at N = 4 with r = 1 at the top two budgets (H-Net N = 4's frontier size). Same data, windows, optimiser and seeds as the main ladder; learning rate = the same method's rate from the N = 2 search; Fixed places a boundary every 4 positions. Each is compared with BPE's frontier at matched FLOPs on held-in data and on each held-out robot (bpb, relative gap g with 95% bootstrap CIs, iso-FLOP frontiers). Reported descriptively; it does not enter H1–H4.
+
+### 6.2 Router effect at N = 4 (no pass/fail)
+
+The H2b statistic (H-Net vs Fixed: g_ID, g_OOD per robot, CIs, the 1.5 × |g_ID| and 0.02 lines) is also computed for the N = 4 arm of §6.1 and reported descriptively.
+
+### 6.3 Run list and machine time
+
+| Block | Runs | Hours | Basis |
+| --- | --- | --- | --- |
+| Learning-rate search (6 methods x 3 rates, + edge rule), size S, smallest budget | 18-24 | 1.3 | measured |
+| Main ladder: BPE, H-Net, Fixed, Entropy, Byte, Byte + conv x 4 budgets x 2 sizes | 48 | 28.4 | measured throughput |
+| Extra seeds at the top budget: H-Net and BPE, frontier size, seeds 1-2 | 4 | 7.6 | measured throughput (slower size) |
+| Secondary, N = 4: H-Net and Fixed x 4 budgets x 2 sizes | 16 | 9.3 | measured throughput |
+| Secondary, N = 4: H-Net refractory (r = 1), top two budgets | 2 | 2.5 | measured throughput |
+| Few-shot fine-tuning (H3) | about 48 | 4.0 | brief's estimate |
+| Policies and rollouts (H4) | about 24 | 7.0 | brief's estimate |
+| Evaluation (validation for every run; test for frontier runs) | - | 5.0 | estimate: forward passes over validation and test windows |
+| **Total** | | **65.1** | cap 72 h |
+
+**Memory check before the ladder** (H-Net, size M, top budget, N = round(R_BPE), micro-batch 16 at start, 10 minutes): peak MPS allocation 0.29 GB, swap growth 0 MB. The check ended at micro-batch 8. Every ladder run starts at micro-batch 8 with accumulation. The in-run rule (halve the micro-batch if swap grows by more than 2 GB) stays.
 
 ## 7. Metrics and statistics
 
@@ -128,11 +169,15 @@ Simulators: `gym-pusht` (observation `environment_state_agent_pos`) and `FetchPi
 - Hypotheses, held-out robots, metrics and thresholds do not change after the freeze; any deviation is a dated amendment with its reason.
 - Every reported number comes from one analysis script run on the frozen results.
 - One training job at a time; checkpoints every 10 minutes.
+- Runs may halve their micro-batch on out-of-memory or swap growth above 2 GB, keeping the effective batch; every event is logged.
 
 ## 11. Files fixed by this document
 
 - `robobytes/sources.py`: SHA-256 `de5b404407fdb46ac0888e05a7836f8b32ad7196f35b74d64a5f75bd61ed8794`
 - `runs/streams_summary.json`: SHA-256 `1d484c2efc174cc8687d4db88e7674912c7fe78266c366b5da62b63003fbc11e`
 - `runs/bpe_summary.json`: SHA-256 `4263428fc9597ca928777eeff48462b68e927e872f861c14eff93a7014fdf8f6`
-- `runs/ladder.json`: SHA-256 `7147e39fda23921b1d5b793b33844d8759b7391acd10bd517c66786aee0823de`
+- `runs/ladder.json`: SHA-256 `63561ab1eafe8e9b6f63c4aa04311bb287a4c69f389e7e6135bd732410952ec5`
+- `runs/baseline_audit.json`: SHA-256 `db4ce3b1ca7f5d2163dacd594aeaa5a7476ee528ba0b774b961f9ae4fc911656`
+- `runs/delta_reference.json`: SHA-256 `3c04f346b4b33e77164606f7fa57671e7efbd80379560d189fb2fa7d38ebfe58`
 - `prereg/splits.json`: SHA-256 `ef569f70762b168cdccd5649455b0050a10e53bf5c556068bd34391b279a1c77`
+- `runs/lr_search.json`: SHA-256 `800291a61277871317a0edaad1a9e9f321be5365e3f116344296d4a20e316e7c`

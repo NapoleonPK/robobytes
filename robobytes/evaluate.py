@@ -4,7 +4,9 @@ For chunked methods it also returns realised compression (symbols per main-netwo
 """
 from __future__ import annotations
 
+import json
 import math
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -60,6 +62,8 @@ def episode_bpb(method, model, name, split, N, R, dev, ent=None, eps=None, batch
             out = model(inp)
         elif method == "fixed":
             out = model(inp, fixed_boundaries(inp, N))
+        elif method == "byteconv":
+            out = model(inp, fixed_boundaries(inp, 1))
         elif method == "entropy":
             out = model(inp, ent(inp))
         else:
@@ -75,3 +79,32 @@ def episode_bpb(method, model, name, split, N, R, dev, ent=None, eps=None, batch
                 res[int(e)][3] += int(b[k][v].sum())  # boundaries among the scored (new) input positions
     model.train()
     return res
+
+
+def load_run(run, dev):
+    """(method, model, N, R, entropy boundaries or None) from a finished run directory."""
+    from .train import EntropyBoundaries, build
+    c = torch.load(Path(run) / "final.pt", map_location="cpu", weights_only=False)
+    a, meta = c["args"], c["meta"]
+    m = build(a["method"], a["size"], meta["N"], meta["R_BPE"], meta.get("refractory"), a.get("pos", "learned"),
+              a.get("init", "default")).to(dev)
+    m.load_state_dict(c["model"])
+    ent = EntropyBoundaries(a["entropy_ckpt"], a["entropy_threshold"], dev) if a["method"] == "entropy" else None
+    return a["method"], m, meta["N"], meta["R_BPE"], ent
+
+
+def validate(run, dev, max_eps=100):
+    """Held-in validation (frontier choice): first max_eps validation episodes per training dataset; pooled = mean of
+    per-dataset bpb. Writes <run>/val.json."""
+    from .data import training_names
+    method, m, N, R, ent = load_run(run, dev)
+    per = {}
+    for name in training_names():
+        eps = Stream(name).episodes("val")[:max_eps]
+        r = episode_bpb(method, m, name, "val", N, R, dev, ent=ent, eps=eps)
+        bits, by = sum(v[0] for v in r.values()), sum(v[1] for v in r.values())
+        pos, ch = sum(v[2] for v in r.values()), sum(v[3] for v in r.values())
+        per[name] = dict(bpb=bits / by, compression=pos / ch if ch else None)
+    out = dict(val_bpb=float(np.mean([v["bpb"] for v in per.values()])), per_dataset=per, max_episodes=max_eps)
+    json.dump(out, open(Path(run) / "val.json", "w"), indent=1)
+    return out

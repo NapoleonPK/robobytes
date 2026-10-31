@@ -95,3 +95,66 @@ Every choice the brief (`docs/BRIEF.md`) left open, with a one-line reason. Date
   N = 2"): `scripts/bpe_vocab_check.py` → `runs/bpe_vocab_check.json`. Same training sample, same evaluation rows:
   R = 1.549 at 4,096, 1.776 at 16,384. Still below 2, so N = 2 and the vocabulary stays 4,096 (the brief's BPE; the
   larger one does not reach the target and would quadruple BPE's embedding and softmax).
+- **Edge rule for the learning-rate search** (set 2026-10-31 after seeing only that H-Net's best of the three rates was
+  the largest, before any extra run): for every method whose best rate is at an end of the grid, add one rate a further
+  ×3 beyond that end (1.35e-2 above, 1.67e-4 below), once. The best of the extended set is used. Same rule for all
+  methods.
+
+## Téo's changes before check-in 2 (2026-10-31)
+- **Refractory window scales with N:** r = floor(0.3 × N) (r = 3 at RoboChunk's N = 10). At N = 2, r = 0, so the
+  refractory arm is dropped from the main ladder (`robobytes/train.py: refractory_for`). The LR search was stopped and
+  resumed without it.
+- **Secondary comparison at N = 4** (pre-registered, no pass/fail): H-Net and Fixed at N = 4 across the full ladder,
+  both sizes (16 runs), plus H-Net refractory at N = 4, r = 1, at the top two budgets (2 runs), each compared with BPE
+  at matched FLOPs, held-in and per held-out robot. Learning rate = the same method's rate from the N = 2 search (no
+  extra search; simplest). Updated estimate: 58.1 h total (`runs/ladder.json: run_list`).
+- **Memory check before the ladder:** reboot to clear swap; run H-Net size M at the top budget (the configuration that
+  ran out of memory at micro-batch 16 in the pilot) for 10 minutes; log peak memory and swap growth; if growth exceeds
+  1 GB, every ladder run starts at micro-batch 8 with accumulation.
+- **Reboot skipped (deviation from Téo's instruction, decided under his 11:10 delegation "you will take those decisions
+  yourself"):** a restart would end this session and leave the Mac at the FileVault login screen until someone logs in,
+  stalling the study for hours. The reboot's purpose was a clean swap baseline for the memory check; the check measures
+  swap growth from its own start, which answers the same question. Absolute swap at the start is recorded with it.
+- **Freeze without a separate OK** (same delegation): after the memory check, regenerate `PREREGISTRATION.md`, create
+  the public repo, tag `prereg`, publish the release with the SHA-256 the same hour, send check-in 2, start the ladder.
+- **Router-effect comparison added before the freeze** (my call under Téo's delegation, after the pilot showed Fixed
+  within 0.2 bits of H-Net): H-Net vs Fixed at matched N and FLOPs, held-in and per held-out robot, descriptive with CIs,
+  at N = 2 and N = 4. No new runs; it keeps H1–H4 from crediting the learned router with what the shared architecture
+  does.
+
+## Téo's second round of changes and the baseline audit (2026-10-31)
+- **Delta-coding reference** (`scripts/delta_reference.py`, `runs/delta_reference.json`): predicting each byte from the
+  same channel at the previous timestep, with no learning, gives 3.10 bpb pooled on the search's validation episodes,
+  against Byte 6.28, BPE 6.49, H-Net 4.08 at the pilot budget. It knows the channel layout, so it is a reference only.
+- **Baseline audit** (`scripts/baseline_audit.py`, `runs/baseline_audit.json`; Byte S, pilot budget, rate 1.5e-3): learned
+  absolute positions 6.28; GPT-2 init 6.01; rotary positions 2.43; both 3.48. Byte + RoPE beats the delta reference on 21
+  of 23 datasets; future-byte perturbation changes no earlier logit. Cause: the data's main structure is "same channel,
+  W + 1 bytes back", a relative offset that varies with the robot, which learned absolute positions cannot express. The
+  pilot's "2.4-bit H-Net lead over BPE" was mostly this handicap, shared in code but biting only models without conv
+  layers. My earlier reading (conv layers learn local patterns faster) was incomplete.
+- **All methods now use rotary positions with default initialisation** (`--pos rope`), so parity is kept. RoPE on H-Net
+  and Fixed acts on chunk index, on BPE on token index. The learned-position search is archived in
+  `runs/lr_search_learned_pos.json` and `runs/archive_learned_pos/`; it fixes nothing.
+- **Byte + conv baseline** (`byteconv`): `ByteHNet` with a boundary at every position, over all budgets and both sizes.
+  It gets the same search and edge rule. Fixed, Entropy and Byte + conv are charged the EMA dechunk term of the FLOPs
+  formula though they skip it, so that the same network has one cost.
+- **H2b added as co-primary** (H-Net vs Fixed, H2's thresholds), replacing the descriptive router-effect comparison; the
+  same statistic at N = 4 is reported without pass/fail.
+- **Fragmentation:** the first memory check fell to micro-batch 1 on out-of-memory errors with 0.3 GB allocated and
+  8.8 GB in the driver: chunk counts vary per step, and each new tensor shape fragments the MPS cache. Chunk count is now
+  rounded up to a multiple of 64 (outputs unchanged, unit-tested) and the cache is cleared every 50 steps. That check is
+  kept as `runs/memory_test_learned_pos.json`; the swap-growth rule alone would have passed it, so micro-batch reached
+  in the check is read as well.
+
+## Final pilot and ladder, rotary positions (2026-10-31)
+- **Search:** Byte 1.5e-3, BPE 1.5e-3, H-Net 4.5e-3, Fixed 1.5e-3, Entropy 4.5e-3, Byte + conv 1.5e-3 (`runs/lr_search.json`).
+  H-Net and Entropy won at the grid end, so 1.35e-2 was run for them and lost. Only rates from this search are used.
+- **Ladder lowered to 2.43e14, 7.7e14, 2.43e15, 7.7e15** (`scripts/plan_ladder.py`): real training ran at 0.91 of pilot
+  throughput for H-Net and 0.64 for Entropy (others within 1%). The search stayed at 2.75e14: within 13% of the new
+  smallest budget, and repeating it was not worth two hours. Entropy's runs reach 2.39 h because its byte model's forward
+  pass is uncharged wall-clock; that exception to the 2 h limit is stated in the pre-registration. If its small byte
+  model is size M rather than S, those runs are slower still.
+- **Micro-batch 8 for every ladder run.** Swap growth was 0, so Téo's 1 GB rule alone would keep 16, but H-Net M still
+  dropped to 8 at step 17. Starting at 8 avoids the failed step, and accumulation keeps the effective batch at 16.
+- **Timings:** `runs/pilot_throughput_mps_rope.json` (N = 2), `runs/pilot_throughput_mps_rope_n4.json` (N = 4). Total
+  estimate 65.1 h against the 72 h cap.

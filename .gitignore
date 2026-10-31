@@ -25,3 +25,8 @@ docs/BRIEF.md
 !runs/pilot_throughput_*.json
 !runs/flops_check.json
 !runs/dataset_survey.csv
+!runs/memory_test.json
+!runs/baseline_audit.json
+!runs/delta_reference.json
+!runs/lr_search_learned_pos.json
+!runs/memory_test_learned_pos.json

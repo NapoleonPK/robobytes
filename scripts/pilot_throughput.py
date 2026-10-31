@@ -16,6 +16,7 @@ from robobytes.model import VOCAB, ByteHNet, TokenLM, ratio_loss
 SIZES = {"S": (256, 4, 4), "M": (384, 8, 6), "L": (512, 12, 8)}  # main width, layers, heads
 R_ASSUMED, N_ASSUMED = 4.0, 4  # placeholders until BPE is trained on day 2; FLOPs are rescaled then
 CTX, MB = 1024, 16
+POS = "learned"  # the first pilots; set by --pos
 
 
 def swap_mb():
@@ -26,10 +27,12 @@ def swap_mb():
 def build(method, size):
     d, L, h = SIZES[size]
     if method == "byte":
-        return TokenLM(VOCAB, d, L, h), 1.0
+        return TokenLM(VOCAB, d, L, h, pos=POS), 1.0
     if method == "bpe":
-        return TokenLM(4096 + 2, d, L, h), R_ASSUMED
-    return ByteHNet(d, L, h, refractory=3 if method == "hnet_refractory" else 0), float(N_ASSUMED)
+        return TokenLM(4096 + 2, d, L, h, pos=POS), R_ASSUMED
+    if method == "byteconv":
+        return ByteHNet(d, L, h, pos=POS), 1.0
+    return ByteHNet(d, L, h, refractory=3 if method == "hnet_refractory" else 0, pos=POS), float(N_ASSUMED)
 
 
 def step_fn(method, model, dev, MB):
@@ -42,9 +45,9 @@ def step_fn(method, model, dev, MB):
             logits = model(ids)["logits"]
             return F.cross_entropy(logits[:, :-1].reshape(-1, V), ids[:, 1:].reshape(-1))
         return f
-    fixed = method in ("fixed", "entropy")
+    fixed = method in ("fixed", "entropy", "byteconv")
     bnd = torch.zeros(MB, CTX, dtype=torch.bool, device=dev)
-    bnd[:, ::N_ASSUMED] = True
+    bnd[:, ::(1 if method == "byteconv" else N_ASSUMED)] = True
 
     def f():
         ids = torch.randint(0, VOCAB, (MB, CTX), device=dev)
@@ -63,9 +66,11 @@ def main():
     ap.add_argument("--R", type=float, default=4.0)
     ap.add_argument("--N", type=int, default=4)
     ap.add_argument("--tag", default="")
+    ap.add_argument("--pos", default="rope", choices=["learned", "rope"])
+    ap.add_argument("--sizes", nargs="+", default=list(SIZES))
     ap.add_argument("--methods", nargs="+", default=["byte", "bpe", "hnet", "fixed", "entropy", "hnet_refractory"])
     a = ap.parse_args()
-    globals().update(R_ASSUMED=a.R, N_ASSUMED=a.N)
+    globals().update(R_ASSUMED=a.R, N_ASSUMED=a.N, POS=a.pos)
     dev = torch.device(a.device)
     sync = torch.mps.synchronize if a.device == "mps" else (lambda: None)
     res = {"device": a.device, "R": a.R, "N": a.N, "swap_mb_start": swap_mb(), "runs": {}}
@@ -73,7 +78,7 @@ def main():
     if out.exists():  # merge with earlier timings of other methods
         res["runs"] = json.load(open(out))["runs"]
     for method in a.methods:
-        for size in SIZES:
+        for size in a.sizes:
             mb = MB
             while True:  # halve the micro-batch on out-of-memory (brief section 4), logged in the result
                 torch.manual_seed(0)

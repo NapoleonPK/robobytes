@@ -19,11 +19,22 @@ N_BYTES, BOS, SEP = 256, 256, 257
 VOCAB = 258
 
 
+def rope(x, base=10000.0):
+    """Rotary position embedding on (B, h, L, dh), rotating pairs (even, odd) of each head dimension."""
+    L, dh = x.shape[-2], x.shape[-1]
+    inv = base ** (-torch.arange(0, dh, 2, device=x.device, dtype=torch.float32) / dh)
+    ang = torch.arange(L, device=x.device, dtype=torch.float32)[:, None] * inv[None]
+    cos, sin = ang.cos().to(x.dtype), ang.sin().to(x.dtype)
+    x1, x2 = x[..., 0::2], x[..., 1::2]
+    return torch.stack([x1 * cos - x2 * sin, x1 * sin + x2 * cos], -1).flatten(-2)
+
+
 class Block(nn.Module):
     """Pre-norm Transformer block; attention through scaled_dot_product_attention with is_causal=True (no L x L mask)."""
 
-    def __init__(self, d, heads):
+    def __init__(self, d, heads, use_rope=False):
         super().__init__()
+        self.use_rope = use_rope
         self.h = heads
         self.n1, self.n2 = nn.LayerNorm(d), nn.LayerNorm(d)
         self.qkv, self.proj = nn.Linear(d, 3 * d), nn.Linear(d, d)
@@ -32,32 +43,52 @@ class Block(nn.Module):
     def forward(self, x):
         B, L, D = x.shape
         q, k, v = self.qkv(self.n1(x)).view(B, L, 3, self.h, D // self.h).permute(2, 0, 3, 1, 4)
+        if self.use_rope:
+            q, k = rope(q), rope(k)
         a = F.scaled_dot_product_attention(q, k, v, is_causal=True)
         x = x + self.proj(a.transpose(1, 2).reshape(B, L, D))
         return x + self.fc2(F.gelu(self.fc1(self.n2(x))))
 
 
 class Main(nn.Module):
-    """Causal Transformer with learned positions and a final norm (shared by every method; only its size varies)."""
+    """Causal Transformer with a final norm (shared by every method; only its size varies). Positions: learned absolute
+    embeddings ("learned") or rotary embeddings in attention ("rope")."""
 
-    def __init__(self, d, layers, heads, max_len=1024):
+    def __init__(self, d, layers, heads, max_len=1024, pos="learned"):
         super().__init__()
-        self.pos = nn.Embedding(max_len, d)
-        self.blocks = nn.ModuleList([Block(d, heads) for _ in range(layers)])
+        self.pos = nn.Embedding(max_len, d) if pos == "learned" else None
+        self.blocks = nn.ModuleList([Block(d, heads, use_rope=pos == "rope") for _ in range(layers)])
         self.norm = nn.LayerNorm(d)
 
     def forward(self, h):
-        h = h + self.pos(torch.arange(h.shape[1], device=h.device))
+        if self.pos is not None:
+            h = h + self.pos(torch.arange(h.shape[1], device=h.device))
         for b in self.blocks:
             h = b(h)
         return self.norm(h)
 
 
+def gpt2_init(main, embeddings=()):
+    """GPT-2 initialisation for the main Transformer and the given embeddings: N(0, 0.02) weights, zero biases, output
+    projections of each block scaled by 1 / sqrt(2 x layers). The H-Net router, residual and conv weights keep theirs."""
+    L = len(main.blocks)
+    for mod in list(main.modules()) + list(embeddings):
+        if isinstance(mod, (nn.Linear, nn.Embedding)):
+            nn.init.normal_(mod.weight, std=0.02)
+            if getattr(mod, "bias", None) is not None:
+                nn.init.zeros_(mod.bias)
+    for b in main.blocks:
+        nn.init.normal_(b.proj.weight, std=0.02 / math.sqrt(2 * L))
+        nn.init.normal_(b.fc2.weight, std=0.02 / math.sqrt(2 * L))
+
+
 class TokenLM(nn.Module):
-    def __init__(self, vocab, d, layers, heads, max_len=1024):
+    def __init__(self, vocab, d, layers, heads, max_len=1024, pos="learned", init="default"):
         super().__init__()
         self.emb = nn.Embedding(vocab, d)
-        self.main = Main(d, layers, heads, max_len)
+        self.main = Main(d, layers, heads, max_len, pos)
+        if init == "gpt2":
+            gpt2_init(self.main, [self.emb])
         self.head = nn.Linear(d, vocab)
 
     def forward(self, ids):
@@ -122,9 +153,11 @@ def ema(z, P):
 
 
 class ByteHNet(nn.Module):
-    def __init__(self, d_main, layers, heads, d_outer=256, outer_blocks=4, refractory=0, max_chunks=1024):
+    def __init__(self, d_main, layers, heads, d_outer=256, outer_blocks=4, refractory=0, max_chunks=1024, k_bucket=64,
+                 pos="learned", init="default"):
         super().__init__()
         self.refractory = refractory
+        self.k_bucket = k_bucket  # chunk count rounded up to a multiple of this: few distinct shapes, no MPS fragmentation
         self.emb = nn.Embedding(VOCAB, d_outer)
         self.encoder = nn.Sequential(*[ConvBlock(d_outer) for _ in range(outer_blocks)], nn.LayerNorm(d_outer))
         self.router_norm = nn.LayerNorm(d_outer)
@@ -133,7 +166,9 @@ class ByteHNet(nn.Module):
             self.wq.weight.copy_(torch.eye(d_outer))
             self.wk.weight.copy_(torch.eye(d_outer))
         self.up_proj, self.down_proj = nn.Linear(d_outer, d_main), nn.Linear(d_main, d_outer)
-        self.main = Main(d_main, layers, heads, max_chunks)
+        self.main = Main(d_main, layers, heads, max_chunks, pos)
+        if init == "gpt2":
+            gpt2_init(self.main, [self.emb])
         self.residual = nn.Linear(d_outer, d_outer)
         with torch.no_grad():  # H-Net initialises the residual projection close to 0
             self.residual.weight.mul_(1e-3)
@@ -164,7 +199,7 @@ class ByteHNet(nn.Module):
         b[:, 0] = True
         idx = b.long().cumsum(1) - 1
         nk = b.sum(1)
-        K = int(nk.max())
+        K = min(ids.shape[1], -(-int(nk.max()) // self.k_bucket) * self.k_bucket) if self.k_bucket else int(nk.max())
         bi, ti = b.nonzero(as_tuple=True)
         chunks = xh.new_zeros(ids.shape[0], K, xh.shape[-1])
         chunks[bi, idx[bi, ti]] = xh[bi, ti]

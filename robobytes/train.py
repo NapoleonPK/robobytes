@@ -40,13 +40,19 @@ def bpe_info():
     return json.load(open("runs/bpe_summary.json"))
 
 
-def build(method, size, N, R):
+def refractory_for(N):
+    """Pre-registered refractory window: r = floor(0.3 N) (r = 3 at RoboChunk's N = 10; r = 0 at N = 2)."""
+    return int(math.floor(0.3 * N))
+
+
+def build(method, size, N, R, refractory=None, pos="rope", init="default"):
     d, L, h = SIZES[size]
     if method == "byte":
-        return TokenLM(VOCAB, d, L, h)
+        return TokenLM(VOCAB, d, L, h, pos=pos, init=init)
     if method == "bpe":
-        return TokenLM(bpe.VOCAB_T, d, L, h, max_len=bpe_ctx(R))
-    return ByteHNet(d, L, h, refractory=3 if method == "hnet_refractory" else 0)
+        return TokenLM(bpe.VOCAB_T, d, L, h, max_len=bpe_ctx(R), pos=pos, init=init)
+    r = (refractory_for(N) if refractory is None else refractory) if method == "hnet_refractory" else 0
+    return ByteHNet(d, L, h, refractory=r, pos=pos, init=init)
 
 
 def bpe_ctx(R):
@@ -65,7 +71,7 @@ class EntropyBoundaries:
     def __init__(self, ckpt, threshold, dev):
         c = torch.load(ckpt, map_location="cpu", weights_only=False)
         d, L, h = SIZES[c["args"]["size"]]
-        self.m = TokenLM(VOCAB, d, L, h).to(dev).eval()
+        self.m = TokenLM(VOCAB, d, L, h, pos=c["args"].get("pos", "learned")).to(dev).eval()
         self.m.load_state_dict(c["model"])
         self.threshold = threshold
 
@@ -86,6 +92,8 @@ def forward(method, model, ids, N, ent=None):
         out = model(x)
     elif method == "fixed":
         out = model(x, fixed_boundaries(x, N))
+    elif method == "byteconv":  # H-Net's conv encoder/decoder, main Transformer over every byte (a boundary everywhere)
+        out = model(x, fixed_boundaries(x, 1))
     elif method == "entropy":
         out = model(x, ent(x))
     else:
@@ -108,11 +116,15 @@ def lr_at(step, total, peak):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--method", required=True, choices=["byte", "bpe", "hnet", "hnet_refractory", "fixed", "entropy"])
+    ap.add_argument("--method", required=True, choices=["byte", "bpe", "hnet", "hnet_refractory", "fixed", "entropy", "byteconv"])
     ap.add_argument("--size", required=True, choices=list(SIZES))
     ap.add_argument("--budget", type=float, required=True)
     ap.add_argument("--lr", type=float, required=True)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--N", type=int, help="chunk target; default round(R_BPE) (secondary comparison: 4)")
+    ap.add_argument("--refractory", type=int, help="refractory window; default floor(0.3 N)")
+    ap.add_argument("--pos", default="rope", choices=["learned", "rope"])
+    ap.add_argument("--init", default="default", choices=["default", "gpt2"])
     ap.add_argument("--micro", type=int, default=16)
     ap.add_argument("--entropy-ckpt")
     ap.add_argument("--entropy-threshold", type=float)
@@ -124,10 +136,10 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     dev = torch.device(a.device)
     info = bpe_info()
-    R, N = info["R_BPE"], info.get("N_used", info["N"])
+    R, N = info["R_BPE"], (a.N or info.get("N_used", info["N"]))
     torch.manual_seed(a.seed)
-    model = build(a.method, a.size, N, R).to(dev)
-    comp = 1.0 if a.method == "byte" else (R if a.method == "bpe" else float(N))
+    model = build(a.method, a.size, N, R, a.refractory, a.pos, a.init).to(dev)
+    comp = 1.0 if a.method in ("byte", "byteconv") else (R if a.method == "bpe" else float(N))
     fpb = flops_per_byte(model.cpu(), CTX, comp)
     model.to(dev)
     ctx = bpe_ctx(R) if a.method == "bpe" else CTX
@@ -146,7 +158,8 @@ def main():
         mix.set_state(c["mix"])
         torch.set_rng_state(c["torch_rng"])
     meta = dict(args=vars(a), params=params(model), flops_per_symbol=fpb, compression_assumed=comp, ctx=ctx,
-                steps=total, symbols_per_step=sym_per_step, R_BPE=R, N=N)
+                steps=total, symbols_per_step=sym_per_step, R_BPE=R, N=N,
+                refractory=getattr(model, "refractory", None))
     json.dump(meta, open(out / "meta.json", "w"), indent=1)
 
     def save(final=False):
@@ -186,12 +199,15 @@ def main():
             print(f"OOM: micro-batch -> {micro}", flush=True)
             continue
         step += 1
+        if a.device == "mps" and step % 50 == 0:
+            torch.mps.empty_cache()  # variable chunk counts fragment the MPS cache
         if step % 100 == 0 or step == total:
             if a.device == "mps":
                 torch.mps.synchronize()
             sw = swap_mb()
             rec = dict(step=step, loss=lsum, lr=lr_at(step - 1, total, a.lr), seconds=run_t + time.time() - t0,
-                       mps_gb=torch.mps.current_allocated_memory() / 1e9 if a.device == "mps" else 0, swap_mb=sw,
+                       mps_gb=torch.mps.current_allocated_memory() / 1e9 if a.device == "mps" else 0,
+                       mps_driver_gb=torch.mps.driver_allocated_memory() / 1e9 if a.device == "mps" else 0, swap_mb=sw,
                        micro=micro, compression=(pos_sum / chunks_sum) if chunks_sum else None)
             chunks_sum = pos_sum = 0
             log.append(rec)

@@ -12,6 +12,7 @@ from robobytes.sources import HELD_OUT, TRAIN
 from robobytes.serialize import STREAMS, Stream
 
 OUT = Path("PREREGISTRATION.md")
+FINAL = False  # set by --final
 LISTS = Path("prereg/splits.json")
 
 
@@ -47,8 +48,13 @@ def main():
     L = []
     a = L.append
     a("# RoboBytes: pre-registration\n")
-    a("**Status: DRAFT for review (not frozen).** Frozen = the commit tagged `prereg` in the public `robobytes` repo, whose "
-      "SHA-256 is published the same hour as a GitHub release.\n")
+    if FINAL:
+        a("**Status: frozen 2026-10-31.** The frozen text is this file at the commit tagged `prereg` in the public "
+          "`robobytes` repo; its SHA-256 is published the same hour as the GitHub release `prereg`. Later changes are "
+          "dated amendments.\n")
+    else:
+        a("**Status: DRAFT for review (not frozen).** Frozen = the commit tagged `prereg` in the public `robobytes` "
+          "repo, whose SHA-256 is published the same hour as a GitHub release.\n")
     a("Independent study. Not affiliated with Cartesia, the H-Net authors (Hwang, Wang & Gu), the FAST authors or "
       "LeRobot / Hugging Face; it re-implements their published ideas and uses public LeRobot datasets. Follows RoboChunk "
       "(`NapoleonPK/robochunk-study`), whose router code it reuses.\n")
@@ -57,7 +63,9 @@ def main():
       "median 3.10× on unseen programming languages). RoboBytes asks whether the same holds for **robots never seen in "
       "training**: each joint value is quantised to one byte, and models read the byte stream of trajectories.\n")
     a("## 2. Hypotheses and pass criteria\n")
-    a("All four tests compare plain H-Net (primary) with BPE (baseline). Other methods are reported without pass/fail.\n")
+    a("H1–H4 compare plain H-Net (primary) with BPE (baseline). **H2b** (co-primary with H2) compares H-Net with Fixed "
+      "patches, which share every component except the learned router, so it isolates the router's contribution. Other "
+      "methods are reported without pass/fail.\n")
     a("- **bpb:** cross-entropy of the next byte in bits, data bytes only (BOS and SEP predictions excluded), for every method.")
     a("- **Relative gap:** g = (bpb_BPE − bpb_HNet) / bpb_BPE; g > 0 means H-Net is better.")
     a("- **g_ID:** on the held-in test episodes (pooled, see §7). **g_OOD(r):** zero-shot on held-out robot r's test episodes.")
@@ -71,14 +79,17 @@ def main():
       "difference excludes 0. |")
     a("| H2 (main) | Does the advantage grow on unseen robots? | At the top budget, for at least 2 of the 3 held-out "
       "robots: g_OOD(r) > 0 with CI excluding 0, **and** g_OOD(r) ≥ max(1.5 × \\|g_ID\\|, 0.02). |")
+    a("| H2b (co-primary) | Does the **learned router's** advantage grow on unseen robots? | Same rule with "
+      "g = (bpb_Fixed − bpb_HNet) / bpb_Fixed (both at N = round(R_BPE)): at the top budget, for at least 2 of the 3 "
+      "held-out robots, g_OOD(r) > 0 with CI excluding 0 **and** g_OOD(r) ≥ max(1.5 × \\|g_ID\\|, 0.02). |")
     a("| H3 | Does H-Net adapt to a new robot better with few episodes? | After fine-tuning on the 50-episode pool of "
       "each held-out robot (§8), test bpb of H-Net < BPE for at least 2 of 3 robots, CI excluding 0. |")
     a("| H4 (underpowered) | Does better pretraining show up as better robot behaviour? | Policy success on PushT and "
       "Fetch (§9): H-Net − BPE > 0 with CI (over rollouts and seeds) excluding 0 on at least 1 of 2 tasks. |\n")
     a(f"**Compression floor.** If H-Net's realised compression at the top budget (held-in test) is below 0.8 × R_BPE = "
       f"{0.8 * R:.3f}, the comparison is not matched and H1 and H2 count as failed.\n")
-    a("**Exploratory (labelled as such):** compute multipliers from the iso-FLOP frontiers; the refractory router as a "
-      "second H-Net arm; whether chunk counts for a new robot shrink as an episode goes on (in-context merging); whether "
+    a("**Exploratory (labelled as such):** compute multipliers from the iso-FLOP frontiers; the secondary N = 4 "
+      "comparison (§6.1); whether chunk counts for a new robot shrink as an episode goes on (in-context merging); whether "
       "boundaries align with gripper events; 16-bit serialisation; how Byte and Entropy transfer.\n")
     a("## 3. Data\n")
     family = lambda t: ("Franka" if ("Franka" in t or "Panda" in t) else "SO-100/101" if t.startswith("SO-")
@@ -137,17 +148,32 @@ def main():
     a("| BPE | as above; context round(1,024 / R_BPE) tokens | Primary baseline |")
     a(f"| H-Net | RoboChunk's router (LayerNorm, identity init), ratio loss α = 0.3 targeting N = {N}; causal-conv encoder "
       "and decoder, 4 blocks each, width 256; EMA dechunk; next-byte softmax over 258 | Primary method |")
-    a("| H-Net refractory | as H-Net, no boundary within 3 positions of the last kept one | Exploratory |")
+    a("| H-Net refractory | as H-Net, no new boundary within r positions of the last kept one, **r = floor(0.3 × N)** "
+      f"(r = 3 at RoboChunk's N = 10). At N = {N}, r = {int(0.3 * N)}: identical to H-Net, so the arm is not in the main "
+      "ladder; it runs only in the N = 4 comparison (r = 1) | Exploratory |")
     a(f"| Fixed | H-Net architecture, a boundary every {N} positions | Baseline |")
     a("| Entropy | H-Net architecture, boundary where a small byte model's next-symbol entropy exceeds a threshold set to "
       f"give compression {N} on training-robot validation windows; the small model is the Byte run at the second budget | Baseline |")
-    a("| Byte | plain Transformer, one position per byte | Reference |\n")
-    a("Main Transformer sizes: **S** = width 256, 4 layers; **M** = width 384, 8 layers (pre-norm, learned positions, "
+    a("| Byte | plain Transformer, one position per byte | Reference |")
+    a("| Byte + conv | H-Net's conv encoder and decoder with the main Transformer over every byte (a boundary at every "
+      "position): H-Net without chunking | Reference: separates the conv wrapper from chunking |\n")
+    a("Main Transformer sizes: **S** = width 256, 4 layers; **M** = width 384, 8 layers (pre-norm, rotary positions, "
       "context 1,024 bytes). Only the main network changes with size.\n")
+    au = json.load(open("runs/baseline_audit.json"))
+    de = json.load(open("runs/delta_reference.json"))["_pooled"]
+    a(f"**Baseline audit.** A no-learning reference, predicting each byte from the same channel at the previous "
+      f"timestep, gives {de['val20_bpb']:.2f} bpb on validation; it is told the channel layout. The first pilot used "
+      f"learned absolute positions, where Byte reached only {au['byte_baseline']['val_bpb']:.2f}. Rotary positions "
+      f"reached {au['byte_rope']['val_bpb']:.2f} (GPT-2 init alone {au['byte_gpt2init']['val_bpb']:.2f}; both "
+      f"{au['byte_rope_gpt2init']['val_bpb']:.2f}), because the data's main structure is a relative offset. **Every "
+      "method therefore uses rotary positions** (over bytes, tokens or chunks). The first search is archived and fixes "
+      "nothing.\n")
     a("## 6. Compute ladder and training\n")
-    a(f"Budgets **{', '.join(fmt_e(b) for b in ld['budgets'])} FLOPs** (×3.16), sizes S and M at every budget, 5 "
+    a(f"Budgets **{', '.join(fmt_e(b) for b in ld['budgets'])} FLOPs** (×3.16), sizes S and M at every budget, 6 "
       f"methods: {len(ld['runs'])} ladder runs, ≈ {ld['ladder_hours']:.0f} h at the measured throughput; longest run "
-      f"{ld['max_run_hours']:.2f} h. FLOPs = 6 × parameters used per position + 6 × layers × context × width, per "
+      f"{max(r['hours'] for r in ld['runs'] if r['method'] != 'entropy'):.2f} h, except Entropy (up to "
+      f"{ld['max_run_hours']:.2f} h, because its small byte model's forward pass is wall-clock time not charged to its "
+      "budget). FLOPs = 6 × parameters used per position + 6 × layers × context × width, per "
       f"network, per symbol. At most {ld['max_passes']:.2f} passes over the {ld['train_symbols']:,} training symbols, so "
       "no budget is dropped. At each budget the size with the lower held-in validation bpb is the method's frontier run; "
       "only frontier runs enter the tests.\n")
@@ -158,11 +184,49 @@ def main():
         run0 = next(v["run"] for k, v in lr.items() if not k.startswith("_"))
         b0 = json.load(open(Path(run0) / "meta.json"))["args"]["budget"]
         a(f"**Learning rates** (pilot search at {fmt_e(b0)} FLOPs, size S, 3 values per method, held-in validation "
-          "only): " + ", ".join(f"{m} {v:g}" for m, v in best.items()) + ". Fixed for every later run.\n")
+          "only; a method whose best rate was at an end of the grid got one more rate ×3 beyond it, once): "
+          + ", ".join(f"{m} {v:g}" for m, v in best.items()) + ". Fixed for every later run.\n")
+        a("**Known before the freeze.** Held-in validation at the search budget, size S, each method's best rate (first "
+          "20 validation episodes per dataset). These pilot numbers motivated H2b and the N = 4 arm; held-out robots have "
+          "not been evaluated by any model:\n")
+        a("| Method | Rate | Validation bpb |")
+        a("| --- | --- | --- |")
+        for m, v in best.items():
+            a(f"| {m} | {v:g} | {lr[f'{m}_{v:g}']['val_bpb']:.3f} |")
+        a("")
+        a(f"The search ran at {fmt_e(b0)} FLOPs, set before the ladder was lowered to account for real training speed; the "
+          f"smallest budget is {fmt_e(ld['budgets'][0])}. Rates are not re-searched.\n")
     else:
         a("**Learning rates:** pending (search running: 5e-4, 1.5e-3, 4.5e-3 per method at the smallest budget).\n")
-    a("Extra runs: H-Net and BPE at the top budget with seeds 1 and 2 (frontier size); H-Net refractory at the top two "
-      "budgets (H-Net's frontier size).\n")
+    a("Extra runs: H-Net and BPE at the top budget with seeds 1 and 2 (frontier size).\n")
+    a("### 6.1 Secondary comparison at N = 4 (pre-registered, no pass/fail)\n")
+    a(f"N = round(R_BPE) = {N} barely exercises chunking, so H-Net and Fixed are also trained with **N = 4** across the "
+      "full ladder (4 budgets × sizes S and M), plus H-Net refractory at N = 4 with r = 1 at the top two budgets (H-Net "
+      "N = 4's frontier size). Same data, windows, optimiser and seeds as the main ladder; learning rate = the same "
+      "method's rate from the N = 2 search; Fixed places a boundary every 4 positions. Each is compared with BPE's "
+      "frontier at matched FLOPs on held-in data and on each held-out robot (bpb, relative gap g with 95% bootstrap "
+      "CIs, iso-FLOP frontiers). Reported descriptively; it does not enter H1–H4.\n")
+    a("### 6.2 Router effect at N = 4 (no pass/fail)\n")
+    a("The H2b statistic (H-Net vs Fixed: g_ID, g_OOD per robot, CIs, the 1.5 × |g_ID| and 0.02 lines) is also computed "
+      "for the N = 4 arm of §6.1 and reported descriptively.\n")
+    a("### 6.3 Run list and machine time\n")
+    a("| Block | Runs | Hours | Basis |")
+    a("| --- | --- | --- | --- |")
+    for r in ld["run_list"]:
+        a(f"| {r['block']} | {r['runs']} | {r['hours']:.1f} | {r['basis']} |")
+    a(f"| **Total** | | **{ld['total_hours']:.1f}** | cap 72 h |\n")
+    mt = Path("runs/memory_test.json")
+    if mt.exists():
+        m = json.load(open(mt))
+        a(f"**Memory check before the ladder** ({m['config']}, 10 minutes): peak MPS "
+          f"allocation {m['peak_mps_gb']:.2f} GB, swap growth {m['swap_growth_mb']:.0f} MB. "
+          + (f"The check ended at micro-batch {m['micro_end']}. Every ladder run starts at micro-batch "
+             + ("8 with accumulation." if m["decision"].startswith("micro-batch 8") else "16."))
+          + " The in-run rule (halve the micro-batch if swap grows by more than 2 GB) stays.\n")
+    else:
+        a("**Memory check before the ladder:** run the largest configuration "
+          "(H-Net, size M, top budget) for 10 minutes and log peak memory and swap growth; if growth exceeds 1 GB, every "
+          "ladder run starts at micro-batch 8 with accumulation. Result: pending.\n")
     a("## 7. Metrics and statistics\n")
     a("- **Windows:** each episode in 1,024-position windows (BPE: round(1,024 / R_BPE) tokens), stride half a window, "
       "scoring the second half of each window and all of the first.")
@@ -190,9 +254,12 @@ def main():
     a("- Hypotheses, held-out robots, metrics and thresholds do not change after the freeze; any deviation is a dated "
       "amendment with its reason.")
     a("- Every reported number comes from one analysis script run on the frozen results.")
-    a("- One training job at a time; checkpoints every 10 minutes.\n")
+    a("- One training job at a time; checkpoints every 10 minutes.")
+    a("- Runs may halve their micro-batch on out-of-memory or swap growth above 2 GB, keeping the effective batch; every "
+      "event is logged.\n")
     a("## 11. Files fixed by this document\n")
-    for f in ["robobytes/sources.py", "runs/streams_summary.json", "runs/bpe_summary.json", "runs/ladder.json", str(LISTS)]:
+    for f in ["robobytes/sources.py", "runs/streams_summary.json", "runs/bpe_summary.json", "runs/ladder.json",
+              "runs/baseline_audit.json", "runs/delta_reference.json", str(LISTS)]:
         a(f"- `{f}`: SHA-256 `{sha(f)}`")
     if Path("runs/lr_search.json").exists():
         a(f"- `runs/lr_search.json`: SHA-256 `{sha('runs/lr_search.json')}`")
@@ -201,4 +268,6 @@ def main():
 
 
 if __name__ == "__main__":
+    import sys
+    FINAL = "--final" in sys.argv
     main()

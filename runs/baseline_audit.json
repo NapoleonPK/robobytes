@@ -1,0 +1,93 @@
+{
+ "byte_baseline": {
+  "lr": 0.0015,
+  "val_bpb": 6.27881537275554
+ },
+ "byte_gpt2init": {
+  "lr": 0.0015,
+  "val_bpb": 6.006676463181991,
+  "per_dataset": {
+   "berkeley_autolab_ur5": 5.9632759127465125,
+   "berkeley_fanuc_manipulation": 3.5199247610689413,
+   "cmu_stretch": 3.410651259676174,
+   "dlr_sara_pour": 7.482842690350014,
+   "fmb": 5.927592424924612,
+   "jaco_play": 4.886310444748357,
+   "koch_pick_place_1_lego": 7.38787745229206,
+   "koch_pick_place_5_lego": 7.724482234844097,
+   "robocasa_target_human_unified": 1.8908945115845202,
+   "roboturk": 3.2376835756326146,
+   "stanford_kuka_multimodal_dataset": 6.142096871512277,
+   "svla_so100_pickplace": 6.700043152703179,
+   "svla_so100_sorting": 7.465067692574738,
+   "svla_so100_stacking": 7.690825440053717,
+   "svla_so101_pickplace": 7.284039852597298,
+   "toto": 6.746081966678096,
+   "utaustin_mutex": 6.970548758984904,
+   "utokyo_pr2_opening_fridge": 6.880490830365349,
+   "utokyo_pr2_tabletop_manipulation": 4.042748448389516,
+   "utokyo_xarm_pick_and_place": 6.735023614869895,
+   "vlabench_unified": 4.436940863906153,
+   "xarm_lift_medium": 7.885168975830078,
+   "xarm_push_medium": 7.742946916852679
+  }
+ },
+ "byte_rope": {
+  "lr": 0.0015,
+  "val_bpb": 2.4291650164481156,
+  "per_dataset": {
+   "berkeley_autolab_ur5": 2.496202452386444,
+   "berkeley_fanuc_manipulation": 0.7423787639698999,
+   "cmu_stretch": 0.8579991009367108,
+   "dlr_sara_pour": 2.8606189416560817,
+   "fmb": 2.6075875546867517,
+   "jaco_play": 1.566136505591051,
+   "koch_pick_place_1_lego": 1.7207013496774772,
+   "koch_pick_place_5_lego": 2.0889493295499633,
+   "robocasa_target_human_unified": 1.04857366690638,
+   "roboturk": 2.879163435093926,
+   "stanford_kuka_multimodal_dataset": 3.5344775390625,
+   "svla_so100_pickplace": 1.5955384125312169,
+   "svla_so100_sorting": 1.7913320200827616,
+   "svla_so100_stacking": 1.5642193858767202,
+   "svla_so101_pickplace": 1.8941671997035314,
+   "toto": 1.1781689895437288,
+   "utaustin_mutex": 2.378535003570217,
+   "utokyo_pr2_opening_fridge": 3.268020842641527,
+   "utokyo_pr2_tabletop_manipulation": 1.4026868122232006,
+   "utokyo_xarm_pick_and_place": 3.545946425579964,
+   "vlabench_unified": 1.1250263429071503,
+   "xarm_lift_medium": 7.490220458984375,
+   "xarm_push_medium": 6.23414484514509
+  }
+ },
+ "byte_rope_gpt2init": {
+  "lr": 0.0015,
+  "val_bpb": 3.4769025471844106,
+  "per_dataset": {
+   "berkeley_autolab_ur5": 3.05788011675504,
+   "berkeley_fanuc_manipulation": 1.1185651710338465,
+   "cmu_stretch": 1.6554627910418314,
+   "dlr_sara_pour": 5.112304737295582,
+   "fmb": 2.965492586874143,
+   "jaco_play": 1.8892875315473738,
+   "koch_pick_place_1_lego": 4.042525396720834,
+   "koch_pick_place_5_lego": 4.5693576484351786,
+   "robocasa_target_human_unified": 1.4325997524731842,
+   "roboturk": 2.896842788739969,
+   "stanford_kuka_multimodal_dataset": 4.025931012834821,
+   "svla_so100_pickplace": 3.680634149445428,
+   "svla_so100_sorting": 4.208615472091646,
+   "svla_so100_stacking": 3.942198475817766,
+   "svla_so101_pickplace": 4.193327630769222,
+   "toto": 1.7202215042158029,
+   "utaustin_mutex": 2.969179535601305,
+   "utokyo_pr2_opening_fridge": 4.13057939782901,
+   "utokyo_pr2_tabletop_manipulation": 1.8431364850669987,
+   "utokyo_xarm_pick_and_place": 3.9225323913790655,
+   "vlabench_unified": 1.7943017260353862,
+   "xarm_lift_medium": 7.897149993896484,
+   "xarm_push_medium": 6.900632289341518
+  }
+ }
+}

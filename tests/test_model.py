@@ -29,3 +29,17 @@ def test_models_causal_and_shapes():
         ids2 = ids.clone()
         ids2[:, 40:] = (ids2[:, 40:] + 1) % VOCAB  # changing the future must not change outputs before it
         assert torch.allclose(m(ids2)["logits"][:, :40], out[:, :40], atol=1e-5)
+
+
+def test_chunk_bucketing_does_not_change_outputs():
+    import torch
+    from robobytes.model import ByteHNet
+    torch.manual_seed(0)
+    m = ByteHNet(64, 2, 2, d_outer=32, outer_blocks=1).eval()
+    ids = torch.randint(0, 258, (3, 200))
+    with torch.no_grad():
+        m.k_bucket = 0
+        a = m(ids)["logits"]
+        m.k_bucket = 64
+        b = m(ids)["logits"]
+    assert torch.allclose(a, b, atol=1e-5)
