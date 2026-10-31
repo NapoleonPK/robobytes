@@ -27,8 +27,8 @@ RUNS = {
     "byteconv_256x4_conv_init_0.1": ("byteconv", B, W256 + ["--conv-init", "0.1"]),
 }  # all done; the wrapper is now 128 x 2 by default, hence W256 for reruns
 EMA = {  # is H-Net's deficit to Fixed the soft EMA dechunk or the irregular boundaries? (compare runs/lr_search.json)
-    "hnet_no_ema_4.5e-3": ("hnet", 2.75e14, ["--no-ema"], 4.5e-3),
-    "hnet_no_ema_1.5e-3": ("hnet", 2.75e14, ["--no-ema"], 1.5e-3),
+    "hnet_no_ema_4.5e-3": ("hnet", 2.75e14, ["--no-ema", "--no-rope-bytes"], 4.5e-3),
+    "hnet_no_ema_1.5e-3": ("hnet", 2.75e14, ["--no-ema", "--no-rope-bytes"], 1.5e-3),
 }
 ENT = json.load(open("runs/lr/entropy_0.0015/meta.json"))["args"]
 ENT = ["--entropy-ckpt", ENT["entropy_ckpt"], "--entropy-threshold", str(ENT["entropy_threshold"])]

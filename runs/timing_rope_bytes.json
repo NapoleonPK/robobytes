@@ -1,0 +1,50 @@
+{
+ "hnet_S": {
+  "flops_per_s": 928417032163.9806,
+  "seconds": 107.71021699905396,
+  "micro": 8,
+  "compression": 1.8599159950051085,
+  "swap_mb": 1714.56,
+  "mps_driver_gb": 2.58777088
+ },
+ "hnet_M": {
+  "flops_per_s": 1215309017195.1704,
+  "seconds": 82.28359913825989,
+  "micro": 8,
+  "compression": 1.9830069473021714,
+  "swap_mb": 1714.56,
+  "mps_driver_gb": 5.80820992
+ },
+ "hnet_no_ema_S": {
+  "flops_per_s": 923599864744.0453,
+  "seconds": 108.27199506759644,
+  "micro": 8,
+  "compression": 1.9134017536401815,
+  "swap_mb": 1714.56,
+  "mps_driver_gb": 3.615145984
+ },
+ "hnet_no_ema_M": {
+  "flops_per_s": 1213450406937.0032,
+  "seconds": 82.40963077545166,
+  "micro": 8,
+  "compression": 1.9476590407921874,
+  "swap_mb": 1714.56,
+  "mps_driver_gb": 5.843714048
+ },
+ "hnet_S_N4": {
+  "flops_per_s": 808282392381.2468,
+  "seconds": 123.71913695335388,
+  "micro": 8,
+  "compression": 3.8446055170256037,
+  "swap_mb": 1714.56,
+  "mps_driver_gb": 2.55705088
+ },
+ "hnet_M_N4": {
+  "flops_per_s": 1101481555225.3445,
+  "seconds": 90.78681302070618,
+  "micro": 8,
+  "compression": 4.059914835899342,
+  "swap_mb": 1714.56,
+  "mps_driver_gb": 3.59284736
+ }
+}

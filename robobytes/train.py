@@ -46,7 +46,7 @@ def refractory_for(N):
 
 
 def build(method, size, N, R, refractory=None, pos="rope", init="default", outer_width=128, outer_blocks=2, conv_init=1.0,
-          use_ema=True, rope_bytes=False):
+          use_ema=True, rope_bytes=True):
     d, L, h = SIZES[size]
     if method == "byte":
         return TokenLM(VOCAB, d, L, h, pos=pos, init=init)
@@ -130,8 +130,9 @@ def main():
     ap.add_argument("--outer-width", type=int, default=128)
     ap.add_argument("--outer-blocks", type=int, default=2)
     ap.add_argument("--conv-init", type=float, default=1.0)
-    ap.add_argument("--no-ema", action="store_true", help="diagnostic only")
-    ap.add_argument("--rope-bytes", action="store_true", help="diagnostic only: RoPE on byte offset / N, not chunk index")
+    ap.add_argument("--no-ema", action="store_true", help="the no-EMA H-Net arm")
+    ap.add_argument("--rope-bytes", action=argparse.BooleanOptionalAction, default=True,
+                    help="RoPE on byte offset / N; --no-rope-bytes = chunk index (archived runs)")
     ap.add_argument("--init", default="default", choices=["default", "gpt2"])
     ap.add_argument("--micro", type=int, default=16)
     ap.add_argument("--entropy-ckpt")

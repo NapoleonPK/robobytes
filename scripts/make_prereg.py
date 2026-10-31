@@ -1,6 +1,7 @@
 """Generate PREREGISTRATION.md and the episode lists it fixes (prereg/splits.json) from the pilot's result files.
 Every number in the document comes from these files: runs/streams_summary.json, runs/bpe_summary.json,
-runs/bpe_vocab_check.json, runs/ladder.json, runs/lr_search.json, runs/wrapper_diag.json, runs/wrapper_share.json,
+runs/bpe_vocab_check.json, runs/ladder.json, runs/lr_search.json, runs/lr_search_chunk_rope.json, runs/rope_bytes_check.json, runs/timing_rope_bytes.json,
+runs/wrapper_diag.json, runs/wrapper_share.json,
 robobytes/sources.py. The prediction probabilities in §2.1 are judgement, written here by hand.
 usage: PYTHONPATH=. python scripts/make_prereg.py"""
 import hashlib
@@ -90,19 +91,19 @@ def main():
     a(f"**Compression floor.** If H-Net's realised compression at the top budget (held-in test) is below 0.8 × R_BPE = "
       f"{0.8 * R:.3f}, the comparison is not matched and H1 and H2 count as failed.\n")
     a("**Exploratory (labelled as such):** compute multipliers from the iso-FLOP frontiers; the secondary N = 4 "
-      "comparison (§6.1); whether chunk counts for a new robot shrink as an episode goes on (in-context merging); whether "
+      "comparison (§6.1); the no-EMA arm (§6.3); whether chunk counts for a new robot shrink as an episode goes on (in-context merging); whether "
       "boundaries align with gripper events; 16-bit serialisation; how Byte and Entropy transfer.\n")
     bv = {m: lr[f"{m}_{best[m]:g}"]["val_bpb"] for m in best}
     g_b, g_f = (bv["bpe"] - bv["hnet"]) / bv["bpe"], (bv["fixed"] - bv["hnet"]) / bv["fixed"]
     a("### 2.1 Predictions stated in advance\n")
     a("Judgement from the held-in pilot only (search budget, size S, §6); no model has seen a held-out robot. "
       "Probabilities are subjective, and the report will score them.\n")
-    a(f"- **Held-in order:** Byte best ({bv['byte']:.2f}), then Fixed ({bv['fixed']:.2f}) and Byte + conv "
-      f"({bv['byteconv']:.2f}), then Entropy ({bv['entropy']:.2f}), H-Net ({bv['hnet']:.2f}), BPE ({bv['bpe']:.2f}). Gaps "
-      "should narrow with budget.")
-    a(f"- **H1: likely passes (85%).** Pilot g = {g_b:.2f} for H-Net over BPE. The risk is that BPE improves faster with "
+    a(f"- **Held-in order:** Byte best ({bv['byte']:.2f}), then Fixed ({bv['fixed']:.2f}), Byte + conv "
+      f"({bv['byteconv']:.2f}), H-Net without EMA ({bv['hnet_no_ema']:.2f}), Entropy ({bv['entropy']:.2f}), H-Net "
+      f"({bv['hnet']:.2f}), BPE ({bv['bpe']:.2f}). Gaps should narrow with budget.")
+    a(f"- **H1: likely passes (90%).** Pilot g = {g_b:.2f} for H-Net over BPE. The risk is that BPE improves faster with "
       "budget.")
-    a(f"- **H2: likely fails (35%).** A pilot g_ID of {g_b:.2f} would require g_OOD ≥ {1.5 * abs(g_b):.2f} on 2 of 3 robots. "
+    a(f"- **H2: likely fails (20%).** A pilot g_ID of {g_b:.2f} would require g_OOD ≥ {1.5 * abs(g_b):.2f} on 2 of 3 robots. "
       "BPE barely compresses held-out robots, so it nears a byte model with a shorter context; the effect on it is unclear.")
     a(f"- **H2b: expected to fail (5%) unless the H-Net vs Fixed gap reverses out of distribution.** Pilot g_ID = "
       f"{g_f:.2f}. The rule uses |g_ID|, so H-Net being worse in distribution raises the bar: at that value "
@@ -110,8 +111,10 @@ def main():
     a("- **H3: likely passes (65%)** if H-Net leads BPE at zero shot, because BPE's vocabulary is frozen and it cannot "
       "form new tokens for a new robot.")
     a("- **H4: likely fails or is uninformative (20%).** Underpowered by design.")
-    a(f"- **Compression floor: passes (95%).** Pilot H-Net compression "
+    a(f"- **Compression floor: passes (90%).** Pilot H-Net compression "
       f"{lr[f'hnet_{best['hnet']:g}']['train']['compression']:.2f} against a floor of {0.8 * R:.2f}.")
+    a("- **No-EMA arm:** better than primary H-Net in distribution and still behind Fixed, on held-in data; whether it "
+      "closes on Fixed out of distribution is the open question, with no prediction of direction.")
     a("- **N = 4:** H-Net and Fixed both worse than at N = 2, and H-Net further behind Fixed; refractory r = 1 changes "
       "little.\n")
     a("## 3. Data\n")
@@ -170,7 +173,9 @@ def main():
     a("| --- | --- | --- |")
     a("| BPE | as above; context round(1,024 / R_BPE) tokens | Primary baseline |")
     a(f"| H-Net | RoboChunk's router (LayerNorm, identity init), ratio loss α = 0.3 targeting N = {N}; causal-conv encoder "
-      "and decoder, 2 blocks each, width 128; EMA dechunk; next-byte softmax over 258 | Primary method |")
+      "and decoder, 2 blocks each, width 128; rotary positions on byte offset / N; EMA dechunk; next-byte softmax over 258 | "
+      "Primary method |")
+    a("| H-Net no EMA | as H-Net, without the EMA dechunk, charged the same FLOPs | Descriptive arm (§6.3) |")
     a("| H-Net refractory | as H-Net, no new boundary within r positions of the last kept one, **r = floor(0.3 × N)** "
       f"(r = 3 at RoboChunk's N = 10). At N = {N}, r = {int(0.3 * N)}: identical to H-Net, so the arm is not in the main "
       "ladder; it runs only in the N = 4 comparison (r = 1) | Exploratory |")
@@ -181,7 +186,8 @@ def main():
     a("| Byte + conv | H-Net's conv encoder and decoder with the main Transformer over every byte (a boundary at every "
       "position): H-Net without chunking | Reference: separates the conv wrapper from chunking |\n")
     a("Main Transformer sizes: **S** = width 256, 4 layers; **M** = width 384, 8 layers (pre-norm, rotary positions, "
-      "context 1,024 bytes). Only the main network changes with size.\n")
+      "context 1,024 bytes). Chunked methods use byte offset / N as the rotary position, which equals the chunk index "
+      "for regular boundaries. Only the main network changes with size.\n")
     au = json.load(open("runs/baseline_audit.json"))
     de = json.load(open("runs/delta_reference.json"))["_pooled"]
     a(f"**Baseline audit.** A no-learning reference, predicting each byte from the same channel at the previous "
@@ -189,7 +195,7 @@ def main():
       f"learned absolute positions, where Byte reached only {au['byte_baseline']['val_bpb']:.2f}. Rotary positions "
       f"reached {au['byte_rope']['val_bpb']:.2f} (GPT-2 init alone {au['byte_gpt2init']['val_bpb']:.2f}; both "
       f"{au['byte_rope_gpt2init']['val_bpb']:.2f}), because the data's main structure is a relative offset. **Every "
-      "method therefore uses rotary positions** (over bytes, tokens or chunks). The first search is archived and fixes "
+      "method therefore uses rotary positions** (over bytes or tokens; for chunked methods see below). The first search is archived and fixes "
       "nothing.\n")
     wd = json.load(open("runs/wrapper_diag.json"))
     ws = json.load(open("runs/wrapper_share.json"))
@@ -207,18 +213,29 @@ def main():
     a("")
     a("**H-Net, Fixed, Entropy and Byte + conv therefore use width 128, 2 blocks** (departure from the brief, on Téo's "
       "instruction). The 256×4 search is archived and fixes nothing.\n")
-    a(f"**H-Net diagnostics.** At the search budget, size S, Fixed reaches {lr['fixed_0.0015']['val_bpb']:.2f}. H-Net "
-      f"without the EMA dechunk reached {v('hnet_no_ema_1.5e-3'):.2f}; with rotary positions on byte offset / N instead of "
-      f"chunk index {v('hnet_rope_bytes_1.5e-3'):.2f} (Entropy {v('entropy_rope_bytes_1.5e-3'):.2f}); with both "
-      f"{v('hnet_rope_bytes_no_ema_1.5e-3'):.2f}, all at 1.5e-3. Byte-offset positions leave regular boundaries unchanged. "
-      "Pending Téo's decision; neither is in this draft's design.\n")
+    old = json.load(open("runs/lr_search_chunk_rope.json"))
+    rc = json.load(open("runs/rope_bytes_check.json"))
+    ob = {m: old[f"{m}_{old['_best'][m]:g}"]["val_bpb"] for m in ("hnet", "entropy")}
+    a(f"**Position audit for chunked methods.** With rotary positions on chunk index, H-Net reached {ob['hnet']:.2f} and "
+      f"Entropy {ob['entropy']:.2f} against Fixed's {lr['fixed_0.0015']['val_bpb']:.2f} at the search budget. Under "
+      "irregular boundaries the data's W + 1 byte offset is not a constant number of chunks, the failure the audit above "
+      f"found for Byte. On byte offset / N they reach {bv['hnet']:.2f} and {bv['entropy']:.2f}. Fixed and Byte + conv are "
+      f"unchanged (rescored: {rc['fixed_0.0015']['chunk_index']:.4f} → {rc['fixed_0.0015']['byte_offset']:.4f} and "
+      f"{rc['byteconv_0.0015']['chunk_index']:.4f} → {rc['byteconv_0.0015']['byte_offset']:.4f}), the FLOPs do not change "
+      "and the router is untouched. **Every chunked method therefore uses byte-offset positions** (Téo's decision). The "
+      "chunk-index search is archived and fixes nothing.\n")
+    a(f"**EMA.** H-Net without the EMA dechunk reached {bv['hnet_no_ema']:.2f} on the same positions, "
+      f"{bv['hnet'] - bv['hnet_no_ema']:.2f} bits better. The hypotheses name H-Net, so EMA stays in the primary method; "
+      "the no-EMA variant is a descriptive arm (§6.3).\n")
     a("## 6. Compute ladder and training\n")
     a(f"Budgets **{', '.join(fmt_e(b) for b in ld['budgets'])} FLOPs** (×3.16), sizes S and M at every budget, 6 "
       f"methods: {len(ld['runs'])} ladder runs, ≈ {ld['ladder_hours']:.0f} h at the measured throughput; longest run "
-      f"{max(r['hours'] for r in ld['runs'] if r['method'] != 'entropy'):.2f} h, except Entropy (up to "
+      f"{ld['longest_not_entropy']:.2f} h across every arm, except Entropy (up to "
       f"{ld['max_run_hours']:.2f} h, because its small byte model's forward pass is wall-clock time not charged to its "
       "budget; Téo accepted this overrun). FLOPs = 6 × parameters used per position + 6 × layers × context × width, per "
-      f"network, per symbol, charged at nominal N (realised compression is reported for every run). At most {ld['max_passes']:.2f} passes over the {ld['train_symbols']:,} training symbols, so "
+      f"network, per symbol, charged at nominal N, so a method whose realised compression falls below N uses more main-network "
+      f"positions than it is charged for (H-Net pilot: {lr[f'hnet_{best['hnet']:g}']['train']['compression']:.2f}); realised "
+      f"compression is reported for every run. At most {ld['max_passes']:.2f} passes over the {ld['train_symbols']:,} training symbols, so "
       "no budget is dropped. At each budget the size with the lower held-in validation bpb is the method's frontier run; "
       "only frontier runs enter the tests.\n")
     a("Optimiser: AdamW (0.9, 0.95), weight decay 0.1, 2% linear warm-up, cosine decay to 10%, gradient clip 1.0, "
@@ -238,8 +255,8 @@ def main():
         for m, v in best.items():
             a(f"| {m} | {v:g} | {lr[f'{m}_{v:g}']['val_bpb']:.3f} |")
         a("")
-        a(f"The search ran at {fmt_e(b0)} FLOPs, set before the ladder was lowered to account for real training speed; the "
-          f"smallest budget is {fmt_e(ld['budgets'][0])}. Rates are not re-searched.\n")
+        a(f"The search ran at {fmt_e(b0)} FLOPs, above the smallest budget of {fmt_e(ld['budgets'][0])}, because real "
+          "training speed was measured after it. Rates are not re-searched.\n")
     else:
         a("**Learning rates:** pending (search running: 5e-4, 1.5e-3, 4.5e-3 per method at the smallest budget).\n")
     a("Extra runs: H-Net and BPE at the top budget with seeds 1 and 2 (frontier size).\n")
@@ -253,7 +270,11 @@ def main():
     a("### 6.2 Router effect at N = 4 (no pass/fail)\n")
     a("The H2b statistic (H-Net vs Fixed: g_ID, g_OOD per robot, CIs, the 1.5 × |g_ID| and 0.02 lines) is also computed "
       "for the N = 4 arm of §6.1 and reported descriptively.\n")
-    a("### 6.3 Run list and machine time\n")
+    a("### 6.3 H-Net without EMA (pre-registered, no pass/fail)\n")
+    a(f"H-Net without the EMA dechunk, N = {N}, 4 budgets × sizes S and M, seed 0, rate {best['hnet_no_ema']:g}. Compared "
+      "with Fixed and with primary H-Net on held-in data and each held-out robot, using the H2b statistic, CIs and lines. "
+      "Reported descriptively; it does not enter H1–H4, and it cannot replace H-Net in any test.\n")
+    a("### 6.4 Run list and machine time\n")
     a("| Block | Runs | Hours | Basis |")
     a("| --- | --- | --- | --- |")
     for r in ld["run_list"]:
@@ -304,7 +325,7 @@ def main():
     a("## 11. Files fixed by this document\n")
     for f in ["robobytes/sources.py", "runs/streams_summary.json", "runs/bpe_summary.json", "runs/ladder.json",
               "runs/baseline_audit.json", "runs/delta_reference.json", "runs/wrapper_diag.json", "runs/wrapper_share.json",
-              str(LISTS)]:
+              "runs/lr_search_chunk_rope.json", "runs/rope_bytes_check.json", "runs/timing_rope_bytes.json", str(LISTS)]:
         a(f"- `{f}`: SHA-256 `{sha(f)}`")
     if Path("runs/lr_search.json").exists():
         a(f"- `runs/lr_search.json`: SHA-256 `{sha('runs/lr_search.json')}`")

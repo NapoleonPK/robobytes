@@ -20,7 +20,7 @@ from robobytes.train import EntropyBoundaries
 from robobytes.serialize import Stream
 
 LRS = [5e-4, 1.5e-3, 4.5e-3]
-METHODS = ["byte", "bpe", "hnet", "fixed", "entropy", "byteconv"]  # refractory arm dropped: r = floor(0.3 N) = 0 at N = 2
+METHODS = ["byte", "bpe", "hnet", "fixed", "entropy", "byteconv", "hnet_no_ema"]  # refractory arm dropped: r = floor(0.3 N) = 0 at N = 2
 OUT = Path("runs/lr_search.json")
 
 
@@ -65,8 +65,10 @@ def main():
                 extra = ["--entropy-ckpt", str(ck), "--entropy-threshold", str(thr)]
                 ent = EntropyBoundaries(ck, thr, dev)
             if not (run / "final.pt").exists():
-                cmd = [sys.executable, "-m", "robobytes.train", "--method", method, "--size", "S", "--budget",
-                       str(a.budget), "--lr", str(lr), "--out", str(run)] + extra
+                if method == "hnet_no_ema":
+                    extra = ["--no-ema"]
+                cmd = [sys.executable, "-m", "robobytes.train", "--method", method.removesuffix("_no_ema"), "--size", "S",
+                       "--budget", str(a.budget), "--lr", str(lr), "--out", str(run)] + extra
                 subprocess.run(cmd, check=True)
             bpb, per = val_bpb(method, run, dev, ent)
             res[key] = dict(method=method, lr=lr, run=str(run), val_bpb=bpb, per_dataset=per,

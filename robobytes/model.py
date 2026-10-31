@@ -160,8 +160,8 @@ class ByteHNet(nn.Module):
     def __init__(self, d_main, layers, heads, d_outer=128, outer_blocks=2, refractory=0, max_chunks=1024, k_bucket=64,
                  pos="learned", init="default", conv_init=1.0, use_ema=True, rope_bytes=0.0):
         super().__init__()
-        self.use_ema = use_ema  # diagnostic only: False skips the EMA dechunk for the learned router
-        self.rope_bytes = rope_bytes  # diagnostic only: > 0 gives each chunk the RoPE position (byte offset / this)
+        self.use_ema = use_ema  # False skips the EMA dechunk for the learned router (descriptive arm)
+        self.rope_bytes = rope_bytes  # > 0: each chunk's RoPE position is its byte offset / this, so the W + 1 byte offset survives irregular boundaries; 0: chunk index
         self.refractory = refractory
         self.k_bucket = k_bucket  # chunk count rounded up to a multiple of this: few distinct shapes, no MPS fragmentation
         self.emb = nn.Embedding(VOCAB, d_outer)

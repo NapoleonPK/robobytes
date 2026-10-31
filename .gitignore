@@ -34,3 +34,6 @@ docs/BRIEF.md
 !runs/wrapper_share.json
 !runs/lr_search_wrapper256.json
 !runs/memory_test_wrapper256.json
+!runs/lr_search_chunk_rope.json
+!runs/rope_bytes_check.json
+!runs/timing_rope_bytes.json

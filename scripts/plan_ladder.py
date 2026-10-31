@@ -1,8 +1,7 @@
 """Choose the compute ladder from the measured day-1 throughput (brief section 4) and write runs/ladder.json.
-Throughput per method and size: Byte from runs/pilot_throughput_mps.json; BPE, H-Net and Fixed re-timed at the real
-R_BPE and N (runs/pilot_throughput_mps_real.json); Entropy is timed as Fixed (same network, external boundaries) and the
-refractory arm as H-Net. The secondary comparison at N = 4 (H-Net and Fixed, all budgets and both sizes; H-Net
-refractory r = 1 at the top two budgets) uses the first pilot's timings, which assumed N = 4. Bytes seen = budget /
+Throughput per method and size: the pilot (runs/pilot_throughput_mps_rope.json, _n4.json) x the REAL factors; every H-Net
+arm directly from runs/timing_rope_bytes.json; Entropy is timed as Fixed (same network, external boundaries) and the
+refractory arm as H-Net. Bytes seen = budget /
 analytic FLOPs per symbol; passes = bytes seen / training symbols. Also writes the whole run list with time estimates.
 usage: PYTHONPATH=. python -I scripts/plan_ladder.py"""
 import json
@@ -15,23 +14,25 @@ from robobytes.serialize import Stream
 from robobytes.train import SIZES, bpe_info, build
 
 TOP_HOURS = 2.0
+ENTROPY_HOURS = 2.39  # the overrun Téo accepted for Entropy (2026-10-31)
 SPACING = 10 ** 0.5
 SIZE_PAIR = ("S", "M")
-# real training / pilot throughput, measured on the final learning-rate runs (size S) and the memory check (H-Net M); the
-# pilot has no router loop on real data and no entropy-model forward pass. Entropy's factor is S's at both sizes (cautious:
-# its extra pass weighs less at M)
-REAL = {"byte": 0.99, "bpe": 0.99, "fixed": 0.97, "byteconv": 0.98, "entropy": 0.46, "hnet_S": 0.87, "hnet_M": 0.94}
+# real training / pilot throughput, measured on the final learning-rate runs (size S); the pilot has no entropy-model
+# forward pass. Entropy's factor is S's at both sizes (cautious: its extra pass weighs less at M). H-Net needs no factor: it
+# is timed directly on real data at micro-batch 8, in every arm (runs/timing_rope_bytes.json)
+REAL = {"byte": 0.99, "bpe": 0.99, "fixed": 0.97, "byteconv": 0.98, "entropy": 0.46}
 METHODS = ["byte", "bpe", "hnet", "fixed", "entropy", "byteconv"]
 
 
-def real_factor(m, size):
-    return REAL[f"hnet_{size}"] if m.startswith("hnet") else REAL[m]
+def measured(timing, key, pilot, m):
+    return timing[key]["flops_per_s"] if m.startswith("hnet") else pilot * REAL[m]
 
 
 def main():
     info = bpe_info()
     R, N = info["R_BPE"], info.get("N_used", info["N"])
     real = json.load(open("runs/pilot_throughput_mps_rope.json"))["runs"]
+    timing = json.load(open("runs/timing_rope_bytes.json"))
     n4_t = json.load(open("runs/pilot_throughput_mps_rope_n4.json"))["runs"]
     timed = {m: m for m in METHODS}
     timed["entropy"] = "fixed"
@@ -45,7 +46,7 @@ def main():
             t = real[f"{timed[m]}_{size}"]
             # the pilot computed achieved FLOP/s with its own compression; this is the same model, so it carries over
             cfg[f"{m}_{size}"] = dict(flops_per_symbol=flops_per_byte(model, CTX, comp),
-                                      flops_per_s=t["achieved_flops"] * real_factor(m, size),
+                                      flops_per_s=measured(timing, f"hnet_{size}", t["achieved_flops"], m),
                                       micro_batch=t["micro_batch"])
     n4 = {}
     for m in ("hnet", "fixed", "hnet_refractory"):
@@ -53,11 +54,13 @@ def main():
             model = build(m, size, 4, R, refractory=1)
             src = "hnet" if m == "hnet_refractory" else m
             n4[f"{m}_{size}"] = dict(flops_per_symbol=flops_per_byte(model, CTX, 4.0),
-                                     flops_per_s=n4_t[f"{src}_{size}"]["achieved_flops"] * real_factor(m, size))
+                                     flops_per_s=measured(timing, f"hnet_{size}_N4", n4_t[f"{src}_{size}"]["achieved_flops"], m))
     # Entropy's extra forward pass is uncharged wall-clock, so it does not set the budget; its runs may exceed 2 h
     slowest = min([cfg[f"{m}_{s}"]["flops_per_s"] for m in METHODS if m != "entropy" for s in SIZE_PAIR]
-                  + [c["flops_per_s"] for c in n4.values()])
-    top = float(f"{TOP_HOURS * 3600 * slowest:.1e}")
+                  + [c["flops_per_s"] for c in n4.values()]
+                  + [timing[f"hnet_no_ema_{s}"]["flops_per_s"] for s in SIZE_PAIR])
+    entropy = min(cfg[f"entropy_{s}"]["flops_per_s"] for s in SIZE_PAIR)
+    top = float(f"{min(TOP_HOURS * slowest, ENTROPY_HOURS * entropy) * 3600:.1e}")
     while top / slowest / 3600 > TOP_HOURS:
         top = float(f"{top * 0.95:.1e}")
     budgets = [float(f"{top / SPACING ** k:.2e}") for k in (3, 2, 1, 0)]
@@ -69,6 +72,8 @@ def main():
                 by = b / c["flops_per_symbol"]
                 plan.append(dict(budget=b, method=m, size=s, hours=b / c["flops_per_s"] / 3600, symbols_seen=by,
                                  passes=by / train_symbols))
+    noema = [dict(budget=b, method="hnet_no_ema", size=s, hours=b / timing[f"hnet_no_ema_{s}"]["flops_per_s"] / 3600,
+                  passes=b / cfg[f"hnet_{s}"]["flops_per_symbol"] / train_symbols) for b in budgets for s in SIZE_PAIR]
     secondary = []
     for b in budgets:
         for m in ("hnet", "fixed"):
@@ -86,12 +91,14 @@ def main():
     lr_log = json.load(open("runs/lr_search.json"))
     lr_hours = sum(v["train"]["seconds"] for k, v in lr_log.items() if not k.startswith("_")) / 3600
     run_list = [
-        dict(block="Learning-rate search (6 methods x 3 rates, + edge rule), size S, smallest budget", runs="18-24",
+        dict(block="Learning-rate search (7 arms x 3 rates, + edge rule), size S, 2.75e14 FLOPs", runs="21-24",
              hours=lr_hours, basis="measured"),
         dict(block="Main ladder: BPE, H-Net, Fixed, Entropy, Byte, Byte + conv x 4 budgets x 2 sizes", runs=len(plan),
              hours=hours(plan), basis="measured throughput"),
         dict(block="Extra seeds at the top budget: H-Net and BPE, frontier size, seeds 1-2", runs=4,
              hours=4 * top_slow, basis="measured throughput (slower size)"),
+        dict(block="Descriptive arm: H-Net without EMA x 4 budgets x 2 sizes", runs=len(noema), hours=hours(noema),
+             basis="measured throughput"),
         dict(block="Secondary, N = 4: H-Net and Fixed x 4 budgets x 2 sizes", runs=16,
              hours=hours([r for r in secondary if r["method"] != "hnet_refractory"]), basis="measured throughput"),
         dict(block="Secondary, N = 4: H-Net refractory (r = 1), top two budgets", runs=2,
@@ -108,7 +115,9 @@ def main():
     out = dict(R_BPE=R, N=N, real_factors=REAL, secondary=secondary, run_list=run_list, total_hours=out_total, train_symbols=train_symbols, budgets=budgets, size_pair=SIZE_PAIR, configs=cfg, runs=plan,
                ladder_hours=hours(plan), max_run_hours=max(r["hours"] for r in plan),
                max_passes=max(r["passes"] for r in plan), top_budget_hours=hours(top_rows),
-               per_dataset_passes_at_max=per_passes, max_secondary_hours=max(r["hours"] for r in secondary))
+               per_dataset_passes_at_max=per_passes, noema=noema,
+               max_secondary_hours=max(r["hours"] for r in secondary + noema),
+               longest_not_entropy=max(r["hours"] for r in plan + secondary + noema if r["method"] != "entropy"))
     json.dump(out, open("runs/ladder.json", "w"), indent=1)
     print("budgets", budgets, "train symbols", train_symbols)
     for r in top_rows:

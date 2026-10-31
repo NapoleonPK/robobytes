@@ -3,10 +3,10 @@
 Stages: main ladder (6 methods x 4 budgets x sizes S, M; the Entropy runs wait for the Byte frontier at the second
 budget, which is their small byte model), extra seeds 1-2 for H-Net and BPE at the top budget (frontier size), the
 N = 4 secondary comparison (H-Net and Fixed, all budgets and sizes; H-Net refractory r = 1 at the top two budgets,
-H-Net N = 4's frontier size). After each training run its held-in validation is scored (val.json). A finished run
+H-Net N = 4's frontier size), and the no-EMA H-Net arm (all budgets and sizes). After each training run its held-in validation is scored (val.json). A finished run
 (final.pt + val.json) is skipped, so the script can be restarted at any time.
 usage: PYTHONPATH=. PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.7 PYTORCH_MPS_LOW_WATERMARK_RATIO=0.5 caffeinate -i \
-       python scripts/run_ladder.py [--stage main|seeds|n4|all]"""
+       python scripts/run_ladder.py [--stage main|seeds|noema|n4|all]"""
 import argparse
 import json
 import subprocess
@@ -62,7 +62,9 @@ def train(method, budget_i, size, seed=0, N=None, r=None, extra=()):
         return d
     lr = LR["hnet" if method == "hnet_refractory" else method]
     if not (d / "final.pt").exists():
-        cmd = [sys.executable, "-m", "robobytes.train", "--method", method, "--size", size, "--budget",
+        if method == "hnet_no_ema":
+            extra = [*extra, "--no-ema"]
+        cmd = [sys.executable, "-m", "robobytes.train", "--method", method.removesuffix("_no_ema"), "--size", size, "--budget",
                str(BUDGETS[budget_i]), "--lr", str(lr), "--seed", str(seed), "--micro", str(MICRO), "--out", str(d)]
         cmd += (["--N", str(N)] if N else []) + (["--refractory", str(r)] if r is not None else []) + list(extra)
         t0 = time.time()
@@ -106,6 +108,12 @@ def seeds_stage():
             train(m, top, size, seed=seed)
 
 
+def noema_stage():
+    for bi in range(len(BUDGETS)):
+        for s in SIZES:
+            train("hnet_no_ema", bi, s)
+
+
 def n4_stage():
     for bi in range(len(BUDGETS)):
         for m in ("hnet", "fixed"):
@@ -118,7 +126,7 @@ def n4_stage():
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--stage", default="all", choices=["main", "seeds", "n4", "all"])
+    ap.add_argument("--stage", default="all", choices=["main", "seeds", "noema", "n4", "all"])
     a = ap.parse_args()
     ROOT.mkdir(parents=True, exist_ok=True)
     log_status(stage=a.stage, micro=MICRO)
@@ -126,6 +134,8 @@ def main():
         main_stage()
     if a.stage in ("seeds", "all"):
         seeds_stage()
+    if a.stage in ("noema", "all"):
+        noema_stage()
     if a.stage in ("n4", "all"):
         n4_stage()
     log_status(finished=a.stage)

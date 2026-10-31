@@ -6,9 +6,7 @@
   "bpe": 0.99,
   "fixed": 0.97,
   "byteconv": 0.98,
-  "entropy": 0.46,
-  "hnet_S": 0.87,
-  "hnet_M": 0.94
+  "entropy": 0.46
  },
  "secondary": [
   {
@@ -16,7 +14,7 @@
    "method": "hnet",
    "N": 4,
    "size": "S",
-   "hours": 0.0631678577320644,
+   "hours": 0.05429895455174976,
    "passes": 0.042100673778648824
   },
   {
@@ -24,7 +22,7 @@
    "method": "hnet",
    "N": 4,
    "size": "M",
-   "hours": 0.04259333556195695,
+   "hours": 0.03984532349242105,
    "passes": 0.013470850952237726
   },
   {
@@ -48,7 +46,7 @@
    "method": "hnet",
    "N": 4,
    "size": "S",
-   "hours": 0.1998982839622291,
+   "hours": 0.17183213465743594,
    "passes": 0.1332299803121798
   },
   {
@@ -56,7 +54,7 @@
    "method": "hnet",
    "N": 4,
    "size": "M",
-   "hours": 0.13478903658847136,
+   "hours": 0.1260927958620919,
    "passes": 0.04262927516530926
   },
   {
@@ -80,7 +78,7 @@
    "method": "hnet",
    "N": 4,
    "size": "S",
-   "hours": 0.631678577320644,
+   "hours": 0.5429895455174976,
    "passes": 0.42100673778648817
   },
   {
@@ -88,7 +86,7 @@
    "method": "hnet",
    "N": 4,
    "size": "M",
-   "hours": 0.4259333556195696,
+   "hours": 0.3984532349242105,
    "passes": 0.13470850952237726
   },
   {
@@ -112,7 +110,7 @@
    "method": "hnet",
    "N": 4,
    "size": "S",
-   "hours": 1.9989828396222915,
+   "hours": 1.7183213465743594,
    "passes": 1.3322998031217979
   },
   {
@@ -120,7 +118,7 @@
    "method": "hnet",
    "N": 4,
    "size": "M",
-   "hours": 1.3478903658847137,
+   "hours": 1.2609279586209192,
    "passes": 0.4262927516530926
   },
   {
@@ -145,7 +143,7 @@
    "N": 4,
    "refractory": 1,
    "size": "frontier",
-   "hours": 0.631678577320644,
+   "hours": 0.5429895455174976,
    "passes": 0.42100673778648817
   },
   {
@@ -154,39 +152,45 @@
    "N": 4,
    "refractory": 1,
    "size": "frontier",
-   "hours": 1.9989828396222915,
+   "hours": 1.7183213465743594,
    "passes": 1.3322998031217979
   }
  ],
  "run_list": [
   {
-   "block": "Learning-rate search (6 methods x 3 rates, + edge rule), size S, smallest budget",
-   "runs": "18-24",
-   "hours": 1.4578954911894269,
+   "block": "Learning-rate search (7 arms x 3 rates, + edge rule), size S, 2.75e14 FLOPs",
+   "runs": "21-24",
+   "hours": 1.6692742707331976,
    "basis": "measured"
   },
   {
    "block": "Main ladder: BPE, H-Net, Fixed, Entropy, Byte, Byte + conv x 4 budgets x 2 sizes",
    "runs": 48,
-   "hours": 21.298915500352756,
+   "hours": 21.291221901369564,
    "basis": "measured throughput"
   },
   {
    "block": "Extra seeds at the top budget: H-Net and BPE, frontier size, seeds 1-2",
    "runs": 4,
-   "hours": 6.3164083620373015,
+   "hours": 5.983900944391887,
    "basis": "measured throughput (slower size)"
+  },
+  {
+   "block": "Descriptive arm: H-Net without EMA x 4 budgets x 2 sizes",
+   "runs": 8,
+   "hours": 3.8337600218110612,
+   "basis": "measured throughput"
   },
   {
    "block": "Secondary, N = 4: H-Net and Fixed x 4 budgets x 2 sizes",
    "runs": 16,
-   "hours": 7.742097752748761,
+   "hours": 7.209925394657506,
    "basis": "measured throughput"
   },
   {
    "block": "Secondary, N = 4: H-Net refractory (r = 1), top two budgets",
    "runs": 2,
-   "hours": 2.6306614169429356,
+   "hours": 2.261310892091857,
    "basis": "measured throughput"
   },
   {
@@ -208,7 +212,7 @@
    "basis": "estimate: forward passes over validation and test windows"
   }
  ],
- "total_hours": 55.44597852327118,
+ "total_hours": 58.249393425055075,
  "train_symbols": 458630486,
  "budgets": [
   158000000000000.0,
@@ -243,12 +247,12 @@
   },
   "hnet_S": {
    "flops_per_symbol": 14348172.0,
-   "flops_per_s": 879543442590.7922,
+   "flops_per_s": 928417032163.9806,
    "micro_batch": 16
   },
   "hnet_M": {
    "flops_per_symbol": 50703372.0,
-   "flops_per_s": 1304101872924.5671,
+   "flops_per_s": 1215309017195.1704,
    "micro_batch": 16
   },
   "fixed_S": {
@@ -319,7 +323,7 @@
    "budget": 158000000000000.0,
    "method": "hnet",
    "size": "S",
-   "hours": 0.04989962606009468,
+   "hours": 0.0472728174606959,
    "symbols_seen": 11011855.726290429,
    "passes": 0.024010300366928573
   },
@@ -327,7 +331,7 @@
    "budget": 158000000000000.0,
    "method": "hnet",
    "size": "M",
-   "hours": 0.03365449417725631,
+   "hours": 0.03611335739956962,
    "symbols_seen": 3116163.556143761,
    "passes": 0.006794497206938313
   },
@@ -415,7 +419,7 @@
    "budget": 500000000000000.0,
    "method": "hnet",
    "size": "S",
-   "hours": 0.15791020905093256,
+   "hours": 0.14959752360979717,
    "symbols_seen": 34847644.703450724,
    "passes": 0.07598196318648281
   },
@@ -423,7 +427,7 @@
    "budget": 500000000000000.0,
    "method": "hnet",
    "size": "M",
-   "hours": 0.10650156385207693,
+   "hours": 0.11428277658091651,
    "symbols_seen": 9861277.076404307,
    "passes": 0.021501573439678207
   },
@@ -511,7 +515,7 @@
    "budget": 1580000000000000.0,
    "method": "hnet",
    "size": "S",
-   "hours": 0.4989962606009469,
+   "hours": 0.47272817460695904,
    "symbols_seen": 110118557.26290429,
    "passes": 0.2401030036692857
   },
@@ -519,7 +523,7 @@
    "budget": 1580000000000000.0,
    "method": "hnet",
    "size": "M",
-   "hours": 0.33654494177256306,
+   "hours": 0.3611335739956962,
    "symbols_seen": 31161635.56143761,
    "passes": 0.06794497206938313
   },
@@ -607,7 +611,7 @@
    "budget": 5000000000000000.0,
    "method": "hnet",
    "size": "S",
-   "hours": 1.5791020905093254,
+   "hours": 1.4959752360979717,
    "symbols_seen": 348476447.0345073,
    "passes": 0.7598196318648283
   },
@@ -615,7 +619,7 @@
    "budget": 5000000000000000.0,
    "method": "hnet",
    "size": "M",
-   "hours": 1.0650156385207692,
+   "hours": 1.142827765809165,
    "symbols_seen": 98612770.76404306,
    "passes": 0.21501573439678204
   },
@@ -668,10 +672,10 @@
    "passes": 0.10063263816442128
   }
  ],
- "ladder_hours": 21.298915500352756,
+ "ladder_hours": 21.291221901369564,
  "max_run_hours": 2.3678047453893667,
  "max_passes": 0.7598196318648283,
- "top_budget_hours": 14.713260224062418,
+ "top_budget_hours": 14.70794549693946,
  "per_dataset_passes_at_max": {
   "berkeley_autolab_ur5": 6.393713695701173,
   "berkeley_fanuc_manipulation": 8.002044279120248,
@@ -697,5 +701,64 @@
   "xarm_lift_medium": 18.28921675202535,
   "xarm_push_medium": 19.23585590625216
  },
- "max_secondary_hours": 1.9989828396222915
+ "noema": [
+  {
+   "budget": 158000000000000.0,
+   "method": "hnet_no_ema",
+   "size": "S",
+   "hours": 0.04751937561300065,
+   "passes": 0.024010300366928573
+  },
+  {
+   "budget": 158000000000000.0,
+   "method": "hnet_no_ema",
+   "size": "M",
+   "hours": 0.03616867128478156,
+   "passes": 0.006794497206938313
+  },
+  {
+   "budget": 500000000000000.0,
+   "method": "hnet_no_ema",
+   "size": "S",
+   "hours": 0.15037777092721727,
+   "passes": 0.07598196318648281
+  },
+  {
+   "budget": 500000000000000.0,
+   "method": "hnet_no_ema",
+   "size": "M",
+   "hours": 0.11445782052146064,
+   "passes": 0.021501573439678207
+  },
+  {
+   "budget": 1580000000000000.0,
+   "method": "hnet_no_ema",
+   "size": "S",
+   "hours": 0.47519375613000653,
+   "passes": 0.2401030036692857
+  },
+  {
+   "budget": 1580000000000000.0,
+   "method": "hnet_no_ema",
+   "size": "M",
+   "hours": 0.3616867128478156,
+   "passes": 0.06794497206938313
+  },
+  {
+   "budget": 5000000000000000.0,
+   "method": "hnet_no_ema",
+   "size": "S",
+   "hours": 1.5037777092721727,
+   "passes": 0.7598196318648283
+  },
+  {
+   "budget": 5000000000000000.0,
+   "method": "hnet_no_ema",
+   "size": "M",
+   "hours": 1.1445782052146063,
+   "passes": 0.21501573439678204
+  }
+ ],
+ "max_secondary_hours": 1.7183213465743594,
+ "longest_not_entropy": 1.7183213465743594
 }

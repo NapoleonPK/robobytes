@@ -202,3 +202,23 @@ Same search budget, size S, same validation episodes (`runs/wrapper_diag.json`).
 - **Charge.** FLOPs use nominal N. With byte-offset RoPE realised compression falls to about 1.8, so H-Net uses more main
   positions than it is charged for.
 - These flags are diagnostic only. Whether to adopt either is Téo's decision before the freeze.
+
+## Téo's decision, final design and ladder (2026-10-31 ~18:30, supersedes the two sections above where they differ)
+- **Téo: "A plus arm freeze".** Byte-offset positions for every chunked method; H-Net without EMA as a descriptive arm;
+  EMA stays in the primary H-Net; freeze after updating the numbers and predictions, with no further check-in.
+- **Search.** The diagnostic runs for H-Net, Entropy and H-Net no EMA moved to `runs/lr/` and were rescored by
+  `scripts/lr_search.py`, matching the diagnostic values exactly. Best rate 1.5e-3 for all three, interior, so the edge rule
+  added nothing; the old H-Net edge run is archived. The chunk-index search is `runs/lr_search_chunk_rope.json` and
+  `runs/archive_chunk_rope/`; it fixes nothing.
+- **Fixed and Byte + conv keep their search runs:** rescored with byte-offset positions, their validation bpb is identical
+  (`runs/rope_bytes_check.json`).
+- **H-Net throughput is now measured directly** (`scripts/timing_rope_bytes.py`, `runs/timing_rope_bytes.json`): 1e14
+  FLOPs on real data at micro-batch 8, every H-Net arm. These runs are short and compression falls later in training: the
+  2.75e14 search run took 340 s at micro-batch 16, 0.81 TFLOP/s against 0.93 here, so H-Net runs may take up to 15% longer
+  than estimated.
+- **Top budget capped at 5e15.** The measured rates alone would allow 5.8e15, but that puts Entropy at 2.75 h, past the
+  2.39 h Téo accepted. `scripts/plan_ladder.py` now applies both limits. This also keeps the ladder Téo saw in check-in 2.
+- **The memory check was not repeated** for the new positions: they add one small tensor per step, and the timing runs
+  held micro-batch 8 with M's driver memory at 5.8 GB against 6.2 GB in the check.
+- **Ratio target unchanged at N = 2,** so H-Net's realised compression of about 1.8 at the search budget is charged at 2.
+  Stated in the pre-registration; the compression floor (1.24) is the existing guard.
