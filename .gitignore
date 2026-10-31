@@ -17,3 +17,11 @@ runs/*
 *.pem
 hf_stage/
 docs/BRIEF.md
+!runs/streams_summary.json
+!runs/bpe_summary.json
+!runs/bpe_vocab_check.json
+!runs/ladder.json
+!runs/lr_search.json
+!runs/pilot_throughput_*.json
+!runs/flops_check.json
+!runs/dataset_survey.csv

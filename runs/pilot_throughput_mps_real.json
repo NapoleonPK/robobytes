@@ -1,0 +1,107 @@
+{
+ "device": "mps",
+ "R": 1.5493026174306204,
+ "N": 2,
+ "swap_mb_start": 1933.69,
+ "runs": {
+  "hnet_S": {
+   "params": 7058434,
+   "micro_batch": 16,
+   "s_per_step": 0.41840511083602905,
+   "bytes_per_s": 39158.22148363004,
+   "flops_per_byte": 32474124.0,
+   "achieved_flops": 1271628940078.8657,
+   "mps_alloc_gb": 0.11295232,
+   "swap_mb_max": 1941.69,
+   "compression_assumed": 2.0
+  },
+  "hnet_M": {
+   "params": 18292098,
+   "micro_batch": 8,
+   "s_per_step": 0.3602970004081726,
+   "bytes_per_s": 22736.797671697135,
+   "flops_per_byte": 68927628.0,
+   "achieved_flops": 1567193531826.006,
+   "mps_alloc_gb": 0.296685056,
+   "swap_mb_max": 1941.69,
+   "compression_assumed": 2.0
+  },
+  "hnet_L": {
+   "params": 42121986,
+   "micro_batch": 4,
+   "s_per_step": 0.30268158912658694,
+   "bytes_per_s": 13532.372457206106,
+   "flops_per_byte": 144742668.0,
+   "achieved_flops": 1958711693825.7275,
+   "mps_alloc_gb": 0.677104896,
+   "swap_mb_max": 1933.69,
+   "compression_assumed": 2.0
+  },
+  "fixed_S": {
+   "params": 7058434,
+   "micro_batch": 16,
+   "s_per_step": 0.36510547876358035,
+   "bytes_per_s": 44874.70321038174,
+   "flops_per_byte": 32474124.0,
+   "achieved_flops": 1457266676517.1345,
+   "mps_alloc_gb": 0.111373312,
+   "swap_mb_max": 1933.69,
+   "compression_assumed": 2.0
+  },
+  "fixed_M": {
+   "params": 18292098,
+   "micro_batch": 16,
+   "s_per_step": 0.6291630721092224,
+   "bytes_per_s": 26040.94347920621,
+   "flops_per_byte": 68927628.0,
+   "achieved_flops": 1794940464903.7512,
+   "mps_alloc_gb": 0.291308544,
+   "swap_mb_max": 1933.69,
+   "compression_assumed": 2.0
+  },
+  "fixed_L": {
+   "params": 42121986,
+   "micro_batch": 16,
+   "s_per_step": 1.0872223997116088,
+   "bytes_per_s": 15069.593860783165,
+   "flops_per_byte": 144742668.0,
+   "achieved_flops": 2181213221086.1758,
+   "mps_alloc_gb": 0.673963008,
+   "swap_mb_max": 1933.69,
+   "compression_assumed": 2.0
+  },
+  "bpe_S": {
+   "params": 5523970,
+   "micro_batch": 16,
+   "s_per_step": 0.19348858118057252,
+   "bytes_per_s": 84676.83157338205,
+   "flops_per_byte": 18935783.49844093,
+   "achieved_flops": 1603422150007.5098,
+   "mps_alloc_gb": 0.089416704,
+   "swap_mb_max": 1925.69,
+   "compression_assumed": 1.5493026174306204
+  },
+  "bpe_M": {
+   "params": 17741058,
+   "micro_batch": 16,
+   "s_per_step": 0.5860078001022339,
+   "bytes_per_s": 27958.67221757403,
+   "flops_per_byte": 68952154.091669,
+   "achieved_flops": 1927810674944.6292,
+   "mps_alloc_gb": 0.285668352,
+   "swap_mb_max": 1925.69,
+   "compression_assumed": 1.5493026174306204
+  },
+  "bpe_L": {
+   "params": 42554370,
+   "micro_batch": 8,
+   "s_per_step": 0.6390123319625854,
+   "bytes_per_s": 12819.783891869627,
+   "flops_per_byte": 170371119.6597296,
+   "achieved_flops": 2184120935453.5942,
+   "mps_alloc_gb": 0.683459584,
+   "swap_mb_max": 1925.69,
+   "compression_assumed": 1.5493026174306204
+  }
+ }
+}

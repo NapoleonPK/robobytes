@@ -1,0 +1,18 @@
+{
+ "byte": {
+  "counted_per_byte": 33950720.0,
+  "analytic_per_byte": 25646604.0,
+  "ratio": 1.3237900815250236
+ },
+ "bpe": {
+  "counted_per_byte": 7209728.0,
+  "analytic_per_byte": 6712323.0,
+  "ratio": 1.07410325754586
+ },
+ "hnet": {
+  "counted_per_byte": 25496576.0,
+  "analytic_per_byte": 26062860.0,
+  "ratio": 0.9782723768611733
+ },
+ "note": "counted = matmul/conv/SDPA FLOPs seen by torch.utils.flop_counter (elementwise ops, depthwise conv as multiply-adds and the EMA are not all counted); the H-Net run uses fixed boundaries every N bytes, so the same architecture as Fixed/Entropy and H-Net up to the router (2 d_outer^2 per byte)."
+}

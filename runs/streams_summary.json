@@ -1,0 +1,655 @@
+{
+ "toto": {
+  "robot": "Franka",
+  "W": 15,
+  "dims": {
+   "observation.state": 8,
+   "action": 7
+  },
+  "fps": 30,
+  "revision": {
+   "lerobot/toto": "51f5a8dc59fe2888f53b938ecc7142980543129e"
+  },
+  "episodes": {
+   "test": 50,
+   "train": 903,
+   "val": 50
+  },
+  "frames": 325699,
+  "constant_channels": 2,
+  "data_bytes_test": 261975,
+  "symbols_test": 279490,
+  "data_bytes_train": 4392060,
+  "symbols_train": 4685767,
+  "data_bytes_val": 231450,
+  "symbols_val": 246930
+ },
+ "fmb": {
+  "robot": "Franka",
+  "W": 15,
+  "dims": {
+   "observation.state": 8,
+   "action": 7
+  },
+  "fps": 10,
+  "revision": {
+   "lerobot/fmb": "76c86f111d328229773288bf60d5b5b50e047e8d"
+  },
+  "episodes": {
+   "test": 90,
+   "train": 1624,
+   "val": 90
+  },
+  "frames": 338188,
+  "constant_channels": 0,
+  "data_bytes_test": 230445,
+  "symbols_test": 245898,
+  "data_bytes_train": 4578570,
+  "symbols_train": 4885432,
+  "data_bytes_val": 263805,
+  "symbols_val": 281482
+ },
+ "utaustin_mutex": {
+  "robot": "Franka",
+  "W": 15,
+  "dims": {
+   "observation.state": 8,
+   "action": 7
+  },
+  "fps": 20,
+  "revision": {
+   "lerobot/utaustin_mutex": "a880eaeec88c6fcb6cd75e24ecf78f56fa96e559"
+  },
+  "episodes": {
+   "test": 75,
+   "train": 1350,
+   "val": 75
+  },
+  "frames": 361883,
+  "constant_channels": 0,
+  "data_bytes_test": 284025,
+  "symbols_test": 303035,
+  "data_bytes_train": 4866885,
+  "symbols_train": 5192694,
+  "data_bytes_val": 277335,
+  "symbols_val": 295899
+ },
+ "svla_so100_pickplace": {
+  "robot": "SO-100",
+  "W": 12,
+  "dims": {
+   "observation.state": 6,
+   "action": 6
+  },
+  "fps": 30,
+  "revision": {
+   "lerobot/svla_so100_pickplace": "728583b5eaf9e739a7f119e2def466fa1d552402"
+  },
+  "episodes": {
+   "test": 2,
+   "train": 46,
+   "val": 2
+  },
+  "frames": 19631,
+  "constant_channels": 0,
+  "data_bytes_test": 11508,
+  "symbols_test": 12469,
+  "data_bytes_train": 213264,
+  "symbols_train": 231082,
+  "data_bytes_val": 10800,
+  "symbols_val": 11702
+ },
+ "svla_so100_sorting": {
+  "robot": "SO-100",
+  "W": 12,
+  "dims": {
+   "observation.state": 6,
+   "action": 6
+  },
+  "fps": 30,
+  "revision": {
+   "lerobot/svla_so100_sorting": "13870ca969084d8ce4d8a0391b06cead78e804ba"
+  },
+  "episodes": {
+   "test": 3,
+   "train": 46,
+   "val": 3
+  },
+  "frames": 35713,
+  "constant_channels": 0,
+  "data_bytes_test": 25128,
+  "symbols_test": 27225,
+  "data_bytes_train": 378516,
+  "symbols_train": 410105,
+  "data_bytes_val": 24912,
+  "symbols_val": 26991
+ },
+ "svla_so100_stacking": {
+  "robot": "SO-100",
+  "W": 12,
+  "dims": {
+   "observation.state": 6,
+   "action": 6
+  },
+  "fps": 30,
+  "revision": {
+   "lerobot/svla_so100_stacking": "933bcc61148b1b560d1a13753b47eac54a085561"
+  },
+  "episodes": {
+   "test": 3,
+   "train": 50,
+   "val": 3
+  },
+  "frames": 22956,
+  "constant_channels": 0,
+  "data_bytes_test": 15288,
+  "symbols_test": 16565,
+  "data_bytes_train": 243924,
+  "symbols_train": 264301,
+  "data_bytes_val": 16260,
+  "symbols_val": 17618
+ },
+ "svla_so101_pickplace": {
+  "robot": "SO-101",
+  "W": 12,
+  "dims": {
+   "observation.state": 6,
+   "action": 6
+  },
+  "fps": 30,
+  "revision": {
+   "lerobot/svla_so101_pickplace": "f641879e22172be7e8161d5e6c1503c2d2feb657"
+  },
+  "episodes": {
+   "test": 2,
+   "train": 46,
+   "val": 2
+  },
+  "frames": 11939,
+  "constant_channels": 0,
+  "data_bytes_test": 5976,
+  "symbols_test": 6476,
+  "data_bytes_train": 130752,
+  "symbols_train": 141694,
+  "data_bytes_val": 6540,
+  "symbols_val": 7087
+ },
+ "koch_pick_place_1_lego": {
+  "robot": "Koch v1.1",
+  "W": 12,
+  "dims": {
+   "observation.state": 6,
+   "action": 6
+  },
+  "fps": 30,
+  "revision": {
+   "lerobot/koch_pick_place_1_lego": "afc0b3e54679cb8a94283fbab5a4ccf0d405f10b"
+  },
+  "episodes": {
+   "test": 5,
+   "train": 92,
+   "val": 5
+  },
+  "frames": 39693,
+  "constant_channels": 0,
+  "data_bytes_test": 21492,
+  "symbols_test": 23288,
+  "data_bytes_train": 432576,
+  "symbols_train": 468716,
+  "data_bytes_val": 22248,
+  "symbols_val": 24107
+ },
+ "koch_pick_place_5_lego": {
+  "robot": "Koch v1.1",
+  "W": 12,
+  "dims": {
+   "observation.state": 6,
+   "action": 6
+  },
+  "fps": 30,
+  "revision": {
+   "lerobot/koch_pick_place_5_lego": "af1f4ff76be9fa752424b176125119744a6ef3f6"
+  },
+  "episodes": {
+   "test": 2,
+   "train": 46,
+   "val": 2
+  },
+  "frames": 37972,
+  "constant_channels": 0,
+  "data_bytes_test": 16128,
+  "symbols_test": 17474,
+  "data_bytes_train": 419556,
+  "symbols_train": 454565,
+  "data_bytes_val": 19980,
+  "symbols_val": 21647
+ },
+ "xarm_lift_medium": {
+  "robot": "xArm (sim)",
+  "W": 8,
+  "dims": {
+   "observation.state": 4,
+   "action": 4
+  },
+  "fps": 15,
+  "revision": {
+   "lerobot/xarm_lift_medium": "79efb0e3cef0e530ddec4b8569b190966ab45808"
+  },
+  "episodes": {
+   "test": 40,
+   "train": 720,
+   "val": 40
+  },
+  "frames": 20000,
+  "constant_channels": 0,
+  "data_bytes_test": 8000,
+  "symbols_test": 9040,
+  "data_bytes_train": 144000,
+  "symbols_train": 162720,
+  "data_bytes_val": 8000,
+  "symbols_val": 9040
+ },
+ "xarm_push_medium": {
+  "robot": "xArm (sim)",
+  "W": 7,
+  "dims": {
+   "observation.state": 4,
+   "action": 3
+  },
+  "fps": 15,
+  "revision": {
+   "lerobot/xarm_push_medium": "50352b1fd09fd7cb440a3f09c0c0f0b362e45876"
+  },
+  "episodes": {
+   "test": 40,
+   "train": 720,
+   "val": 40
+  },
+  "frames": 20000,
+  "constant_channels": 0,
+  "data_bytes_test": 7000,
+  "symbols_test": 8040,
+  "data_bytes_train": 126000,
+  "symbols_train": 144720,
+  "data_bytes_val": 7000,
+  "symbols_val": 8040
+ },
+ "utokyo_xarm_pick_and_place": {
+  "robot": "xArm",
+  "W": 15,
+  "dims": {
+   "observation.state": 8,
+   "action": 7
+  },
+  "fps": 10,
+  "revision": {
+   "lerobot/utokyo_xarm_pick_and_place": "da56c23e1b6d32c101c300b85dc54288b53ea63c"
+  },
+  "episodes": {
+   "test": 5,
+   "train": 92,
+   "val": 5
+  },
+  "frames": 7490,
+  "constant_channels": 2,
+  "data_bytes_test": 5100,
+  "symbols_test": 5445,
+  "data_bytes_train": 101610,
+  "symbols_train": 108476,
+  "data_bytes_val": 5640,
+  "symbols_val": 6021
+ },
+ "berkeley_autolab_ur5": {
+  "robot": "UR5",
+  "W": 15,
+  "dims": {
+   "observation.state": 8,
+   "action": 7
+  },
+  "fps": 5,
+  "revision": {
+   "lerobot/berkeley_autolab_ur5": "c4e26a697fc4c04776b0558f83e563d14be0109f"
+  },
+  "episodes": {
+   "test": 50,
+   "train": 900,
+   "val": 50
+  },
+  "frames": 97939,
+  "constant_channels": 0,
+  "data_bytes_test": 73590,
+  "symbols_test": 78546,
+  "data_bytes_train": 1320660,
+  "symbols_train": 1409604,
+  "data_bytes_val": 74835,
+  "symbols_val": 79874
+ },
+ "jaco_play": {
+  "robot": "Jaco 2",
+  "W": 15,
+  "dims": {
+   "observation.state": 8,
+   "action": 7
+  },
+  "fps": 10,
+  "revision": {
+   "lerobot/jaco_play": "265773f4d24610e89040a9e11e1e39cbf4c8a5db"
+  },
+  "episodes": {
+   "test": 54,
+   "train": 977,
+   "val": 54
+  },
+  "frames": 77965,
+  "constant_channels": 4,
+  "data_bytes_test": 54645,
+  "symbols_test": 58342,
+  "data_bytes_train": 1057095,
+  "symbols_train": 1128545,
+  "data_bytes_val": 57735,
+  "symbols_val": 61638
+ },
+ "stanford_kuka_multimodal_dataset": {
+  "robot": "Kuka iiwa",
+  "W": 14,
+  "dims": {
+   "observation.state": 7,
+   "action": 7
+  },
+  "fps": 20,
+  "revision": {
+   "lerobot/stanford_kuka_multimodal_dataset": "93927d10c07233ddbe3d6e3cec433af9430121c7"
+  },
+  "episodes": {
+   "test": 150,
+   "train": 2700,
+   "val": 150
+  },
+  "frames": 149985,
+  "constant_channels": 3,
+  "data_bytes_test": 105000,
+  "symbols_test": 112650,
+  "data_bytes_train": 1889790,
+  "symbols_train": 2027475,
+  "data_bytes_val": 105000,
+  "symbols_val": 112650
+ },
+ "roboturk": {
+  "robot": "Sawyer",
+  "W": 15,
+  "dims": {
+   "observation.state": 8,
+   "action": 7
+  },
+  "fps": 10,
+  "revision": {
+   "lerobot/roboturk": "d38c91900282c484d91710a1c4581597476cbc64"
+  },
+  "episodes": {
+   "test": 100,
+   "train": 1795,
+   "val": 100
+  },
+  "frames": 187507,
+  "constant_channels": 8,
+  "data_bytes_test": 142020,
+  "symbols_test": 151588,
+  "data_bytes_train": 2517690,
+  "symbols_train": 2687331,
+  "data_bytes_val": 152895,
+  "symbols_val": 163188
+ },
+ "berkeley_fanuc_manipulation": {
+  "robot": "Fanuc Mate",
+  "W": 15,
+  "dims": {
+   "observation.state": 8,
+   "action": 7
+  },
+  "fps": 10,
+  "revision": {
+   "lerobot/berkeley_fanuc_manipulation": "51bdefb6c7f24659fb3cfef61ba70246062193c2"
+  },
+  "episodes": {
+   "test": 21,
+   "train": 373,
+   "val": 21
+  },
+  "frames": 62613,
+  "constant_channels": 2,
+  "data_bytes_test": 47655,
+  "symbols_test": 50853,
+  "data_bytes_train": 843510,
+  "symbols_train": 900117,
+  "data_bytes_val": 48030,
+  "symbols_val": 51253
+ },
+ "cmu_stretch": {
+  "robot": "Hello Robot Stretch",
+  "W": 12,
+  "dims": {
+   "observation.state": 4,
+   "action": 8
+  },
+  "fps": 5,
+  "revision": {
+   "lerobot/cmu_stretch": "d84574233973ea9a292babd008256d2290a3f96e"
+  },
+  "episodes": {
+   "test": 7,
+   "train": 121,
+   "val": 7
+  },
+  "frames": 25016,
+  "constant_channels": 6,
+  "data_bytes_test": 15828,
+  "symbols_test": 17154,
+  "data_bytes_train": 268812,
+  "symbols_train": 291334,
+  "data_bytes_val": 15552,
+  "symbols_val": 16855
+ },
+ "utokyo_pr2_opening_fridge": {
+  "robot": "PR2",
+  "W": 15,
+  "dims": {
+   "observation.state": 7,
+   "action": 8
+  },
+  "fps": 5,
+  "revision": {
+   "lerobot/utokyo_pr2_opening_fridge": "47504c67033d34b1b7f3ae522f35d0e0e5e1eead"
+  },
+  "episodes": {
+   "test": 4,
+   "train": 72,
+   "val": 4
+  },
+  "frames": 11522,
+  "constant_channels": 1,
+  "data_bytes_test": 8685,
+  "symbols_test": 9268,
+  "data_bytes_train": 154965,
+  "symbols_train": 165368,
+  "data_bytes_val": 9180,
+  "symbols_val": 9796
+ },
+ "utokyo_pr2_tabletop_manipulation": {
+  "robot": "PR2",
+  "W": 15,
+  "dims": {
+   "observation.state": 7,
+   "action": 8
+  },
+  "fps": 5,
+  "revision": {
+   "lerobot/utokyo_pr2_tabletop_manipulation": "a0b6918864b3fd0f58ca29acc7e06e572f7c985c"
+  },
+  "episodes": {
+   "test": 12,
+   "train": 216,
+   "val": 12
+  },
+  "frames": 32708,
+  "constant_channels": 7,
+  "data_bytes_test": 24375,
+  "symbols_test": 26012,
+  "data_bytes_train": 441090,
+  "symbols_train": 470712,
+  "data_bytes_val": 25155,
+  "symbols_val": 26844
+ },
+ "dlr_sara_pour": {
+  "robot": "DLR SARA",
+  "W": 13,
+  "dims": {
+   "observation.state": 6,
+   "action": 7
+  },
+  "fps": 5,
+  "revision": {
+   "lerobot/dlr_sara_pour": "4246fa6111ab2682b1c39f44b045faec9ad41de7"
+  },
+  "episodes": {
+   "test": 5,
+   "train": 90,
+   "val": 5
+  },
+  "frames": 12971,
+  "constant_channels": 1,
+  "data_bytes_test": 8255,
+  "symbols_test": 8895,
+  "data_bytes_train": 151788,
+  "symbols_train": 163554,
+  "data_bytes_val": 8580,
+  "symbols_val": 9245
+ },
+ "heldout_aloha": {
+  "robot": "aloha",
+  "W": 28,
+  "dims": {
+   "observation.state": 14,
+   "action": 14
+  },
+  "fps": 50,
+  "revision": {
+   "lerobot/aloha_sim_insertion_human": "cc571a3c661df81b566dbfde3d5c1e85fcdf7884",
+   "lerobot/aloha_sim_transfer_cube_human": "6a43d500f101255823a9d2b9dc244eeb01a2cd31"
+  },
+  "episodes": {
+   "pool": 50,
+   "test": 40,
+   "val": 10
+  },
+  "frames": 45000,
+  "constant_channels": 0,
+  "data_bytes_pool": 638400,
+  "symbols_pool": 661250,
+  "data_bytes_test": 492800,
+  "symbols_test": 510440,
+  "data_bytes_val": 128800,
+  "symbols_val": 133410
+ },
+ "heldout_pusht": {
+  "robot": "pusht",
+  "W": 20,
+  "dims": {
+   "observation.state": 2,
+   "observation.environment_state": 16,
+   "action": 2
+  },
+  "fps": 10,
+  "revision": {
+   "lerobot/pusht_keypoints": "ace8c161a68bc025c21a5f29f85b86a9a2c5e64b"
+  },
+  "episodes": {
+   "pool": 50,
+   "test": 146,
+   "val": 10
+  },
+  "frames": 25650,
+  "constant_channels": 0,
+  "data_bytes_pool": 123320,
+  "symbols_pool": 129536,
+  "data_bytes_test": 365840,
+  "symbols_test": 384278,
+  "data_bytes_val": 23840,
+  "symbols_val": 25042
+ },
+ "heldout_fetch": {
+  "robot": "fetch",
+  "W": 32,
+  "dims": {
+   "observation": 25,
+   "goal": 3,
+   "action": 4
+  },
+  "fps": 25,
+  "revision": {
+   "PAOP123/robochunk-sim": "630a3a3737ae56f6e80b91ee06c3502ce93dedea"
+  },
+  "episodes": {
+   "pool": 50,
+   "test": 240,
+   "val": 10
+  },
+  "frames": 24043,
+  "constant_channels": 1,
+  "data_bytes_pool": 122592,
+  "symbols_pool": 126473,
+  "data_bytes_test": 620576,
+  "symbols_test": 640209,
+  "data_bytes_val": 26208,
+  "symbols_val": 27037
+ },
+ "robocasa_target_human_unified": {
+  "robot": "PandaOmron (Franka on mobile base)",
+  "W": 28,
+  "dims": {
+   "observation.state": 16,
+   "action": 12
+  },
+  "fps": 20,
+  "revision": {
+   "lerobot/robocasa_target_human_unified": "a1c7cba1a128f5dd8d3084012ba366d10ce174d9"
+  },
+  "episodes": {
+   "test": 1265,
+   "train": 22777,
+   "val": 1265
+  },
+  "frames": 14957899,
+  "constant_channels": 3,
+  "data_bytes_test": 21123984,
+  "symbols_test": 21879677,
+  "data_bytes_train": 376601876,
+  "symbols_train": 390074720,
+  "data_bytes_val": 21095312,
+  "symbols_val": 21849981
+ },
+ "vlabench_unified": {
+  "robot": "Franka",
+  "W": 14,
+  "dims": {
+   "observation.state": 7,
+   "action": 7
+  },
+  "fps": 10,
+  "revision": {
+   "lerobot/vlabench_unified": "f61ad898199e746c20af3112f278cc86eb3ca3c4"
+  },
+  "episodes": {
+   "test": 549,
+   "train": 9879,
+   "val": 549
+  },
+  "frames": 3114872,
+  "constant_channels": 0,
+  "data_bytes_test": 2082822,
+  "symbols_test": 2232144,
+  "data_bytes_train": 39341470,
+  "symbols_train": 42161454,
+  "data_bytes_val": 2183916,
+  "symbols_val": 2340459
+ }
+}

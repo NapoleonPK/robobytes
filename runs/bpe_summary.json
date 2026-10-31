@@ -1,0 +1,555 @@
+{
+ "vocab": 4096,
+ "sample_bytes": 30000000.0,
+ "train_seconds": 6.1400861740112305,
+ "datasets": {
+  "berkeley_autolab_ur5": {
+   "test": {
+    "symbols": 78546,
+    "positions": 54253,
+    "compression": 1.4477724734116086,
+    "data_bytes_per_data_token": 1.492788607826034
+   },
+   "train": {
+    "symbols": 1409604,
+    "positions": 988330,
+    "compression": 1.4262483178695375,
+    "data_bytes_per_data_token": 1.4684017763229582
+   },
+   "val": {
+    "symbols": 79874,
+    "positions": 56098,
+    "compression": 1.4238297265499662,
+    "data_bytes_per_data_token": 1.4656573767602186
+   }
+  },
+  "berkeley_fanuc_manipulation": {
+   "test": {
+    "symbols": 50853,
+    "positions": 24834,
+    "compression": 2.0477168398163808,
+    "data_bytes_per_data_token": 2.2025790349417638
+   },
+   "train": {
+    "symbols": 900117,
+    "positions": 437869,
+    "compression": 2.0556764694463414,
+    "data_bytes_per_data_token": 2.2124156092136116
+   },
+   "val": {
+    "symbols": 51253,
+    "positions": 24702,
+    "compression": 2.0748522386851267,
+    "data_bytes_per_data_token": 2.2361376227943572
+   }
+  },
+  "cmu_stretch": {
+   "test": {
+    "symbols": 17154,
+    "positions": 7155,
+    "compression": 2.3974842767295597,
+    "data_bytes_per_data_token": 2.715388574369532
+   },
+   "train": {
+    "symbols": 291334,
+    "positions": 121427,
+    "compression": 2.399252225617037,
+    "data_bytes_per_data_token": 2.717880794701987
+   },
+   "val": {
+    "symbols": 16855,
+    "positions": 7121,
+    "compression": 2.3669428451060246,
+    "data_bytes_per_data_token": 2.6730835338604333
+   }
+  },
+  "dlr_sara_pour": {
+   "test": {
+    "symbols": 8895,
+    "positions": 7264,
+    "compression": 1.2245319383259912,
+    "data_bytes_per_data_token": 1.246225845410628
+   },
+   "train": {
+    "symbols": 163554,
+    "positions": 125526,
+    "compression": 1.3029491898092826,
+    "data_bytes_per_data_token": 1.3342827004219409
+   },
+   "val": {
+    "symbols": 9245,
+    "positions": 6485,
+    "compression": 1.425597532767926,
+    "data_bytes_per_data_token": 1.4742268041237114
+   }
+  },
+  "fmb": {
+   "test": {
+    "symbols": 245898,
+    "positions": 174792,
+    "compression": 1.406803515035013,
+    "data_bytes_per_data_token": 1.4462560954945116
+   },
+   "train": {
+    "symbols": 4885432,
+    "positions": 3496330,
+    "compression": 1.3973028861692116,
+    "data_bytes_per_data_token": 1.4355278058911392
+   },
+   "val": {
+    "symbols": 281482,
+    "positions": 202725,
+    "compression": 1.3884917992354175,
+    "data_bytes_per_data_token": 1.4256030867666767
+   }
+  },
+  "jaco_play": {
+   "test": {
+    "symbols": 58342,
+    "positions": 36382,
+    "compression": 1.6035951844318619,
+    "data_bytes_per_data_token": 1.671867829279486
+   },
+   "train": {
+    "symbols": 1128545,
+    "positions": 698558,
+    "compression": 1.6155351452563709,
+    "data_bytes_per_data_token": 1.6856665837463403
+   },
+   "val": {
+    "symbols": 61638,
+    "positions": 38494,
+    "compression": 1.6012365563464437,
+    "data_bytes_per_data_token": 1.6690757711543465
+   }
+  },
+  "koch_pick_place_1_lego": {
+   "test": {
+    "symbols": 23288,
+    "positions": 20766,
+    "compression": 1.121448521621882,
+    "data_bytes_per_data_token": 1.132946758039009
+   },
+   "train": {
+    "symbols": 468716,
+    "positions": 419366,
+    "compression": 1.1176776371951946,
+    "data_bytes_per_data_token": 1.1287751874872791
+   },
+   "val": {
+    "symbols": 24107,
+    "positions": 21779,
+    "compression": 1.106891960145094,
+    "data_bytes_per_data_token": 1.116867469879518
+   }
+  },
+  "koch_pick_place_5_lego": {
+   "test": {
+    "symbols": 17474,
+    "positions": 16662,
+    "compression": 1.048733645420718,
+    "data_bytes_per_data_token": 1.053016453382084
+   },
+   "train": {
+    "symbols": 454565,
+    "positions": 426028,
+    "compression": 1.0669838602157604,
+    "data_bytes_per_data_token": 1.072981108334889
+   },
+   "val": {
+    "symbols": 21647,
+    "positions": 19730,
+    "compression": 1.097161682716675,
+    "data_bytes_per_data_token": 1.1061285500747384
+   }
+  },
+  "robocasa_target_human_unified": {
+   "test": {
+    "symbols": 21879677,
+    "positions": 12344808,
+    "compression": 1.772378881874874,
+    "data_bytes_per_data_token": 1.8227434968071332
+   },
+   "train": {
+    "symbols": 390074720,
+    "positions": 220019590,
+    "compression": 1.77290903959961,
+    "data_bytes_per_data_token": 1.8233251469379237
+   },
+   "val": {
+    "symbols": 21849981,
+    "positions": 12363151,
+    "compression": 1.7673472563750132,
+    "data_bytes_per_data_token": 1.8172326062959825
+   }
+  },
+  "roboturk": {
+   "test": {
+    "symbols": 151588,
+    "positions": 64152,
+    "compression": 2.362950492580122,
+    "data_bytes_per_data_token": 2.6018613513117397
+   },
+   "train": {
+    "symbols": 2687331,
+    "positions": 1136625,
+    "compression": 2.3643074892774663,
+    "data_bytes_per_data_token": 2.6036521803876798
+   },
+   "val": {
+    "symbols": 163188,
+    "positions": 69069,
+    "compression": 2.362680797463406,
+    "data_bytes_per_data_token": 2.601316864026133
+   }
+  },
+  "stanford_kuka_multimodal_dataset": {
+   "test": {
+    "symbols": 112650,
+    "positions": 83833,
+    "compression": 1.3437429174668687,
+    "data_bytes_per_data_token": 1.3782602417862253
+   },
+   "train": {
+    "symbols": 2027475,
+    "positions": 1513196,
+    "compression": 1.3398627804990233,
+    "data_bytes_per_data_token": 1.3738821427091459
+   },
+   "val": {
+    "symbols": 112650,
+    "positions": 84788,
+    "compression": 1.3286078218615842,
+    "data_bytes_per_data_token": 1.3611968160958283
+   }
+  },
+  "svla_so100_pickplace": {
+   "test": {
+    "symbols": 12469,
+    "positions": 10565,
+    "compression": 1.180217699952674,
+    "data_bytes_per_data_token": 1.1982507288629738
+   },
+   "train": {
+    "symbols": 231082,
+    "positions": 191614,
+    "compression": 1.205976598787145,
+    "data_bytes_per_data_token": 1.2270938341503832
+   },
+   "val": {
+    "symbols": 11702,
+    "positions": 9645,
+    "compression": 1.2132711249351995,
+    "data_bytes_per_data_token": 1.2352739334324603
+   }
+  },
+  "svla_so100_sorting": {
+   "test": {
+    "symbols": 27225,
+    "positions": 24431,
+    "compression": 1.1143628995947772,
+    "data_bytes_per_data_token": 1.125100743261395
+   },
+   "train": {
+    "symbols": 410105,
+    "positions": 362475,
+    "compression": 1.1314021656665978,
+    "data_bytes_per_data_token": 1.1439468578301892
+   },
+   "val": {
+    "symbols": 26991,
+    "positions": 23944,
+    "compression": 1.1272552622786502,
+    "data_bytes_per_data_token": 1.1393551337754402
+   }
+  },
+  "svla_so100_stacking": {
+   "test": {
+    "symbols": 16565,
+    "positions": 14396,
+    "compression": 1.1506668519033065,
+    "data_bytes_per_data_token": 1.165332723530757
+   },
+   "train": {
+    "symbols": 264301,
+    "positions": 226338,
+    "compression": 1.1677270277196052,
+    "data_bytes_per_data_token": 1.184321303547759
+   },
+   "val": {
+    "symbols": 17618,
+    "positions": 16195,
+    "compression": 1.087866625501698,
+    "data_bytes_per_data_token": 1.095908876457505
+   }
+  },
+  "svla_so101_pickplace": {
+   "test": {
+    "symbols": 6476,
+    "positions": 5595,
+    "compression": 1.157462019660411,
+    "data_bytes_per_data_token": 1.1729146221786064
+   },
+   "train": {
+    "symbols": 141694,
+    "positions": 120056,
+    "compression": 1.180232558139535,
+    "data_bytes_per_data_token": 1.1983063584874536
+   },
+   "val": {
+    "symbols": 7087,
+    "positions": 6088,
+    "compression": 1.1640932982917214,
+    "data_bytes_per_data_token": 1.180292365998917
+   }
+  },
+  "toto": {
+   "test": {
+    "symbols": 279490,
+    "positions": 232941,
+    "compression": 1.19983171704423,
+    "data_bytes_per_data_token": 1.2160788391373372
+   },
+   "train": {
+    "symbols": 4685767,
+    "positions": 3922800,
+    "compression": 1.1944955134087896,
+    "data_bytes_per_data_token": 1.210236276667476
+   },
+   "val": {
+    "symbols": 246930,
+    "positions": 207504,
+    "compression": 1.1900011566042101,
+    "data_bytes_per_data_token": 1.205318085239345
+   }
+  },
+  "utaustin_mutex": {
+   "test": {
+    "symbols": 303035,
+    "positions": 252625,
+    "compression": 1.1995447798119743,
+    "data_bytes_per_data_token": 1.2157823769877791
+   },
+   "train": {
+    "symbols": 5192694,
+    "positions": 4338271,
+    "compression": 1.1969501213732383,
+    "data_bytes_per_data_token": 1.2129423281765659
+   },
+   "val": {
+    "symbols": 295899,
+    "positions": 247677,
+    "compression": 1.1946971256919294,
+    "data_bytes_per_data_token": 1.2104725615744196
+   }
+  },
+  "utokyo_pr2_opening_fridge": {
+   "test": {
+    "symbols": 9268,
+    "positions": 7844,
+    "compression": 1.1815400305966344,
+    "data_bytes_per_data_token": 1.1961162374328604
+   },
+   "train": {
+    "symbols": 165368,
+    "positions": 139460,
+    "compression": 1.185773698551556,
+    "data_bytes_per_data_token": 1.2007485064738836
+   },
+   "val": {
+    "symbols": 9796,
+    "positions": 8375,
+    "compression": 1.1696716417910449,
+    "data_bytes_per_data_token": 1.1831421574945225
+   }
+  },
+  "utokyo_pr2_tabletop_manipulation": {
+   "test": {
+    "symbols": 26012,
+    "positions": 14545,
+    "compression": 1.7883808869027158,
+    "data_bytes_per_data_token": 1.8883638053920049
+   },
+   "train": {
+    "symbols": 470712,
+    "positions": 263373,
+    "compression": 1.7872447061771708,
+    "data_bytes_per_data_token": 1.8870079700193796
+   },
+   "val": {
+    "symbols": 26844,
+    "positions": 15093,
+    "compression": 1.7785728483402903,
+    "data_bytes_per_data_token": 1.8766786034019696
+   }
+  },
+  "utokyo_xarm_pick_and_place": {
+   "test": {
+    "symbols": 5445,
+    "positions": 4452,
+    "compression": 1.2230458221024259,
+    "data_bytes_per_data_token": 1.241782322863404
+   },
+   "train": {
+    "symbols": 108476,
+    "positions": 86838,
+    "compression": 1.2491766277436145,
+    "data_bytes_per_data_token": 1.2705696993947881
+   },
+   "val": {
+    "symbols": 6021,
+    "positions": 4883,
+    "compression": 1.2330534507474913,
+    "data_bytes_per_data_token": 1.2527765437583296
+   }
+  },
+  "vlabench_unified": {
+   "test": {
+    "symbols": 2232144,
+    "positions": 1441265,
+    "compression": 1.5487394753914097,
+    "data_bytes_per_data_token": 1.6121624560835888
+   },
+   "train": {
+    "symbols": 42161454,
+    "positions": 27103024,
+    "compression": 1.5555996260786251,
+    "data_bytes_per_data_token": 1.620121286296938
+   },
+   "val": {
+    "symbols": 2340459,
+    "positions": 1506507,
+    "compression": 1.5535666279678753,
+    "data_bytes_per_data_token": 1.6177586957874432
+   }
+  },
+  "xarm_lift_medium": {
+   "test": {
+    "symbols": 9040,
+    "positions": 7983,
+    "compression": 1.1324063635224852,
+    "data_bytes_per_data_token": 1.152239665850497
+   },
+   "train": {
+    "symbols": 162720,
+    "positions": 143283,
+    "compression": 1.1356546135968677,
+    "data_bytes_per_data_token": 1.1560415211579682
+   },
+   "val": {
+    "symbols": 9040,
+    "positions": 7958,
+    "compression": 1.1359638100025131,
+    "data_bytes_per_data_token": 1.156403584851113
+   }
+  },
+  "xarm_push_medium": {
+   "test": {
+    "symbols": 8040,
+    "positions": 7409,
+    "compression": 1.0851666891618301,
+    "data_bytes_per_data_token": 1.0990736379337416
+   },
+   "train": {
+    "symbols": 144720,
+    "positions": 133560,
+    "compression": 1.0835579514824798,
+    "data_bytes_per_data_token": 1.09717868338558
+   },
+   "val": {
+    "symbols": 8040,
+    "positions": 7416,
+    "compression": 1.0841423948220066,
+    "data_bytes_per_data_token": 1.0978670012547052
+   }
+  },
+  "heldout_aloha": {
+   "pool": {
+    "symbols": 661250,
+    "positions": 630622,
+    "compression": 1.0485679218295587,
+    "data_bytes_per_data_token": 1.0503938977116418
+   },
+   "test": {
+    "symbols": 510440,
+    "positions": 483944,
+    "compression": 1.0547501363794158,
+    "data_bytes_per_data_token": 1.0568213011254461
+   },
+   "val": {
+    "symbols": 133410,
+    "positions": 126964,
+    "compression": 1.0507702970920891,
+    "data_bytes_per_data_token": 1.052683197933864
+   }
+  },
+  "heldout_fetch": {
+   "pool": {
+    "symbols": 126473,
+    "positions": 108879,
+    "compression": 1.1615922262327905,
+    "data_bytes_per_data_token": 1.1675650964780282
+   },
+   "test": {
+    "symbols": 640209,
+    "positions": 549610,
+    "compression": 1.1648423427521333,
+    "data_bytes_per_data_token": 1.170948927972346
+   },
+   "val": {
+    "symbols": 27037,
+    "positions": 23425,
+    "compression": 1.1541942369263607,
+    "data_bytes_per_data_token": 1.1598513011152416
+   }
+  },
+  "heldout_pusht": {
+   "pool": {
+    "symbols": 129536,
+    "positions": 122199,
+    "compression": 1.060041407867495,
+    "data_bytes_per_data_token": 1.0632592707551969
+   },
+   "test": {
+    "symbols": 384278,
+    "positions": 362049,
+    "compression": 1.0613977666006535,
+    "data_bytes_per_data_token": 1.064692341048453
+   },
+   "val": {
+    "symbols": 25042,
+    "positions": 23325,
+    "compression": 1.0736120042872455,
+    "data_bytes_per_data_token": 1.0776115355060345
+   }
+  }
+ },
+ "R_BPE_pooled": 1.7214958465179695,
+ "weights": {
+  "berkeley_autolab_ur5": 0.02586287962073574,
+  "berkeley_fanuc_manipulation": 0.02066933404447744,
+  "cmu_stretch": 0.011668249106595719,
+  "dlr_sara_pour": 0.00876799080322991,
+  "fmb": 0.048155544236649236,
+  "jaco_play": 0.02313866911183623,
+  "koch_pick_place_1_lego": 0.014801733359771314,
+  "koch_pick_place_5_lego": 0.014577274583852343,
+  "robocasa_target_human_unified": 0.4367396340212913,
+  "roboturk": 0.035709395120283746,
+  "stanford_kuka_multimodal_dataset": 0.030937708245110718,
+  "svla_so100_pickplace": 0.010392981198053755,
+  "svla_so100_sorting": 0.013845973220149348,
+  "svla_so100_stacking": 0.011114978651917518,
+  "svla_so101_pickplace": 0.008137772351543516,
+  "toto": 0.04716452864119437,
+  "utaustin_mutex": 0.049648588773589096,
+  "utokyo_pr2_opening_fridge": 0.008859274873622851,
+  "utokyo_pr2_tabletop_manipulation": 0.014946688110211787,
+  "utokyo_xarm_pick_and_place": 0.0071738054058483125,
+  "vlabench_unified": 0.14115837753973504,
+  "xarm_lift_medium": 0.008540093240777532,
+  "xarm_push_medium": 0.007988525739523366
+ },
+ "R_BPE": 1.5493026174306204,
+ "N": 2
+}

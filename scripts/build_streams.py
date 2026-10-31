@@ -51,13 +51,14 @@ def load_lerobot(repo):
 
 
 def load_fetch(repo):
-    """RoboChunk's held-out simulated test episodes: per step obs (25) + goal (3), then action (4)."""
+    """RoboChunk's held-out simulated test episodes (FetchPickAndPlace-v4, 25 Hz, seeds 200000-200299): per step
+    obs (25) + goal (3), then action (4)."""
     z = np.load(HUB / repo / "sim/test.npz")
     off = z["offsets"]
     lengths = np.diff(off)
     goal = np.repeat(z["goal"], lengths, axis=0)
     x = np.concatenate([z["obs"], goal, z["action"]], 1).astype(np.float32)
-    return x, np.arange(len(lengths)), lengths, dict(fps=None, dims={"observation": 25, "goal": 3, "action": 4},
+    return x, np.arange(len(lengths)), lengths, dict(fps=25, dims={"observation": 25, "goal": 3, "action": 4},
                                                        source_file="sim/test.npz")
 
 

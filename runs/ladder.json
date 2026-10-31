@@ -1,0 +1,458 @@
+{
+ "R_BPE": 1.5493026174306204,
+ "N": 2,
+ "train_symbols": 458630486,
+ "budgets": [
+  275000000000000.0,
+  870000000000000.0,
+  2750000000000000.0,
+  8700000000000000.0
+ ],
+ "size_pair": [
+  "S",
+  "M"
+ ],
+ "configs": {
+  "byte_S": {
+   "flops_per_symbol": 25646604.0,
+   "flops_per_s": 1369970242788.084,
+   "micro_batch": 16
+  },
+  "byte_M": {
+   "flops_per_symbol": 104649228.0,
+   "flops_per_s": 1663120307793.7966,
+   "micro_batch": 16
+  },
+  "byte_L": {
+   "flops_per_symbol": 265520652.0,
+   "flops_per_s": 1914558803574.9614,
+   "micro_batch": 8
+  },
+  "bpe_S": {
+   "flops_per_symbol": 18935783.49844093,
+   "flops_per_s": 1603422150007.5098,
+   "micro_batch": 16
+  },
+  "bpe_M": {
+   "flops_per_symbol": 68952154.091669,
+   "flops_per_s": 1927810674944.6292,
+   "micro_batch": 16
+  },
+  "bpe_L": {
+   "flops_per_symbol": 170371119.6597296,
+   "flops_per_s": 2184120935453.5942,
+   "micro_batch": 8
+  },
+  "hnet_S": {
+   "flops_per_symbol": 32474124.0,
+   "flops_per_s": 1271628940078.8657,
+   "micro_batch": 16
+  },
+  "hnet_M": {
+   "flops_per_symbol": 68927628.0,
+   "flops_per_s": 1567193531826.006,
+   "micro_batch": 8
+  },
+  "hnet_L": {
+   "flops_per_symbol": 144742668.0,
+   "flops_per_s": 1958711693825.7275,
+   "micro_batch": 4
+  },
+  "fixed_S": {
+   "flops_per_symbol": 32474124.0,
+   "flops_per_s": 1457266676517.1345,
+   "micro_batch": 16
+  },
+  "fixed_M": {
+   "flops_per_symbol": 68927628.0,
+   "flops_per_s": 1794940464903.7512,
+   "micro_batch": 16
+  },
+  "fixed_L": {
+   "flops_per_symbol": 144742668.0,
+   "flops_per_s": 2181213221086.1758,
+   "micro_batch": 16
+  },
+  "entropy_S": {
+   "flops_per_symbol": 32474124.0,
+   "flops_per_s": 1457266676517.1345,
+   "micro_batch": 16
+  },
+  "entropy_M": {
+   "flops_per_symbol": 68927628.0,
+   "flops_per_s": 1794940464903.7512,
+   "micro_batch": 16
+  },
+  "entropy_L": {
+   "flops_per_symbol": 144742668.0,
+   "flops_per_s": 2181213221086.1758,
+   "micro_batch": 16
+  },
+  "hnet_refractory_S": {
+   "flops_per_symbol": 32474124.0,
+   "flops_per_s": 1271628940078.8657,
+   "micro_batch": 16
+  },
+  "hnet_refractory_M": {
+   "flops_per_symbol": 68927628.0,
+   "flops_per_s": 1567193531826.006,
+   "micro_batch": 8
+  },
+  "hnet_refractory_L": {
+   "flops_per_symbol": 144742668.0,
+   "flops_per_s": 1958711693825.7275,
+   "micro_batch": 4
+  }
+ },
+ "runs": [
+  {
+   "budget": 275000000000000.0,
+   "method": "byte",
+   "size": "S",
+   "hours": 0.055759524187493775,
+   "symbols_seen": 10722667.219410414,
+   "passes": 0.02337975242973799
+  },
+  {
+   "budget": 275000000000000.0,
+   "method": "byte",
+   "size": "M",
+   "hours": 0.04593106615974293,
+   "symbols_seen": 2627826.3610315407,
+   "passes": 0.005729724563123657
+  },
+  {
+   "budget": 275000000000000.0,
+   "method": "bpe",
+   "size": "S",
+   "hours": 0.04764115856110078,
+   "symbols_seen": 14522768.493980829,
+   "passes": 0.03166551055217212
+  },
+  {
+   "budget": 275000000000000.0,
+   "method": "bpe",
+   "size": "M",
+   "hours": 0.039624684042733054,
+   "symbols_seen": 3988272.7903525545,
+   "passes": 0.008696048152264685
+  },
+  {
+   "budget": 275000000000000.0,
+   "method": "hnet",
+   "size": "S",
+   "hours": 0.0600716816685151,
+   "symbols_seen": 8468280.776411397,
+   "passes": 0.01846427796431177
+  },
+  {
+   "budget": 275000000000000.0,
+   "method": "hnet",
+   "size": "M",
+   "hours": 0.04874247330505814,
+   "symbols_seen": 3989691.91279874,
+   "passes": 0.008699142413308172
+  },
+  {
+   "budget": 275000000000000.0,
+   "method": "fixed",
+   "size": "S",
+   "hours": 0.052419292995471656,
+   "symbols_seen": 8468280.776411397,
+   "passes": 0.01846427796431177
+  },
+  {
+   "budget": 275000000000000.0,
+   "method": "fixed",
+   "size": "M",
+   "hours": 0.04255789558623886,
+   "symbols_seen": 3989691.91279874,
+   "passes": 0.008699142413308172
+  },
+  {
+   "budget": 275000000000000.0,
+   "method": "entropy",
+   "size": "S",
+   "hours": 0.052419292995471656,
+   "symbols_seen": 8468280.776411397,
+   "passes": 0.01846427796431177
+  },
+  {
+   "budget": 275000000000000.0,
+   "method": "entropy",
+   "size": "M",
+   "hours": 0.04255789558623886,
+   "symbols_seen": 3989691.91279874,
+   "passes": 0.008699142413308172
+  },
+  {
+   "budget": 870000000000000.0,
+   "method": "byte",
+   "size": "S",
+   "hours": 0.17640285833861669,
+   "symbols_seen": 33922619.9304984,
+   "passes": 0.07396503495953471
+  },
+  {
+   "budget": 870000000000000.0,
+   "method": "byte",
+   "size": "M",
+   "hours": 0.14530919112355034,
+   "symbols_seen": 8313487.033081601,
+   "passes": 0.01812676498151848
+  },
+  {
+   "budget": 870000000000000.0,
+   "method": "bpe",
+   "size": "S",
+   "hours": 0.15071930162966427,
+   "symbols_seen": 45944758.50823026,
+   "passes": 0.10017816065596272
+  },
+  {
+   "budget": 870000000000000.0,
+   "method": "bpe",
+   "size": "M",
+   "hours": 0.12535809133519185,
+   "symbols_seen": 12617444.827660808,
+   "passes": 0.027511134154437365
+  },
+  {
+   "budget": 870000000000000.0,
+   "method": "hnet",
+   "size": "S",
+   "hours": 0.19004495655130235,
+   "symbols_seen": 26790561.001737878,
+   "passes": 0.05841426119618633
+  },
+  {
+   "budget": 870000000000000.0,
+   "method": "hnet",
+   "size": "M",
+   "hours": 0.15420346100145665,
+   "symbols_seen": 12621934.415036015,
+   "passes": 0.02752092327119313
+  },
+  {
+   "budget": 870000000000000.0,
+   "method": "fixed",
+   "size": "S",
+   "hours": 0.16583558147658306,
+   "symbols_seen": 26790561.001737878,
+   "passes": 0.05841426119618633
+  },
+  {
+   "budget": 870000000000000.0,
+   "method": "fixed",
+   "size": "M",
+   "hours": 0.13463770603646477,
+   "symbols_seen": 12621934.415036015,
+   "passes": 0.02752092327119313
+  },
+  {
+   "budget": 870000000000000.0,
+   "method": "entropy",
+   "size": "S",
+   "hours": 0.16583558147658306,
+   "symbols_seen": 26790561.001737878,
+   "passes": 0.05841426119618633
+  },
+  {
+   "budget": 870000000000000.0,
+   "method": "entropy",
+   "size": "M",
+   "hours": 0.13463770603646477,
+   "symbols_seen": 12621934.415036015,
+   "passes": 0.02752092327119313
+  },
+  {
+   "budget": 2750000000000000.0,
+   "method": "byte",
+   "size": "S",
+   "hours": 0.5575952418749378,
+   "symbols_seen": 107226672.19410414,
+   "passes": 0.23379752429737985
+  },
+  {
+   "budget": 2750000000000000.0,
+   "method": "byte",
+   "size": "M",
+   "hours": 0.4593106615974292,
+   "symbols_seen": 26278263.610315405,
+   "passes": 0.05729724563123657
+  },
+  {
+   "budget": 2750000000000000.0,
+   "method": "bpe",
+   "size": "S",
+   "hours": 0.47641158561100777,
+   "symbols_seen": 145227684.93980828,
+   "passes": 0.3166551055217212
+  },
+  {
+   "budget": 2750000000000000.0,
+   "method": "bpe",
+   "size": "M",
+   "hours": 0.3962468404273306,
+   "symbols_seen": 39882727.903525546,
+   "passes": 0.08696048152264685
+  },
+  {
+   "budget": 2750000000000000.0,
+   "method": "hnet",
+   "size": "S",
+   "hours": 0.600716816685151,
+   "symbols_seen": 84682807.76411398,
+   "passes": 0.1846427796431177
+  },
+  {
+   "budget": 2750000000000000.0,
+   "method": "hnet",
+   "size": "M",
+   "hours": 0.48742473305058137,
+   "symbols_seen": 39896919.1279874,
+   "passes": 0.08699142413308172
+  },
+  {
+   "budget": 2750000000000000.0,
+   "method": "fixed",
+   "size": "S",
+   "hours": 0.5241929299547166,
+   "symbols_seen": 84682807.76411398,
+   "passes": 0.1846427796431177
+  },
+  {
+   "budget": 2750000000000000.0,
+   "method": "fixed",
+   "size": "M",
+   "hours": 0.42557895586238864,
+   "symbols_seen": 39896919.1279874,
+   "passes": 0.08699142413308172
+  },
+  {
+   "budget": 2750000000000000.0,
+   "method": "entropy",
+   "size": "S",
+   "hours": 0.5241929299547166,
+   "symbols_seen": 84682807.76411398,
+   "passes": 0.1846427796431177
+  },
+  {
+   "budget": 2750000000000000.0,
+   "method": "entropy",
+   "size": "M",
+   "hours": 0.42557895586238864,
+   "symbols_seen": 39896919.1279874,
+   "passes": 0.08699142413308172
+  },
+  {
+   "budget": 8700000000000000.0,
+   "method": "byte",
+   "size": "S",
+   "hours": 1.7640285833861669,
+   "symbols_seen": 339226199.30498403,
+   "passes": 0.7396503495953473
+  },
+  {
+   "budget": 8700000000000000.0,
+   "method": "byte",
+   "size": "M",
+   "hours": 1.4530919112355034,
+   "symbols_seen": 83134870.33081602,
+   "passes": 0.1812676498151848
+  },
+  {
+   "budget": 8700000000000000.0,
+   "method": "bpe",
+   "size": "S",
+   "hours": 1.507193016296643,
+   "symbols_seen": 459447585.0823026,
+   "passes": 1.001781606559627
+  },
+  {
+   "budget": 8700000000000000.0,
+   "method": "bpe",
+   "size": "M",
+   "hours": 1.2535809133519185,
+   "symbols_seen": 126174448.27660808,
+   "passes": 0.27511134154437367
+  },
+  {
+   "budget": 8700000000000000.0,
+   "method": "hnet",
+   "size": "S",
+   "hours": 1.9004495655130231,
+   "symbols_seen": 267905610.01737875,
+   "passes": 0.5841426119618632
+  },
+  {
+   "budget": 8700000000000000.0,
+   "method": "hnet",
+   "size": "M",
+   "hours": 1.5420346100145668,
+   "symbols_seen": 126219344.15036014,
+   "passes": 0.27520923271193126
+  },
+  {
+   "budget": 8700000000000000.0,
+   "method": "fixed",
+   "size": "S",
+   "hours": 1.6583558147658306,
+   "symbols_seen": 267905610.01737875,
+   "passes": 0.5841426119618632
+  },
+  {
+   "budget": 8700000000000000.0,
+   "method": "fixed",
+   "size": "M",
+   "hours": 1.3463770603646479,
+   "symbols_seen": 126219344.15036014,
+   "passes": 0.27520923271193126
+  },
+  {
+   "budget": 8700000000000000.0,
+   "method": "entropy",
+   "size": "S",
+   "hours": 1.6583558147658306,
+   "symbols_seen": 267905610.01737875,
+   "passes": 0.5841426119618632
+  },
+  {
+   "budget": 8700000000000000.0,
+   "method": "entropy",
+   "size": "M",
+   "hours": 1.3463770603646479,
+   "symbols_seen": 126219344.15036014,
+   "passes": 0.27520923271193126
+  }
+ ],
+ "ladder_hours": 22.33780340103337,
+ "max_run_hours": 1.9004495655130231,
+ "max_passes": 1.001781606559627,
+ "top_budget_hours": 15.42984435005878,
+ "per_dataset_passes_at_max": {
+  "berkeley_autolab_ur5": 8.429770052455392,
+  "berkeley_fanuc_manipulation": 10.550268034038442,
+  "cmu_stretch": 18.401384233093758,
+  "dlr_sara_pour": 24.63059418031855,
+  "fmb": 4.528759894284167,
+  "jaco_play": 9.420099017275893,
+  "koch_pick_place_1_lego": 14.509043103241808,
+  "koch_pick_place_5_lego": 14.733852374539584,
+  "robocasa_target_human_unified": 0.514411623908391,
+  "roboturk": 6.105163581547687,
+  "stanford_kuka_multimodal_dataset": 7.010816577860126,
+  "svla_so100_pickplace": 20.663790832914607,
+  "svla_so100_sorting": 15.511878565518222,
+  "svla_so100_stacking": 19.321720689156873,
+  "svla_so101_pickplace": 26.38700195397264,
+  "toto": 4.624563873052554,
+  "utaustin_mutex": 4.392888203073362,
+  "utokyo_pr2_opening_fridge": 24.614027177364065,
+  "utokyo_pr2_tabletop_manipulation": 14.589005075747314,
+  "utokyo_xarm_pick_and_place": 30.384486610562472,
+  "vlabench_unified": 1.538250452054315,
+  "xarm_lift_medium": 24.113355554651747,
+  "xarm_push_medium": 25.361448724376906
+ }
+}

@@ -1,0 +1,58 @@
+{
+ "4096": {
+  "R_mixture": 1.549440620900314,
+  "per_dataset": {
+   "berkeley_autolab_ur5": 1.4266368248888528,
+   "berkeley_fanuc_manipulation": 2.056576517271015,
+   "cmu_stretch": 2.400647948164147,
+   "dlr_sara_pour": 1.3031665550559648,
+   "fmb": 1.3968193550273929,
+   "jaco_play": 1.6163972355898455,
+   "koch_pick_place_1_lego": 1.117703458835988,
+   "koch_pick_place_5_lego": 1.0669910935203835,
+   "robocasa_target_human_unified": 1.7728361159728254,
+   "roboturk": 2.366465461787228,
+   "stanford_kuka_multimodal_dataset": 1.3404702826091561,
+   "svla_so100_pickplace": 1.2060260586319218,
+   "svla_so100_sorting": 1.1314188434148482,
+   "svla_so100_stacking": 1.167764088241533,
+   "svla_so101_pickplace": 1.1803016415298726,
+   "toto": 1.1947012014960645,
+   "utaustin_mutex": 1.1969677813678499,
+   "utokyo_pr2_opening_fridge": 1.1858696587941573,
+   "utokyo_pr2_tabletop_manipulation": 1.787890878828988,
+   "utokyo_xarm_pick_and_place": 1.249440896410209,
+   "vlabench_unified": 1.5558205060254335,
+   "xarm_lift_medium": 1.1363397234906674,
+   "xarm_push_medium": 1.084010840108401
+  }
+ },
+ "16384": {
+  "R_mixture": 1.7763308846057164,
+  "per_dataset": {
+   "berkeley_autolab_ur5": 1.6105309009092437,
+   "berkeley_fanuc_manipulation": 2.4477901048496356,
+   "cmu_stretch": 2.5471044598577812,
+   "dlr_sara_pour": 1.5138358955362103,
+   "fmb": 1.5680302159422612,
+   "jaco_play": 1.7734745106921088,
+   "koch_pick_place_1_lego": 1.291266897756518,
+   "koch_pick_place_5_lego": 1.229177202352782,
+   "robocasa_target_human_unified": 2.0608776140722407,
+   "roboturk": 2.669781618668239,
+   "stanford_kuka_multimodal_dataset": 1.5616540100789937,
+   "svla_so100_pickplace": 1.3975163169387668,
+   "svla_so100_sorting": 1.312134215216647,
+   "svla_so100_stacking": 1.3993825264518043,
+   "svla_so101_pickplace": 1.3734631346235893,
+   "toto": 1.3560304581391278,
+   "utaustin_mutex": 1.3809484353854227,
+   "utokyo_pr2_opening_fridge": 1.3541304846479012,
+   "utokyo_pr2_tabletop_manipulation": 2.0271437065377556,
+   "utokyo_xarm_pick_and_place": 1.3757457287197583,
+   "vlabench_unified": 1.7422493135537704,
+   "xarm_lift_medium": 1.2649036096601156,
+   "xarm_push_medium": 1.2474876983851966
+  }
+ }
+}

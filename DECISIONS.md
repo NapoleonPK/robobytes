@@ -62,3 +62,36 @@ Every choice the brief (`docs/BRIEF.md`) left open, with a one-line reason. Date
   the square-root mixture.
 - **R_BPE** is measured on the training mixture (harmonic mean of per-dataset compression under the square-root
   weights), with BOS and SEP counted as one symbol and one position for every method. The pooled value is also reported.
+- **Measured:** R_BPE = 1.549 on the training mixture (pooled 1.721), so **N = round(R_BPE) = 2** as the brief specifies.
+  It is close to the 1.5 rounding edge; both definitions give 2. Held-out robots under the frozen vocabulary: ALOHA
+  1.05, Fetch 1.16, PushT 1.06 (`runs/bpe_summary.json`). 0.8 × R_BPE = 1.24 is the H1/H2 compression floor.
+
+## Throughput pilot and ladder (2026-10-31)
+- **Pilot** (`runs/pilot_throughput_mps.json`, 200 steps, random bytes): 1.3–2.5 TFLOP/s achieved, below the brief's
+  4 TFLOP/s example. Re-timed at the real R and N (`runs/pilot_throughput_mps_real.json`): BPE 1.6 / 1.9 / 2.2,
+  H-Net 1.27 / 1.57 / 1.96, Fixed 1.46 / 1.79 / 2.18 TFLOP/s for sizes S / M / L. All fp32; no mixed precision.
+- **Contaminated timing, redone:** H-Net S/M/L were first timed while my CPU smoke tests raised swap to 3.8 GB; those
+  timings are kept, labelled `_contaminated`, and superseded by a clean rerun.
+- **Micro-batch:** a size-M/L H-Net can run out of memory at micro-batch 16 early in training, when the router still
+  emits up to ~1,024 chunks; the trainer halves the micro-batch and keeps the effective batch of 16 by accumulation.
+- **Swap rule:** macOS keeps swap allocated after memory pressure ends (baseline is now ~1.9 GB, from other apps and my
+  earlier tests), so the 2 GB rule is applied to swap growth during a run, not to absolute swap. Absolute swap is
+  logged every 100 steps alongside.
+- **Ladder** (`scripts/plan_ladder.py`, `runs/ladder.json`): budgets **2.75e14, 8.7e14, 2.75e15, 8.7e15 FLOPs**
+  (×3.16), sizes **S (256 wide, 4 layers) and M (384, 8)** at every budget. The top budget is the largest round value
+  whose slowest run (H-Net S) stays under 2 h (1.90 h). Size L (512, 12; 42M) is not used: at 8.7e15 it would see about
+  3 bytes per parameter, far from its frontier. Ladder total ≈ 22 h; whole study ≈ 50 h with evaluation, under 72 h.
+- **Data passes:** at most 1.00 pass over the 459M training symbols (BPE S at the top budget), so the 4-pass rule keeps
+  all four budgets. Under square-root sampling the smallest datasets repeat more (up to ~30× for
+  `utokyo_xarm_pick_and_place`; robocasa 0.5×); per-dataset passes are in `runs/ladder.json`.
+- **Learning-rate search:** 5e-4, 1.5e-3, 4.5e-3 for every method at 2.75e14, size S, scored on held-in validation (at
+  most 20 episodes per dataset, datasets weighted equally). AdamW (0.9, 0.95), weight decay 0.1, 2% warm-up, cosine to
+  10%, clip 1.0, effective batch 16 windows. The Entropy baseline's small byte model in the search is the best Byte run
+  of the search; in the ladder it is the Byte run at the second budget (brief). Its threshold is the (1 − 1/N) quantile
+  of next-symbol entropy over 256 validation windows. Entropy-model FLOPs are not charged to the Entropy run's budget.
+- **BPE context:** BPE reads round(1,024 / R_BPE) = 661 tokens per window (1,024 bytes on average) and is evaluated in
+  661-token windows with stride 330.
+- **Risk-table check, BPE below 2** (brief: "try vocabulary 16,384 in the pilot; if still below 2, record it and use
+  N = 2"): `scripts/bpe_vocab_check.py` → `runs/bpe_vocab_check.json`. Same training sample, same evaluation rows:
+  R = 1.549 at 4,096, 1.776 at 16,384. Still below 2, so N = 2 and the vocabulary stays 4,096 (the brief's BPE; the
+  larger one does not reach the target and would quadruple BPE's embedding and softmax).

@@ -1,0 +1,242 @@
+{
+ "device": "mps",
+ "swap_mb_start": 1436.25,
+ "runs": {
+  "byte_S": {
+   "params": 3554050,
+   "micro_batch": 16,
+   "s_per_step": 0.3067175817489624,
+   "bytes_per_s": 53417.2182324055,
+   "flops_per_byte": 25646604.0,
+   "achieved_flops": 1369970242788.084,
+   "mps_alloc_gb": 0.056865792,
+   "swap_mb_max": 1436.25,
+   "compression_assumed": 1.0
+  },
+  "byte_M": {
+   "params": 14788098,
+   "micro_batch": 16,
+   "s_per_step": 1.0309374153614044,
+   "bytes_per_s": 15892.332314136103,
+   "flops_per_byte": 104649228.0,
+   "achieved_flops": 1663120307793.7966,
+   "mps_alloc_gb": 0.237986816,
+   "swap_mb_max": 1436.25,
+   "compression_assumed": 1.0
+  },
+  "byte_L": {
+   "params": 38618370,
+   "micro_batch": 8,
+   "s_per_step": 1.1361077952384948,
+   "bytes_per_s": 7210.58339211581,
+   "flops_per_byte": 265520652.0,
+   "achieved_flops": 1914558803574.9614,
+   "mps_alloc_gb": 0.617894912,
+   "swap_mb_max": 1428.25,
+   "compression_assumed": 1.0
+  },
+  "bpe_S": {
+   "params": 5523970,
+   "micro_batch": 16,
+   "s_per_step": 0.058845571279525756,
+   "bytes_per_s": 278423.6713783169,
+   "flops_per_byte": 6712323.0,
+   "achieved_flops": 1868869613137.118,
+   "mps_alloc_gb": 0.089416704,
+   "swap_mb_max": 1420.25,
+   "compression_assumed": 4.0
+  },
+  "bpe_M": {
+   "params": 17741058,
+   "micro_batch": 16,
+   "s_per_step": 0.17941962480545043,
+   "bytes_per_s": 91316.65511933612,
+   "flops_per_byte": 24840963.0,
+   "achieved_flops": 2268393651103.189,
+   "mps_alloc_gb": 0.285668352,
+   "swap_mb_max": 1420.25,
+   "compression_assumed": 4.0
+  },
+  "bpe_L": {
+   "params": 42554370,
+   "micro_batch": 16,
+   "s_per_step": 0.4046120250225067,
+   "bytes_per_s": 40493.111886846746,
+   "flops_per_byte": 62257155.0,
+   "achieved_flops": 2520985943171.7603,
+   "mps_alloc_gb": 0.683721728,
+   "swap_mb_max": 1420.25,
+   "compression_assumed": 4.0
+  },
+  "hnet_S": {
+   "params": 7058434,
+   "micro_batch": 16,
+   "s_per_step": 0.3394489049911499,
+   "bytes_per_s": 48266.468853175895,
+   "flops_per_byte": 26062860.0,
+   "achieved_flops": 1257962220414.684,
+   "mps_alloc_gb": 0.11295232,
+   "swap_mb_max": 2165.69,
+   "compression_assumed": 4.0
+  },
+  "hnet_M": {
+   "params": 18292098,
+   "micro_batch": 16,
+   "s_per_step": 0.4615682291984558,
+   "bytes_per_s": 35496.37727113912,
+   "flops_per_byte": 43503180.0,
+   "achieved_flops": 1544205289774.2742,
+   "mps_alloc_gb": 0.296094208,
+   "swap_mb_max": 2133.69,
+   "compression_assumed": 4.0
+  },
+  "hnet_L": {
+   "params": 42121986,
+   "micro_batch": 16,
+   "s_per_step": 0.7042113196849823,
+   "bytes_per_s": 23265.743594307914,
+   "flops_per_byte": 80231052.0,
+   "achieved_flops": 1866635084133.5852,
+   "mps_alloc_gb": 0.675930624,
+   "swap_mb_max": 2045.69,
+   "compression_assumed": 4.0
+  },
+  "fixed_S": {
+   "params": 7058434,
+   "micro_batch": 16,
+   "s_per_step": 0.2977819609642029,
+   "bytes_per_s": 55020.12259892922,
+   "flops_per_byte": 26062860.0,
+   "achieved_flops": 1433981752478.7285,
+   "mps_alloc_gb": 0.111373312,
+   "swap_mb_max": 2824.69,
+   "compression_assumed": 4.0
+  },
+  "fixed_M": {
+   "params": 18292098,
+   "micro_batch": 16,
+   "s_per_step": 0.41351078033447264,
+   "bytes_per_s": 39621.69979401172,
+   "flops_per_byte": 43503180.0,
+   "achieved_flops": 1723669938044.8547,
+   "mps_alloc_gb": 0.291243008,
+   "swap_mb_max": 2792.69,
+   "compression_assumed": 4.0
+  },
+  "fixed_L": {
+   "params": 42121986,
+   "micro_batch": 16,
+   "s_per_step": 0.6197812163829803,
+   "bytes_per_s": 26435.134797431267,
+   "flops_per_byte": 80231052.0,
+   "achieved_flops": 2120918674559.7173,
+   "mps_alloc_gb": 0.672390144,
+   "swap_mb_max": 2672.69,
+   "compression_assumed": 4.0
+  },
+  "entropy_S": {
+   "params": 7058434,
+   "micro_batch": 16,
+   "s_per_step": 0.29706684112548826,
+   "bytes_per_s": 55152.570842058405,
+   "flops_per_byte": 26062860.0,
+   "achieved_flops": 1437433732496.6504,
+   "mps_alloc_gb": 0.111373312,
+   "swap_mb_max": 2576.69,
+   "compression_assumed": 4.0
+  },
+  "entropy_M": {
+   "params": 18292098,
+   "micro_batch": 16,
+   "s_per_step": 0.41206371068954467,
+   "bytes_per_s": 39760.84177027655,
+   "flops_per_byte": 43503180.0,
+   "achieved_flops": 1729723056483.8594,
+   "mps_alloc_gb": 0.291243008,
+   "swap_mb_max": 2568.69,
+   "compression_assumed": 4.0
+  },
+  "entropy_L": {
+   "params": 42121986,
+   "micro_batch": 16,
+   "s_per_step": 0.6209033238887787,
+   "bytes_per_s": 26387.360752693985,
+   "flops_per_byte": 80231052.0,
+   "achieved_flops": 2117085712692.1504,
+   "mps_alloc_gb": 0.672914432,
+   "swap_mb_max": 2472.56,
+   "compression_assumed": 4.0
+  },
+  "hnet_refractory_S": {
+   "params": 7058434,
+   "micro_batch": 16,
+   "s_per_step": 0.32119124054908754,
+   "bytes_per_s": 51010.10840766076,
+   "flops_per_byte": 26062860.0,
+   "achieved_flops": 1329469314013.6853,
+   "mps_alloc_gb": 0.11295232,
+   "swap_mb_max": 2456.56,
+   "compression_assumed": 4.0
+  },
+  "hnet_refractory_M": {
+   "params": 18292098,
+   "micro_batch": 16,
+   "s_per_step": 0.43285459995269776,
+   "bytes_per_s": 37851.0474459332,
+   "flops_per_byte": 43503180.0,
+   "achieved_flops": 1646640930228.9724,
+   "mps_alloc_gb": 0.3006208,
+   "swap_mb_max": 2456.56,
+   "compression_assumed": 4.0
+  },
+  "hnet_refractory_L": {
+   "params": 42121986,
+   "micro_batch": 16,
+   "s_per_step": 0.6259992992877961,
+   "bytes_per_s": 26172.55325787137,
+   "flops_per_byte": 80231052.0,
+   "achieved_flops": 2099851481405.047,
+   "mps_alloc_gb": 0.684717056,
+   "swap_mb_max": 2416.56,
+   "compression_assumed": 4.0
+  },
+  "hnet_S_contaminated": {
+   "params": 7058434,
+   "micro_batch": 16,
+   "s_per_step": 0.36725618958473205,
+   "bytes_per_s": 44611.90979116212,
+   "flops_per_byte": 26062860.0,
+   "achieved_flops": 1162713959219.6875,
+   "mps_alloc_gb": 0.11295232,
+   "swap_mb_max": 1420.25,
+   "compression_assumed": 4.0
+  },
+  "hnet_M_contaminated": {
+   "params": 18292098,
+   "micro_batch": 16,
+   "s_per_step": 0.5565647554397583,
+   "bytes_per_s": 29437.72461311266,
+   "flops_per_byte": 43503180.0,
+   "achieved_flops": 1280634632634.6704,
+   "mps_alloc_gb": 0.292822016,
+   "swap_mb_max": 2440.88,
+   "compression_assumed": 4.0
+  },
+  "hnet_L_contaminated": {
+   "params": 42121986,
+   "micro_batch": 16,
+   "s_per_step": 0.788557984828949,
+   "bytes_per_s": 20777.16580798298,
+   "flops_per_byte": 80231052.0,
+   "achieved_flops": 1666973870352.9043,
+   "mps_alloc_gb": 0.682554368,
+   "swap_mb_max": 3561.31,
+   "compression_assumed": 4.0
+  }
+ },
+ "contaminated": {
+  "hnet_S": "timed while CPU smoke tests raised swap to 3.8 GB; superseded by the rerun",
+  "hnet_M": "timed while CPU smoke tests raised swap to 3.8 GB; superseded by the rerun",
+  "hnet_L": "timed while CPU smoke tests raised swap to 3.8 GB; superseded by the rerun"
+ }
+}

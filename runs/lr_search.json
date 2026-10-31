@@ -1,0 +1,112 @@
+{
+ "byte_0.0005": {
+  "method": "byte",
+  "lr": 0.0005,
+  "run": "runs/lr/byte_0.0005",
+  "val_bpb": 6.559707553167448,
+  "per_dataset": {
+   "berkeley_autolab_ur5": {
+    "bpb": 6.547049734348827,
+    "compression": null
+   },
+   "berkeley_fanuc_manipulation": {
+    "bpb": 4.245075552872937,
+    "compression": null
+   },
+   "cmu_stretch": {
+    "bpb": 3.8462669245990706,
+    "compression": null
+   },
+   "dlr_sara_pour": {
+    "bpb": 7.320587343158144,
+    "compression": null
+   },
+   "fmb": {
+    "bpb": 6.61714797683343,
+    "compression": null
+   },
+   "jaco_play": {
+    "bpb": 5.546238499652001,
+    "compression": null
+   },
+   "koch_pick_place_1_lego": {
+    "bpb": 7.698091237418988,
+    "compression": null
+   },
+   "koch_pick_place_5_lego": {
+    "bpb": 7.861121013286235,
+    "compression": null
+   },
+   "robocasa_target_human_unified": {
+    "bpb": 5.423089865302908,
+    "compression": null
+   },
+   "roboturk": {
+    "bpb": 3.657669597970317,
+    "compression": null
+   },
+   "stanford_kuka_multimodal_dataset": {
+    "bpb": 6.6360181710379464,
+    "compression": null
+   },
+   "svla_so100_pickplace": {
+    "bpb": 7.229414980853045,
+    "compression": null
+   },
+   "svla_so100_sorting": {
+    "bpb": 7.618329909954916,
+    "compression": null
+   },
+   "svla_so100_stacking": {
+    "bpb": 7.825231272942612,
+    "compression": null
+   },
+   "svla_so101_pickplace": {
+    "bpb": 7.318204976586391,
+    "compression": null
+   },
+   "toto": {
+    "bpb": 7.356235209042084,
+    "compression": null
+   },
+   "utaustin_mutex": {
+    "bpb": 7.478959894223372,
+    "compression": null
+   },
+   "utokyo_pr2_opening_fridge": {
+    "bpb": 7.413307326239957,
+    "compression": null
+   },
+   "utokyo_pr2_tabletop_manipulation": {
+    "bpb": 4.65772948563632,
+    "compression": null
+   },
+   "utokyo_xarm_pick_and_place": {
+    "bpb": 7.261876475557368,
+    "compression": null
+   },
+   "vlabench_unified": {
+    "bpb": 5.561995702615412,
+    "compression": null
+   },
+   "xarm_lift_medium": {
+    "bpb": 7.794384735107422,
+    "compression": null
+   },
+   "xarm_push_medium": {
+    "bpb": 7.959247837611607,
+    "compression": null
+   }
+  },
+  "train": {
+   "step": 654,
+   "loss": 3.747907876968384,
+   "lr": 5.000270231106467e-05,
+   "seconds": 197.1982400417328,
+   "mps_gb": 0.057062912,
+   "swap_mb": 1925.69,
+   "micro": 16,
+   "compression": null
+  }
+ }
+}
