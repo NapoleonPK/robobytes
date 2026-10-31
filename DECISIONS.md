@@ -222,3 +222,37 @@ Same search budget, size S, same validation episodes (`runs/wrapper_diag.json`).
   held micro-batch 8 with M's driver memory at 5.8 GB against 6.2 GB in the check.
 - **Ratio target unchanged at N = 2,** so H-Net's realised compression of about 1.8 at the search budget is charged at 2.
   Stated in the pre-registration; the compression floor (1.24) is the existing guard.
+
+## H3, H4 and analysis code: choices the frozen text leaves open (2026-10-31)
+Written during the ladder, before any model saw a held-out robot. No hypothesis, metric or threshold changes.
+- **H2 and H2b:** the line and the comparison use point estimates of g_ID and g_OOD; the CI requirement applies to g_OOD.
+- **Compression floor:** mean over datasets of symbols / main positions on held-in test, as pooled bpb, averaged per episode
+  over H-Net's three seeds. As written, it fails H1 and H2; it does not name H2b, so H2b is not affected.
+- **Seed pairing at the top budget:** H-Net and BPE use three seeds; Fixed and the arms have seed 0 only, so H2b pairs
+  H-Net's three-seed average with Fixed seed 0. BPE at the top budget is its three-seed average in §6.1.
+- **Only frontier runs are scored on test,** for the no-EMA and N = 4 arms too, chosen by the same held-in validation rule.
+- **H3 "each method" means the six main methods:** H-Net and BPE three seeds, others seed 0, 60 runs against the run list's
+  "about 48". The no-EMA and N = 4 arms are not fine-tuned, as §6.1 and §6.3 do not ask for it.
+- **"Keep the best" includes step 0,** so fine-tuning cannot be worse on validation than the pretrained model. All 500 steps
+  run. Training loss, weight decay and clipping as in pretraining; rate constant at 0.3 × the run's rate.
+- **Entropy fine-tuning:** its small byte model and threshold stay frozen; "all parameters" means the Entropy model's own.
+- **H4 seeds:** for H-Net and BPE, seed s is the checkpoint and head seed; Byte has one checkpoint and three head seeds; the
+  MLP has three initialisations. H4's CI resamples seeds and rollouts, paired on both.
+- **"Every method below 5% or above 95%"** is read as all below 5% or all above 95%; a method on each side is informative.
+  An uninformative task cannot pass. The four methods all count.
+- **Head and MLP baseline (no setting in the text):** hidden width 256, AdamW 1e-3, batch 256, 2,000 steps, best of the
+  robot's 10 validation episodes by MSE. Targets are the quantised action / 255; the MLP baseline reads the quantised
+  observation / 255.
+- **BPE in H4:** one word per timestep would let a token span the last observation bytes and the first action bytes, which
+  leaks the target in training and cannot exist in a rollout. So H4 encodes observation and action bytes separately with the
+  frozen vocabulary, in head training and rollouts alike, and keeps the last round(1,024 / R_BPE) tokens rather than 1,024
+  bytes, the context BPE trained on.
+- **Fetch environment:** `FetchPickAndPlace-v4` with a 150-step limit and goals on the table, matching the demonstrations
+  (RoboChunk's generator). The stock 50-step limit is shorter than most demonstrations (45-146 steps), and stock goals in the
+  air were never demonstrated. Demonstration object regions and physics changes are not reproduced: the stock reset is used.
+- **Environment seeds** 300000-300099 for both tasks, unused by the demonstrations (Fetch's are 200000-200299). Success =
+  `info["is_success"]` at the rollout's last step. PushT's limit is 300 steps; its demonstrations reach 246.
+- **Compute multipliers (exploratory):** FLOPs BPE needs for H-Net's bpb at each H-Net budget, over H-Net's FLOPs, by
+  log-log interpolation on the frontier; empty when the ladder does not reach that bpb.
+- **Not implemented yet:** the other exploratory items (in-context merging, gripper-event alignment, 16-bit serialisation)
+  and figures. `gym-pusht` and `pymunk` are not installed in the venv, so `scripts/policy.py --tasks pusht` cannot run yet.
