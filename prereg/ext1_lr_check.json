@@ -1,0 +1,308 @@
+[
+ {
+  "method": "bpe",
+  "size": "L",
+  "rate": 0.0003,
+  "run": "lr0.0003_bpe_5e15_L_s0",
+  "val_bpb": 2.6681926329660395,
+  "train_seconds": 541.3895998001099,
+  "compression": null
+ },
+ {
+  "method": "bpe",
+  "size": "M",
+  "rate": 0.0003,
+  "run": "lr0.0003_bpe_5e15_M_s0",
+  "val_bpb": 2.2724117921168085,
+  "train_seconds": 639.1264541149139,
+  "compression": null
+ },
+ {
+  "method": "byte",
+  "size": "L",
+  "rate": 0.0003,
+  "run": "lr0.0003_byte_5e15_L_s0",
+  "val_bpb": 2.1281933200264365,
+  "train_seconds": 520.5529398918152,
+  "compression": null
+ },
+ {
+  "method": "byte",
+  "size": "M",
+  "rate": 0.0003,
+  "run": "lr0.0003_byte_5e15_M_s0",
+  "val_bpb": 1.9726870134526389,
+  "train_seconds": 609.9562277793884,
+  "compression": null
+ },
+ {
+  "method": "byteconv",
+  "size": "M",
+  "rate": 0.0003,
+  "run": "lr0.0003_byteconv_5e15_M_s0",
+  "val_bpb": 1.9983553440633366,
+  "train_seconds": 659.4617710113525,
+  "compression": 1.0
+ },
+ {
+  "method": "byteconv",
+  "size": "S",
+  "rate": 0.0003,
+  "run": "lr0.0003_byteconv_5e15_S_s0",
+  "val_bpb": 1.8343410136246203,
+  "train_seconds": 963.439612865448,
+  "compression": 1.0
+ },
+ {
+  "method": "fixed",
+  "size": "L",
+  "rate": 0.0003,
+  "run": "lr0.0003_fixed_5e15_L_s0",
+  "val_bpb": 2.355117559395496,
+  "train_seconds": 578.9614388942719,
+  "compression": 1.9996977749375149
+ },
+ {
+  "method": "fixed",
+  "size": "M",
+  "rate": 0.0003,
+  "run": "lr0.0003_fixed_5e15_M_s0",
+  "val_bpb": 2.008850649570459,
+  "train_seconds": 752.7905535697937,
+  "compression": 1.9996977749375149
+ },
+ {
+  "method": "hnet",
+  "size": "L",
+  "rate": 0.0003,
+  "run": "lr0.0003_hnet_5e15_L_s0",
+  "val_bpb": 2.676461438447866,
+  "train_seconds": 905.9441139698029,
+  "compression": 1.7231376387895356
+ },
+ {
+  "method": "hnet",
+  "size": "M",
+  "rate": 0.0003,
+  "run": "lr0.0003_hnet_5e15_M_s0",
+  "val_bpb": 2.148375660527474,
+  "train_seconds": 1179.4697132110596,
+  "compression": 1.7987259896672785
+ },
+ {
+  "method": "bpe",
+  "size": "L",
+  "rate": 0.00075,
+  "run": "lr0.00075_bpe_5e15_L_s0",
+  "val_bpb": 2.5557435055491675,
+  "train_seconds": 536.5639939308167,
+  "compression": null
+ },
+ {
+  "method": "bpe",
+  "size": "M",
+  "rate": 0.00075,
+  "run": "lr0.00075_bpe_5e15_M_s0",
+  "val_bpb": 2.0319038002361807,
+  "train_seconds": 635.8570046424866,
+  "compression": null
+ },
+ {
+  "method": "byte",
+  "size": "L",
+  "rate": 0.00075,
+  "run": "lr0.00075_byte_5e15_L_s0",
+  "val_bpb": 2.056030628221627,
+  "train_seconds": 515.5058438777924,
+  "compression": null
+ },
+ {
+  "method": "byte",
+  "size": "M",
+  "rate": 0.00075,
+  "run": "lr0.00075_byte_5e15_M_s0",
+  "val_bpb": 1.857873877677656,
+  "train_seconds": 610.0227880477905,
+  "compression": null
+ },
+ {
+  "method": "byteconv",
+  "size": "M",
+  "rate": 0.00075,
+  "run": "lr0.00075_byteconv_5e15_M_s0",
+  "val_bpb": 1.864530156911201,
+  "train_seconds": 658.9721055030823,
+  "compression": 1.0
+ },
+ {
+  "method": "byteconv",
+  "size": "S",
+  "rate": 0.00075,
+  "run": "lr0.00075_byteconv_5e15_S_s0",
+  "val_bpb": 1.7100982508278746,
+  "train_seconds": 956.5361149311066,
+  "compression": 1.0
+ },
+ {
+  "method": "fixed",
+  "size": "L",
+  "rate": 0.00075,
+  "run": "lr0.00075_fixed_5e15_L_s0",
+  "val_bpb": 2.1487440684359838,
+  "train_seconds": 578.9313626289368,
+  "compression": 1.9996977749375149
+ },
+ {
+  "method": "fixed",
+  "size": "M",
+  "rate": 0.00075,
+  "run": "lr0.00075_fixed_5e15_M_s0",
+  "val_bpb": 1.8958121843520772,
+  "train_seconds": 758.2658276557922,
+  "compression": 1.9996977749375149
+ },
+ {
+  "method": "hnet",
+  "size": "L",
+  "rate": 0.00075,
+  "run": "lr0.00075_hnet_5e15_L_s0",
+  "val_bpb": 2.3920856890859064,
+  "train_seconds": 897.9527797698975,
+  "compression": 1.815857637678235
+ },
+ {
+  "method": "hnet",
+  "size": "M",
+  "rate": 0.00075,
+  "run": "lr0.00075_hnet_5e15_M_s0",
+  "val_bpb": 1.9175592673856807,
+  "train_seconds": 1158.6312792301178,
+  "compression": 1.8547589285507964
+ },
+ {
+  "method": "bpe",
+  "size": "L",
+  "rate": 0.0015,
+  "run": "lr0.0015_bpe_5e15_L_s0",
+  "val_bpb": 2.638157075258775,
+  "train_seconds": 533.695859670639,
+  "compression": null
+ },
+ {
+  "method": "bpe",
+  "size": "M",
+  "rate": 0.0015,
+  "run": "lr0.0015_bpe_5e15_M_s0",
+  "val_bpb": 2.012628124251539,
+  "train_seconds": 638.9165117740631,
+  "compression": null
+ },
+ {
+  "method": "byte",
+  "size": "L",
+  "rate": 0.0015,
+  "run": "lr0.0015_byte_5e15_L_s0",
+  "val_bpb": 2.071094389116073,
+  "train_seconds": 512.1800880432129,
+  "compression": null
+ },
+ {
+  "method": "byte",
+  "size": "M",
+  "rate": 0.0015,
+  "run": "lr0.0015_byte_5e15_M_s0",
+  "val_bpb": 1.8492006534673262,
+  "train_seconds": 608.2572290897369,
+  "compression": null
+ },
+ {
+  "method": "byteconv",
+  "size": "M",
+  "rate": 0.0015,
+  "run": "lr0.0015_byteconv_5e15_M_s0",
+  "val_bpb": 1.964682366010318,
+  "train_seconds": 655.6206250190735,
+  "compression": 1.0
+ },
+ {
+  "method": "byteconv",
+  "size": "S",
+  "rate": 0.0015,
+  "run": "lr0.0015_byteconv_5e15_S_s0",
+  "val_bpb": 1.6995542449951178,
+  "train_seconds": 963.7652723789215,
+  "compression": 1.0
+ },
+ {
+  "method": "fixed",
+  "size": "L",
+  "rate": 0.0015,
+  "run": "lr0.0015_fixed_5e15_L_s0",
+  "val_bpb": 2.256562805445072,
+  "train_seconds": 571.6088783740997,
+  "compression": 1.9996977749375149
+ },
+ {
+  "method": "fixed",
+  "size": "M",
+  "rate": 0.0015,
+  "run": "lr0.0015_fixed_5e15_M_s0",
+  "val_bpb": 1.8736343610175055,
+  "train_seconds": 749.8748753070831,
+  "compression": 1.9996977749375149
+ },
+ {
+  "method": "hnet",
+  "size": "L",
+  "rate": 0.0015,
+  "run": "lr0.0015_hnet_5e15_L_s0",
+  "val_bpb": 2.552537482545129,
+  "train_seconds": 852.5047993659973,
+  "compression": 1.8017324168042737
+ },
+ {
+  "method": "hnet",
+  "size": "M",
+  "rate": 0.0015,
+  "run": "lr0.0015_hnet_5e15_M_s0",
+  "val_bpb": 2.340236055822557,
+  "train_seconds": 1023.7098615169525,
+  "compression": 1.9588684754300854
+ },
+ {
+  "method": "bpe",
+  "size": "M",
+  "rate": 0.003,
+  "run": "lr0.003_bpe_5e15_M_s0",
+  "val_bpb": 2.2327751624662304,
+  "train_seconds": 706.9788382053375,
+  "compression": null
+ },
+ {
+  "method": "byte",
+  "size": "M",
+  "rate": 0.003,
+  "run": "lr0.003_byte_5e15_M_s0",
+  "val_bpb": 1.9506989564727097,
+  "train_seconds": 671.4253308773041,
+  "compression": null
+ },
+ {
+  "method": "byteconv",
+  "size": "S",
+  "rate": 0.003,
+  "run": "lr0.003_byteconv_5e15_S_s0",
+  "val_bpb": 1.7247044682466723,
+  "train_seconds": 984.8682222366333,
+  "compression": 1.0
+ },
+ {
+  "method": "fixed",
+  "size": "M",
+  "rate": 0.003,
+  "run": "lr0.003_fixed_5e15_M_s0",
+  "val_bpb": 1.94540453341944,
+  "train_seconds": 773.8188681602478,
+  "compression": 1.9996977749375149
+ }
+]

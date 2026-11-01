@@ -1,0 +1,43 @@
+{
+ "setup": {
+  "seconds": 65.47083926200867,
+  "commit": "0c674d5856b08e67e22226a3ee2a9fcf5bcc3711",
+  "inputs": [
+   "/kaggle/input/datasets/totranvanlieuttvl"
+  ]
+ },
+ "throughput_byteconv": {
+  "byteconv_S": {
+   "flops_per_s": 5560203788049.376,
+   "steps_per_s": 11.569490359236154,
+   "gpu_peak_gb": 1.140213248,
+   "micro": 16,
+   "compression": 1.0,
+   "steps_total": 104038,
+   "flops_per_symbol": 29333004.0
+  },
+  "byteconv_M": {
+   "flops_per_s": 7918500415211.028,
+   "steps_per_s": 4.461231685794351,
+   "gpu_peak_gb": 2.678249472,
+   "micro": 16,
+   "compression": 1.0,
+   "steps_total": 28169,
+   "flops_per_symbol": 108334860.0
+  },
+  "byteconv_L": {
+   "flops_per_s": 9174705216032.633,
+   "steps_per_s": 2.0801192142297773,
+   "gpu_peak_gb": 5.058058752,
+   "micro": 16,
+   "compression": 1.0,
+   "steps_total": 11336,
+   "flops_per_symbol": 269205516.0
+  }
+ },
+ "full_validation": {
+  "mac": 2.3737290676094402,
+  "t4": 2.373728677984022,
+  "seconds": 64.2531156539917
+ }
+}

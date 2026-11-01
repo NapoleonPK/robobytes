@@ -1,0 +1,223 @@
+{
+ "setup": {
+  "seconds": 31.86834192276001,
+  "commit": "0c674d5856b08e67e22226a3ee2a9fcf5bcc3711",
+  "inputs": [
+   "/kaggle/input/datasets/totranvanlieuttvl"
+  ]
+ },
+ "env": {
+  "torch": "2.11.0+cu128",
+  "py": "3.13.15",
+  "gpus": [
+   "Tesla T4",
+   "Tesla T4"
+  ],
+  "mem_gb": [
+   15.636037632,
+   15.636037632
+  ],
+  "cpus": 4
+ },
+ "agreement_hnet_S": {
+  "cmu_stretch": {
+   "mac": 0.5208591389358448,
+   "fp32": 0.5208581565227755,
+   "fp16": 0.5208618319083085,
+   "seconds_fp32": 0.9318697452545166,
+   "rel_fp32_vs_mac": -1.8861396410274622e-06,
+   "rel_fp16_vs_fp32": 7.056403911409603e-06
+  },
+  "dlr_sara_pour": {
+   "mac": 1.9241106853618488,
+   "fp32": 1.9241102628774576,
+   "fp16": 1.9241825317169403,
+   "seconds_fp32": 0.0798044204711914,
+   "rel_fp32_vs_mac": -2.1957385010207275e-07,
+   "rel_fp16_vs_fp32": 3.7559614372018046e-05
+  },
+  "xarm_lift_medium": {
+   "mac": 5.832623260498047,
+   "fp32": 5.832623352050781,
+   "fp16": 5.832545104980468,
+   "seconds_fp32": 0.040792226791381836,
+   "rel_fp32_vs_mac": 1.5696665078834826e-08,
+   "rel_fp16_vs_fp32": -1.3415416286965964e-05
+  }
+ },
+ "agreement_hnet_M": {
+  "cmu_stretch": {
+   "mac": 1.1813751074577743,
+   "fp32": 1.1813740057157682,
+   "fp16": 1.1814742239242317,
+   "seconds_fp32": 0.20935463905334473,
+   "rel_fp32_vs_mac": -9.325928734815747e-07,
+   "rel_fp16_vs_fp32": 8.483190588126632e-05
+  },
+  "dlr_sara_pour": {
+   "mac": 2.581771048521384,
+   "fp32": 2.581770630594178,
+   "fp16": 2.5799553682198337,
+   "seconds_fp32": 0.1380329132080078,
+   "rel_fp32_vs_mac": -1.6187616880269928e-07,
+   "rel_fp16_vs_fp32": -0.0007031075312551316
+  },
+  "xarm_lift_medium": {
+   "mac": 6.822062301635742,
+   "fp32": 6.822062561035156,
+   "fp16": 6.822082427978516,
+   "seconds_fp32": 0.06501483917236328,
+   "rel_fp32_vs_mac": 3.8023606707682234e-08,
+   "rel_fp16_vs_fp32": 2.9121608284832234e-06
+  }
+ },
+ "throughput": {
+  "hnet_S": {
+   "flops_per_s": 3018397404120.5474,
+   "steps_per_s": 12.839848670973,
+   "gpu_peak_gb": 1.13844736,
+   "micro": 16,
+   "compression": 1.917131791109395,
+   "steps_total": 212693,
+   "flops_per_symbol": 14348172.0
+  },
+  "hnet_M": {
+   "flops_per_s": 5115276719879.2705,
+   "steps_per_s": 6.1576124337414635,
+   "gpu_peak_gb": 2.27989248,
+   "micro": 16,
+   "compression": 1.8975261743722782,
+   "steps_total": 60188,
+   "flops_per_symbol": 50703372.0
+  },
+  "hnet_L": {
+   "flops_per_s": 5543903353814.855,
+   "steps_per_s": 2.6765758453155946,
+   "gpu_peak_gb": 4.9585792,
+   "micro": 16,
+   "compression": 1.7568089212953035,
+   "steps_total": 24139,
+   "flops_per_symbol": 126420108.0
+  },
+  "fixed_S": {
+   "flops_per_s": 3850438195941.2607,
+   "steps_per_s": 16.379236108979107,
+   "gpu_peak_gb": 0.77825792,
+   "micro": 16,
+   "compression": 2.0,
+   "steps_total": 212693,
+   "flops_per_symbol": 14348172.0
+  },
+  "fixed_M": {
+   "flops_per_s": 6497458270240.729,
+   "steps_per_s": 7.821439977443662,
+   "gpu_peak_gb": 1.631074304,
+   "micro": 16,
+   "compression": 2.0,
+   "steps_total": 60188,
+   "flops_per_symbol": 50703372.0
+  },
+  "fixed_L": {
+   "flops_per_s": 8094970532494.71,
+   "steps_per_s": 3.9082215567317844,
+   "gpu_peak_gb": 2.993723904,
+   "micro": 16,
+   "compression": 2.0,
+   "steps_total": 24139,
+   "flops_per_symbol": 126420108.0
+  },
+  "byte_S": {
+   "flops_per_s": 6233083143715.379,
+   "steps_per_s": 14.833823752880082,
+   "gpu_peak_gb": 0.818802688,
+   "micro": 16,
+   "compression": null,
+   "steps_total": 118992,
+   "flops_per_symbol": 25646604.0
+  },
+  "byte_M": {
+   "flops_per_s": 7742046469247.503,
+   "steps_per_s": 4.5154371893243415,
+   "gpu_peak_gb": 2.355297792,
+   "micro": 16,
+   "compression": null,
+   "steps_total": 29161,
+   "flops_per_symbol": 104649228.0
+  },
+  "byte_L": {
+   "flops_per_s": 9052953552841.082,
+   "steps_per_s": 2.080999841103313,
+   "gpu_peak_gb": 4.749818368,
+   "micro": 16,
+   "compression": null,
+   "steps_total": 11493,
+   "flops_per_symbol": 265520652.0
+  },
+  "bpe_S": {
+   "flops_per_s": 5801040806940.916,
+   "steps_per_s": 18.6966993425748,
+   "gpu_peak_gb": 1.066251776,
+   "micro": 16,
+   "compression": null,
+   "steps_total": 161149,
+   "flops_per_symbol": 18935783.49844093
+  },
+  "bpe_M": {
+   "flops_per_s": 7483040481934.616,
+   "steps_per_s": 6.623271527046294,
+   "gpu_peak_gb": 2.131837952,
+   "micro": 16,
+   "compression": null,
+   "steps_total": 44255,
+   "flops_per_symbol": 68952154.091669
+  },
+  "bpe_L": {
+   "flops_per_s": 8861831747761.8,
+   "steps_per_s": 3.174459757499903,
+   "gpu_peak_gb": 3.815446016,
+   "micro": 16,
+   "compression": null,
+   "steps_total": 17910,
+   "flops_per_symbol": 170371119.6597296
+  }
+ },
+ "two_jobs_two_gpus": {
+  "hnet_S": {
+   "flops_per_s": 2841074679469.187,
+   "steps_per_s": 12.085542115003953,
+   "gpu_peak_gb": 1.13846016,
+   "micro": 16,
+   "compression": 1.976690876625727,
+   "steps_total": 212693,
+   "flops_per_symbol": 14348172.0
+  },
+  "fixed_S": {
+   "flops_per_s": 4154835750151.4883,
+   "steps_per_s": 17.674101565243436,
+   "gpu_peak_gb": 0.77825792,
+   "micro": 16,
+   "compression": 2.0,
+   "steps_total": 212693,
+   "flops_per_symbol": 14348172.0
+  }
+ },
+ "resume_vs_straight": {
+  "steps": [
+   120,
+   120
+  ],
+  "max_weight_diff": 0.0022096633911132812,
+  "loss": [
+   4.240703582763672,
+   4.250922203063965
+  ],
+  "events": [
+   {
+    "step": 60,
+    "event": "resume"
+   }
+  ],
+  "same_rng": true
+ },
+ "session1_end": 1793520906.487781
+}

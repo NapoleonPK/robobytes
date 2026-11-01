@@ -1,0 +1,8 @@
+[
+ {"key": "frontier_M", "text": "Frontier size at 5e16 is M for H-Net, Fixed, Byte and BPE", "claude": 0.7, "teo": 0.7, "why": "L buys 2.5 times fewer steps than M, and at tuned rates M beat L by 11% or more for all four methods at 5e15. On the Mac, S stays ahead of M at the top budget, with 3.5 times M's steps.", "claude_before": 0.6},
+ {"key": "H1", "text": "H1 passes", "claude": 0.75, "teo": 0.75, "why": "H-Net's lead over BPE at size S narrowed from budget 3 to budget 4, and BPE could keep closing it, but the held-in test set is large and the CI should be tight."},
+ {"key": "H2", "text": "H2 passes", "claude": 0.3, "teo": 0.3, "why": "If g_ID is near 0.05 the bar falls to about 0.08 rather than the pilot's 0.47, which is why this is above the main study's frozen 20%. It still needs that margin on 2 of 3 unseen robots."},
+ {"key": "H2b", "text": "H2b passes", "claude": 0.1, "teo": 0.1, "why": "H-Net trails Fixed on held-in validation at 5e15, and the learned router must beat fixed patches by at least 2% on 2 of 3 unseen robots."},
+ {"key": "floor", "text": "Compression floor passes", "claude": 0.9, "teo": 0.9, "why": "H-Net's realised compression at 5e15 is near 1.9 on held-in validation."},
+ {"key": "calibration", "text": "Calibration within 1% on all four runs", "claude": 0.2, "teo": 0.2, "why": "Revised after the rate check: the 0.0015 repeats of the two M runs sit 1.41% (H-Net) and 0.59% (Fixed) from the Mac, so one configuration is already over the line and the rule needs all four within it.", "claude_before": 0.75}
+]

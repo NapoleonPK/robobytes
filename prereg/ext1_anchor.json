@@ -1,0 +1,37 @@
+{
+ "hnet": {
+  "size": "M",
+  "rate": 0.00075,
+  "run": "lr0.00075_hnet_5e15_M_s0",
+  "sha256": "864ec9db1c34f3b822fb17083aad3b54b8947b92b5e7958e9805ba4b0a1a894b",
+  "val_bpb": 1.9175592673856807
+ },
+ "fixed": {
+  "size": "M",
+  "rate": 0.0015,
+  "run": "lr0.0015_fixed_5e15_M_s0",
+  "sha256": "6973044bdd66442777ffbabb709871a83692cf4200860216cc006b04e6af4f8d",
+  "val_bpb": 1.8736343610175055
+ },
+ "byte": {
+  "size": "M",
+  "rate": 0.0015,
+  "run": "lr0.0015_byte_5e15_M_s0",
+  "sha256": "8570009933422decec468198a7cb5213910cfdf826819ed967d8dfc76f3ea6c7",
+  "val_bpb": 1.8492006534673262
+ },
+ "bpe": {
+  "size": "M",
+  "rate": 0.0015,
+  "run": "lr0.0015_bpe_5e15_M_s0",
+  "sha256": "8f23358a23a61575f078d1af74fe3f8977d3362894a693a87b8f11b35aeac449",
+  "val_bpb": 2.012628124251539
+ },
+ "byteconv": {
+  "size": "S",
+  "rate": 0.0015,
+  "run": "lr0.0015_byteconv_5e15_S_s0",
+  "sha256": "c04b0d14fa534548eb0d18230d43db359b3bdc8862129b784df575a513efc46b",
+  "val_bpb": 1.6995542449951178
+ }
+}

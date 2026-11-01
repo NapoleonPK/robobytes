@@ -284,3 +284,13 @@ Written during the ladder, before any model saw a held-out robot. No hypothesis,
 - **The report must state that no PushT demonstration reaches the environment's 0.95 success flag.** The generated tables print
   this from `runs/pusht_mapping_check.json`.
 - Peak is taken over the rollout's steps. A success ends a PushT rollout, so that step's coverage is included.
+
+## Dated addition: note for the report, H-Net M learning rate (2026-11-01, before any held-out evaluation)
+- **The report must state that the main study's H-Net M runs used a rate about 2× too high.** The Ext1 pre-freeze check, on held-in
+  validation at 5e15 on a Kaggle T4, gave H-Net M 2.340 at 0.0015, the rate of the ladder, and 1.918 at 0.00075
+  (`PREREGISTRATION_ext1.md` §2, `prereg/ext1_lr_check.json`). The ladder's Mac run at 0.0015 gives 2.374.
+- **No hypothesis is affected.** H-Net's N = 2 frontier is S at all four budgets, so H-Net M enters no test of H1-H4 or H2b. The N = 4 and
+  no-EMA arms, which also have M runs, are exploratory.
+- **Limits of that statement.** S also stays ahead of the better-rate M at 5e15 (1.760 against 1.918). Below 5e15 the rate was not checked,
+  though M's deficit there is larger. H-Net S itself was not rechecked at 5e15, so this note says nothing about the rate of the frontier runs.
+- The frozen `PREREGISTRATION.md` and the ladder's runs are not changed; this entry is the dated record.
